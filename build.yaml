@@ -1,0 +1,18 @@
+# Read about `build.yaml` at https://pub.dartlang.org/packages/build_config
+targets:
+  $default:
+    builders:
+      build_cli:
+        enabled: true
+        generate_for:
+          include:
+          - test/src/**
+
+builders:
+  build_args:
+    target: noop
+    import: "package:build_cli/builder.dart"
+    builder_factories: ["cliBuilder"]
+    build_extensions: {".dart": [".g.dart"]}
+    auto_apply: dependents
+    build_to: source
