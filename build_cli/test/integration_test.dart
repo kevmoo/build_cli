@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'src/example.dart';
+import 'src/peanut_example.dart';
 
 void main() {
   test('no args', () {

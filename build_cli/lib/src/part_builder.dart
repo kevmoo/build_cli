@@ -11,7 +11,7 @@
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 
-import 'build_args_generator.dart';
+import 'build_cli_generator.dart';
 
 Builder cliPartBuilder(
     {String header,

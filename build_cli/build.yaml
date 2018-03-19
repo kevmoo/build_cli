@@ -9,7 +9,7 @@ targets:
           - test/src/**
 
 builders:
-  build_args:
+  build_cli:
     target: noop
     import: "package:build_cli/builder.dart"
     builder_factories: ["cliBuilder"]

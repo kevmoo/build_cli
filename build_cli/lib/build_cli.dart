@@ -1,1 +1,1 @@
-export 'src/build_args_generator.dart';
+export 'src/build_cli_generator.dart';

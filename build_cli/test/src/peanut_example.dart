@@ -1,7 +1,7 @@
 import 'package:args/args.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 
-part 'example.g.dart';
+part 'peanut_example.g.dart';
 
 const _defaultConfig = 'release';
 const _defaultConfigFile = 'build.$_defaultConfig.yaml';

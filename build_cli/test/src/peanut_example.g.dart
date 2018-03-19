@@ -1,9 +1,9 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'example.dart';
+part of 'peanut_example.dart';
 
 // **************************************************************************
-// Generator: ArgsGenerator
+// Generator: CliGenerator
 // **************************************************************************
 
 final _$parserForPeanutOptions = new ArgParser()
