@@ -2,6 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/element.dart';
 // ignore: implementation_imports
 import 'package:analyzer/src/dart/resolver/inheritance_manager.dart'
@@ -10,6 +11,9 @@ import 'package:analyzer/analyzer.dart';
 import 'package:source_gen/source_gen.dart';
 
 final _dartCoreObjectChecker = new TypeChecker.fromRuntime(Object);
+
+bool isEnum(DartType targetType) =>
+    targetType is InterfaceType && targetType.element.isEnum;
 
 String commonNullPrefix(
         bool nullable, String expression, String unsafeExpression) =>

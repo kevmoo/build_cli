@@ -9,6 +9,7 @@ import '../annotations.dart';
 
 import 'arg_info.dart';
 import 'to_share.dart';
+import 'util.dart';
 
 class CliGenerator extends GeneratorForAnnotation<CliOptions> {
   const CliGenerator();
@@ -61,7 +62,7 @@ return ''');
         writeNewInstance(buffer, classElement, fields, _deserializeForField);
 
     if (remainingFields.isNotEmpty) {
-      logger.warning(remainingFields);
+      warn(remainingFields);
     }
 
     buffer.writeln('}');
