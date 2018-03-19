@@ -15,6 +15,23 @@ void main() {
     expect(options.help, isFalse);
   });
 
+  group('with invalid args', () {
+    var items = {
+      'Cannot negate option "help".': ['--no-help'],
+      '"foo" is not an allowed value for option "mode".': ['--mode', 'foo']
+    };
+
+    for (var item in items.entries) {
+      test('`${item.value.join(' ')}`', () {
+        expect(() => parsePeanutOptions(item.value), throwsA((error) {
+          expect(error, isFormatException);
+          expect((error as FormatException).message, item.key);
+          return true;
+        }));
+      });
+    }
+  });
+
   test('usage', () {
     expect(parser.usage, r'''-d, --directory       (defaults to "web")
 -b, --branch          (defaults to "gh-pages")
