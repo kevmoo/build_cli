@@ -1,5 +1,5 @@
 import 'package:args/args.dart';
-import 'package:build_cli/annotations.dart';
+import 'package:build_cli_annotations/build_cli_annotations.dart';
 
 part 'example.g.dart';
 
