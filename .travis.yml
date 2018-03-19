@@ -15,6 +15,14 @@ jobs:
       script: ./tool/travis.sh test
       env: PKG="build_cli"
       dart: dev
+    - stage: analyzer_and_format
+      script: ./tool/travis.sh dartfmt
+      env: PKG="build_cli_annotations"
+      dart: dev
+    - stage: analyzer_and_format
+      script: ./tool/travis.sh dartanalyzer
+      env: PKG="build_cli_annotations"
+      dart: dev
 
 stages:
   - analyzer_and_format

@@ -1,0 +1,11 @@
+name: build_cli_annotations
+version: 0.1.0-dev
+author: Kevin Moore <github@j832.com>
+homepage: https://github.com/kevmoo/build_cli
+
+environment:
+  sdk: '>=2.0.0-dev <2.0.0'
+
+dependencies:
+  # Limit version range on args – it's exported
+  args: '>=1.4.0 <1.5.0'
