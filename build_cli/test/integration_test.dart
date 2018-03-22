@@ -33,16 +33,17 @@ void main() {
   });
 
   test('usage', () {
-    expect(parser.usage, r'''-d, --directory       (defaults to "web")
--b, --branch          (defaults to "gh-pages")
-    --mode            The mode to run `pub build` in.
-                      [release (default), debug]
+    expect(parser.usage, r'''-d, --directory        (defaults to "web")
+-b, --branch           (defaults to "gh-pages")
+    --mode             The mode to run `pub build` in.
+                       [release (default), debug]
 
--c, --build-config    The configuration to use when running `build_runner`. If this option is not set, `release` is used if `build.release.yaml` exists in the current directory.
--m, --message         (defaults to "Built <directory>")
--t, --build-tool      If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".
-                      [pub, build]
+-c, --build-config     The configuration to use when running `build_runner`. If this option is not set, `release` is used if `build.release.yaml` exists in the current directory.
+-m, --message          (defaults to "Built <directory>")
+-t, --build-tool       If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".
+                       [pub, build]
 
--h, --help            Prints usage information.''');
+    --bazel-options    [to-source, from-source, via-assets]
+-h, --help             Prints usage information.''');
   });
 }
