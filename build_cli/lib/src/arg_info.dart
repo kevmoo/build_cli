@@ -4,6 +4,7 @@ import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'to_share.dart';
+import 'util.dart';
 
 final boolChecker = new TypeChecker.fromRuntime(bool);
 final stringChecker = new TypeChecker.fromRuntime(String);
@@ -63,7 +64,7 @@ CliOption _getOptions(FieldElement element) {
 
     allowedValues = interfaceType.accessors
         .where((p) => p.returnType == element.type)
-        .map((p) => p.name)
+        .map((p) => kebab(p.name))
         .toList();
 
     if (defaultsToReader != null && !defaultsToReader.isNull) {

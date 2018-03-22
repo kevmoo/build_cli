@@ -37,6 +37,9 @@ class PeanutOptions {
           ' to "build". Otherwise, "pub".')
   final BuildTool buildTool;
 
+  @CliOption()
+  final BazelOptions bazelOptions;
+
   @CliOption(abbr: 'h', negatable: false, help: 'Prints usage information.')
   final bool help;
 
@@ -47,9 +50,12 @@ class PeanutOptions {
       this.buildConfig,
       this.message,
       this.buildTool,
-      this.help});
+      this.help,
+      this.bazelOptions});
 }
 
 enum BuildTool { pub, build }
 
 enum PubBuildMode { release, debug }
+
+enum BazelOptions { toSource, fromSource, viaAssets }
