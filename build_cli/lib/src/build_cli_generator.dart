@@ -97,7 +97,7 @@ String _deserializeForField(FieldElement field, {ParameterElement ctorParam}) {
 }
 
 String _getArgName(FieldElement element) =>
-    ArgInfo.fromField(element).optionData?.name ?? element.name;
+    ArgInfo.fromField(element).optionData?.name ?? kebab(element.name);
 
 void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   var info = ArgInfo.fromField(element);

@@ -22,7 +22,6 @@ class PeanutOptions {
   final PubBuildMode mode;
 
   @CliOption(
-      name: 'build-config',
       abbr: 'c',
       help: 'The configuration to use when running `build_runner`. '
           'If this option is not set, `$_defaultConfig` is used if '
@@ -33,7 +32,6 @@ class PeanutOptions {
   final String message;
 
   @CliOption(
-      name: 'build-tool',
       abbr: 't',
       help: 'If `$_defaultConfigFile` exists in the current directory, defaults'
           ' to "build". Otherwise, "pub".')
