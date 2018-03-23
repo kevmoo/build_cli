@@ -51,9 +51,13 @@ final $parserFieldName = new ArgParser()''');
 ${classElement.name} parse${classElement.name}(List<String> args) {
 
 var result = $parserFieldName.parse(args);
+''');
 
-$_enumValueHelper
+    if (fields.values.any((fe) => isEnum(fe.type))) {
+      buffer.writeln(_enumValueHelper);
+    }
 
+    buffer.write('''
 return ''');
 
     var remainingFields =
