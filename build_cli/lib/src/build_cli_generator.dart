@@ -136,6 +136,14 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
     buffer.write(', allowed: [$allowedItems]');
   }
 
+  if (options.allowedHelp != null) {
+    // TODO: throw/warn if there if `allowed` is null?
+    var allowedHelpItems = options.allowedHelp.entries
+        .map((e) => "'${e.key}':'${e.value}'")
+        .join(',');
+    buffer.write(', allowedHelp: <String, String>{$allowedHelpItems}');
+  }
+
   if (options.negatable != null) {
     buffer.write(', negatable: ${options.negatable}');
   }

@@ -7,4 +7,19 @@ ArgParser get parser => _$parserForPeanutOptions;
 
 @CliOptions()
 class PeanutOptions {
+  @CliOption(
+      abbr: 'f',
+      defaultsTo: FormatOptions.html,
+      allowedHelp: _formatOptionsHelp)
+  final FormatOptions format;
+
+  PeanutOptions({this.format});
 }
+
+enum FormatOptions { dot, html }
+
+const _formatOptionsHelp = const <FormatOptions, String>{
+  FormatOptions.dot: 'Generate a GraphViz dot file',
+  FormatOptions.html:
+      'Wrap the GraphViz dot format in an HTML template which renders it.'
+};

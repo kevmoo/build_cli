@@ -82,6 +82,33 @@ CliOption _getOptions(FieldElement element) {
     return new CliOption(allowed: allowedValues);
   }
 
+  Map<String, String> allowedHelp;
+  var allowedHelpReader = annotation.read('allowedHelp');
+  if (!allowedHelpReader.isNull) {
+    if (!allowedHelpReader.isMap) {
+      throw new StateError('What are you doing?');
+    }
+
+    allowedHelp = <String, String>{};
+    for (var entry in allowedHelpReader.mapValue.entries) {
+      var mapKeyReader = new ConstantReader(entry.key);
+      if (mapKeyReader.isString) {
+        allowedHelp[mapKeyReader.stringValue] = entry.value.toStringValue();
+        continue;
+      }
+
+      if (isEnum(entry.key.type)) {
+        assert(allowedValues != null);
+        var enumValueIndex = entry.key.getField('index').toIntValue();
+        var stringValue = allowedValues[enumValueIndex];
+        allowedHelp[stringValue] = entry.value.toStringValue();
+        continue;
+      }
+
+      throw new StateError('I do not get it! - ${entry.key.type}');
+    }
+  }
+
   var allowedReader = annotation.read('allowed');
   if (!allowedReader.isNull) {
     allowedValues = allowedReader.listValue
@@ -90,7 +117,10 @@ CliOption _getOptions(FieldElement element) {
   }
 
   if (!defaultsToReader.isNull) {
-    if (isEnum(element.type)) {} else if (defaultsToReader.isString) {
+    if (isEnum(element.type)) {
+      // Already taken care of above, right?
+      assert(defaultsTo != null);
+    } else if (defaultsToReader.isString) {
       defaultsTo = defaultsToReader.stringValue;
     } else {
       throw new StateError('What are you doing?');
@@ -109,5 +139,6 @@ CliOption _getOptions(FieldElement element) {
       defaultsTo: defaultsTo,
       help: annotation.read('help').literalValue as String,
       allowed: allowedValues,
+      allowedHelp: allowedHelp,
       negatable: annotation.read('negatable').literalValue as bool);
 }
