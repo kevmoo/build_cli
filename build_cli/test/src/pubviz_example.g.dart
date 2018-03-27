@@ -14,7 +14,10 @@ final _$parserForPeanutOptions = new ArgParser()
     'dot': 'Generate a GraphViz dot file',
     'html': 'Wrap the GraphViz dot format in an HTML template which renders it.'
   })
-  ..addOption('secret', hide: true);
+  ..addOption('secret', hide: true)
+  ..addMultiOption('ignore-packages',
+      abbr: 'i',
+      help: 'A comma seperated list of packages to exclude in the output.');
 
 PeanutOptions parsePeanutOptions(List<String> args) {
   var result = _$parserForPeanutOptions.parse(args);
@@ -29,5 +32,6 @@ PeanutOptions parsePeanutOptions(List<String> args) {
   return new PeanutOptions(
       format: enumValueHelper(
           'FormatOptions', FormatOptions.values, result['format'] as String),
+      ignorePackages: result['ignore-packages'] as List<String>,
       secret: result['secret'] as String);
 }

@@ -6,13 +6,20 @@ import 'package:source_gen/source_gen.dart';
 import 'to_share.dart';
 import 'util.dart';
 
+final _listChecker = new TypeChecker.fromRuntime(List);
+final _iterableChecker = new TypeChecker.fromRuntime(Iterable);
 final boolChecker = new TypeChecker.fromRuntime(bool);
 final stringChecker = new TypeChecker.fromRuntime(String);
 final _cliOptionChecker = new TypeChecker.fromRuntime(CliOption);
 
+// TODO: support Set, too...
+bool isMulti(DartType targetType) =>
+    _iterableChecker.isExactlyType(targetType) ||
+    _listChecker.isExactlyType(targetType);
+
 final _argInfoCache = new Expando<ArgInfo>();
 
-enum ArgType { option, flag }
+enum ArgType { option, flag, multiOption }
 
 class ArgInfo {
   final CliOption optionData;
@@ -43,6 +50,10 @@ ArgType _getArgType(DartType targetType) {
 
   if (isEnum(targetType)) {
     return ArgType.option;
+  }
+
+  if (isMulti(targetType)) {
+    return ArgType.multiOption;
   }
 
   throw new UnsupportedError('Cannot party on `$targetType`.');

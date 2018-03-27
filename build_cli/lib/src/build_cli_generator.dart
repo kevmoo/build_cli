@@ -97,6 +97,10 @@ String _deserializeForField(FieldElement field, {ParameterElement ctorParam}) {
     return "enumValueHelper('$targetType', $targetType.values, $argAccess as String)";
   }
 
+  if (isMulti(targetType)) {
+    return '$argAccess as List<String>';
+  }
+
   throw new UnsupportedError('Should never get here...');
 }
 
@@ -113,6 +117,9 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
       break;
     case ArgType.option:
       buffer.write('addOption');
+      break;
+    case ArgType.multiOption:
+      buffer.write('addMultiOption');
       break;
   }
   buffer.write("('${_getArgName(element)}'");

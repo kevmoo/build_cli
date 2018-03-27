@@ -16,7 +16,12 @@ class PeanutOptions {
   @CliOption(hide: true)
   final String secret;
 
-  PeanutOptions({this.format, this.secret});
+  @CliOption(
+      abbr: 'i',
+      help: 'A comma seperated list of packages to exclude in the output.')
+  final List<String> ignorePackages;
+
+  PeanutOptions({this.format, this.ignorePackages, this.secret});
 }
 
 enum FormatOptions { dot, html }
