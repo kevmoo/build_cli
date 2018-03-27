@@ -140,5 +140,6 @@ CliOption _getOptions(FieldElement element) {
       help: annotation.read('help').literalValue as String,
       allowed: allowedValues,
       allowedHelp: allowedHelp,
-      negatable: annotation.read('negatable').literalValue as bool);
+      negatable: annotation.read('negatable').literalValue as bool,
+      hide: annotation.read('hide').literalValue as bool);
 }

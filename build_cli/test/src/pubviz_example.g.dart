@@ -13,7 +13,8 @@ final _$parserForPeanutOptions = new ArgParser()
   ], allowedHelp: <String, String>{
     'dot': 'Generate a GraphViz dot file',
     'html': 'Wrap the GraphViz dot format in an HTML template which renders it.'
-  });
+  })
+  ..addOption('secret', hide: true);
 
 PeanutOptions parsePeanutOptions(List<String> args) {
   var result = _$parserForPeanutOptions.parse(args);
@@ -27,5 +28,6 @@ PeanutOptions parsePeanutOptions(List<String> args) {
 
   return new PeanutOptions(
       format: enumValueHelper(
-          'FormatOptions', FormatOptions.values, result['format'] as String));
+          'FormatOptions', FormatOptions.values, result['format'] as String),
+      secret: result['secret'] as String);
 }

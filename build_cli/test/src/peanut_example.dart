@@ -43,6 +43,9 @@ class PeanutOptions {
   @CliOption(abbr: 'h', negatable: false, help: 'Prints usage information.')
   final bool help;
 
+  @CliOption(hide: true)
+  final bool secret;
+
   PeanutOptions(
       {this.directory,
       this.branch,
@@ -51,7 +54,8 @@ class PeanutOptions {
       this.message,
       this.buildTool,
       this.help,
-      this.bazelOptions});
+      this.bazelOptions,
+      this.secret});
 }
 
 enum BuildTool { pub, build }

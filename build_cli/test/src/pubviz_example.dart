@@ -13,7 +13,10 @@ class PeanutOptions {
       allowedHelp: _formatOptionsHelp)
   final FormatOptions format;
 
-  PeanutOptions({this.format});
+  @CliOption(hide: true)
+  final String secret;
+
+  PeanutOptions({this.format, this.secret});
 }
 
 enum FormatOptions { dot, html }

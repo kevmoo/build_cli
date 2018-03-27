@@ -12,6 +12,7 @@ class CliOption {
   final List<Object> allowed;
   final Map<Object, String> allowedHelp;
   final bool negatable;
+  final bool hide;
 
   const CliOption(
       {this.name,
@@ -20,5 +21,6 @@ class CliOption {
       this.help,
       this.allowed,
       this.negatable,
-      this.allowedHelp});
+      this.allowedHelp,
+      this.hide});
 }

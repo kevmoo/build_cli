@@ -148,5 +148,9 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
     buffer.write(', negatable: ${options.negatable}');
   }
 
+  if (options.hide != null) {
+    buffer.write(', hide: ${options.hide}');
+  }
+
   buffer.writeln(')');
 }

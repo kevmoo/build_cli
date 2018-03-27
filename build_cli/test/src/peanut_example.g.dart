@@ -29,7 +29,8 @@ final _$parserForPeanutOptions = new ArgParser()
   ..addOption('bazel-options',
       allowed: ['to-source', 'from-source', 'via-assets'])
   ..addFlag('help',
-      abbr: 'h', help: 'Prints usage information.', negatable: false);
+      abbr: 'h', help: 'Prints usage information.', negatable: false)
+  ..addFlag('secret', hide: true);
 
 PeanutOptions parsePeanutOptions(List<String> args) {
   var result = _$parserForPeanutOptions.parse(args);
@@ -52,5 +53,6 @@ PeanutOptions parsePeanutOptions(List<String> args) {
           'BuildTool', BuildTool.values, result['build-tool'] as String),
       help: result['help'] as bool,
       bazelOptions: enumValueHelper('BazelOptions', BazelOptions.values,
-          result['bazel-options'] as String));
+          result['bazel-options'] as String),
+      secret: result['secret'] as bool);
 }
