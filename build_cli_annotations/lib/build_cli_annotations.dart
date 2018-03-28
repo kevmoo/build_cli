@@ -1,4 +1,4 @@
-export 'package:args/args.dart' show ArgParser;
+export 'package:args/args.dart' show ArgParser, ArgResults;
 
 class CliOptions {
   const CliOptions();
