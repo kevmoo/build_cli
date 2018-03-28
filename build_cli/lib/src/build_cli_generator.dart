@@ -46,11 +46,12 @@ final $parserFieldName = new ArgParser()''');
       _parserOptionFor(buffer, f);
     }
 
-    buffer.writeln(''';
-  
-${classElement.name} parse${classElement.name}(List<String> args) {
+    var resultParserName = '_\$parse${classElement.name}Result';
 
-var result = $parserFieldName.parse(args);
+    buffer.writeln(''';
+
+${classElement.name} $resultParserName(ArgResults result) {
+
 ''');
 
     if (fields.values.any((fe) => isEnum(fe.type))) {
@@ -66,6 +67,13 @@ return ''');
     if (remainingFields.isNotEmpty) {
       warn(remainingFields);
     }
+
+    buffer.writeln('''}
+${classElement.name} parse${classElement.name}(List<String> args) {
+
+var result = $parserFieldName.parse(args);
+return $resultParserName(result);
+''');
 
     buffer.writeln('}');
 

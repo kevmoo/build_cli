@@ -32,9 +32,7 @@ final _$parserForPeanutOptions = new ArgParser()
       abbr: 'h', help: 'Prints usage information.', negatable: false)
   ..addFlag('secret', hide: true);
 
-PeanutOptions parsePeanutOptions(List<String> args) {
-  var result = _$parserForPeanutOptions.parse(args);
-
+PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
   T enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
       enumValue == null
           ? null
@@ -55,4 +53,9 @@ PeanutOptions parsePeanutOptions(List<String> args) {
       bazelOptions: enumValueHelper('BazelOptions', BazelOptions.values,
           result['bazel-options'] as String),
       secret: result['secret'] as bool);
+}
+
+PeanutOptions parsePeanutOptions(List<String> args) {
+  var result = _$parserForPeanutOptions.parse(args);
+  return _$parsePeanutOptionsResult(result);
 }

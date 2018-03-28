@@ -19,9 +19,7 @@ final _$parserForPeanutOptions = new ArgParser()
       abbr: 'i',
       help: 'A comma seperated list of packages to exclude in the output.');
 
-PeanutOptions parsePeanutOptions(List<String> args) {
-  var result = _$parserForPeanutOptions.parse(args);
-
+PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
   T enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
       enumValue == null
           ? null
@@ -34,4 +32,9 @@ PeanutOptions parsePeanutOptions(List<String> args) {
           'FormatOptions', FormatOptions.values, result['format'] as String),
       ignorePackages: result['ignore-packages'] as List<String>,
       secret: result['secret'] as String);
+}
+
+PeanutOptions parsePeanutOptions(List<String> args) {
+  var result = _$parserForPeanutOptions.parse(args);
+  return _$parsePeanutOptionsResult(result);
 }
