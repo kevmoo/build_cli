@@ -1,9 +1,3 @@
-import 'package:logging/logging.dart';
-
-void warn(Object message) => _logger.warning(message);
-
-final _logger = new Logger('ArgsGenerator');
-
 final _upperCase = new RegExp('[A-Z]');
 
 String kebab(String input) => input.replaceAllMapped(_upperCase, (match) {

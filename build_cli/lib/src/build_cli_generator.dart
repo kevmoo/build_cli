@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:analyzer/dart/element/element.dart';
+import 'package:build/build.dart' show log;
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -70,7 +71,9 @@ return ''');
         writeNewInstance(buffer, classElement, fields, deserializeForField);
 
     if (remainingFields.isNotEmpty) {
-      warn(remainingFields);
+      var fieldsString = remainingFields.map((f) => '`$f`').join(', ');
+      log.warning(
+          'Fields on `$classElement` were not populated: $fieldsString');
     }
 
     buffer.writeln('''}

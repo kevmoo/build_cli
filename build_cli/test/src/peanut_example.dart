@@ -51,6 +51,9 @@ class PeanutOptions {
 
   final List<String> rest;
 
+  // Explicitly not used – to validate logging behavior
+  final String coolBean = null;
+
   PeanutOptions(
       {this.directory,
       this.branch,

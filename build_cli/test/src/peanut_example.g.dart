@@ -30,7 +30,8 @@ final _$parserForPeanutOptions = new ArgParser()
       allowed: ['to-source', 'from-source', 'via-assets'])
   ..addFlag('help',
       abbr: 'h', help: 'Prints usage information.', negatable: false)
-  ..addFlag('secret', hide: true);
+  ..addFlag('secret', hide: true)
+  ..addOption('cool-bean');
 
 PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
   T enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
