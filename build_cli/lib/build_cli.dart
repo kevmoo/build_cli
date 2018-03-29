@@ -13,7 +13,7 @@ import 'package:source_gen/source_gen.dart';
 
 import 'src/build_cli_generator.dart';
 
-export 'src/build_cli_generator.dart';
+export 'src/build_cli_generator.dart' show CliGenerator;
 
 // TODO: until we can use `log` here - github.com/dart-lang/build/issues/1223
 final _logger = new Logger('json_serializable');

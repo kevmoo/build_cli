@@ -10,6 +10,11 @@ import 'arg_info.dart';
 import 'to_share.dart';
 import 'util.dart';
 
+/// A `package:source_gen` `Generator` which generates CLI parsing code
+/// for classes annotated with [CliOptions].
+///
+/// Developers shouldn't need to access this class directly unless they are
+/// configuring a `package:source_gen` `PartBuilder` in code.
 class CliGenerator extends GeneratorForAnnotation<CliOptions> {
   const CliGenerator();
 
