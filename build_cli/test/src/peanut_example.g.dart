@@ -52,7 +52,8 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
       help: result['help'] as bool,
       bazelOptions: enumValueHelper('BazelOptions', BazelOptions.values,
           result['bazel-options'] as String),
-      secret: result['secret'] as bool);
+      secret: result['secret'] as bool,
+      rest: result.rest);
 }
 
 PeanutOptions parsePeanutOptions(List<String> args) {

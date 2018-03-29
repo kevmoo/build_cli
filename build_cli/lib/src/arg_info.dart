@@ -19,7 +19,7 @@ bool isMulti(DartType targetType) =>
 
 final _argInfoCache = new Expando<ArgInfo>();
 
-enum ArgType { option, flag, multiOption }
+enum ArgType { option, flag, multiOption, rest, wasParsed }
 
 class ArgInfo {
   final CliOption optionData;
@@ -33,8 +33,14 @@ class ArgInfo {
       return info;
     }
 
-    var type = _getArgType(element.type);
     var option = _getOptions(element);
+
+    ArgType type;
+    if (option == null && element.name == 'rest') {
+      type = ArgType.rest;
+    } else {
+      type = _getArgType(element.type);
+    }
     return _argInfoCache[element] = new ArgInfo(type, option);
   }
 }
@@ -67,6 +73,12 @@ CliOption _getOptions(FieldElement element) {
   String defaultsTo;
 
   var annotation = new ConstantReader(obj);
+
+  if (annotation.isNull && element.name == 'rest') {
+    // Should check that this is a `List<String>`
+    return null;
+  }
+
   var defaultsToReader =
       annotation.isNull ? null : annotation?.read('defaultsTo');
 

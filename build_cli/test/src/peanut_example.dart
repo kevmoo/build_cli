@@ -45,6 +45,8 @@ class PeanutOptions {
   @CliOption(hide: true)
   final bool secret;
 
+  final List<String> rest;
+
   PeanutOptions(
       {this.directory,
       this.branch,
@@ -54,7 +56,8 @@ class PeanutOptions {
       this.buildTool,
       this.help,
       this.bazelOptions,
-      this.secret});
+      this.secret,
+      this.rest});
 }
 
 enum BuildTool { pub, build }

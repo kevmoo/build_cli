@@ -91,6 +91,11 @@ T enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
 ''';
 
 String _deserializeForField(FieldElement field, {ParameterElement ctorParam}) {
+  var info = ArgInfo.fromField(field);
+  if (info.argType == ArgType.rest) {
+    return 'result.rest';
+  }
+
   var targetType = ctorParam?.type ?? field.type;
   var argName = _getArgName(field);
 
@@ -118,17 +123,19 @@ String _getArgName(FieldElement element) =>
 void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   var info = ArgInfo.fromField(element);
 
-  buffer.write('..');
   switch (info.argType) {
     case ArgType.flag:
-      buffer.write('addFlag');
+      buffer.write('..addFlag');
       break;
     case ArgType.option:
-      buffer.write('addOption');
+      buffer.write('..addOption');
       break;
     case ArgType.multiOption:
-      buffer.write('addMultiOption');
+      buffer.write('..addMultiOption');
       break;
+    case ArgType.rest:
+    case ArgType.wasParsed:
+      return;
   }
   buffer.write("('${_getArgName(element)}'");
 
