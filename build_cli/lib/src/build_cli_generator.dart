@@ -3,18 +3,11 @@ import 'dart:collection';
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
-
-import 'package:logging/logging.dart';
-
 import 'package:source_gen/source_gen.dart';
 
 import 'arg_info.dart';
 import 'to_share.dart';
 import 'util.dart';
-
-final _logger = new Logger('build_cli_generator');
-
-void warn(Object obj) => _logger.warning(obj);
 
 class CliGenerator extends GeneratorForAnnotation<CliOptions> {
   const CliGenerator();
