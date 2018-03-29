@@ -65,7 +65,11 @@ ${classElement.name} $resultParserName(ArgResults result) {
     if (remainingFields.isNotEmpty) {
       var fieldsString = remainingFields.map((f) => '`$f`').join(', ');
       log.warning(
-          'Fields on `$classElement` were not populated: $fieldsString');
+          'Skipping unassignable fields on `$classElement`: $fieldsString');
+
+      for (var unusedField in remainingFields) {
+        fields.remove(unusedField.name);
+      }
     }
 
     buffer.writeln('''}
