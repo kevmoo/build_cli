@@ -9,10 +9,29 @@ void main() {
     expect(options.directory, 'web');
     expect(options.branch, 'gh-pages');
     expect(options.mode, PubBuildMode.release);
+    expect(options.modeWasParsed, isFalse);
     expect(options.buildConfig, isNull);
+    expect(options.buildConfigWasParsed, isFalse);
     expect(options.message, 'Built <directory>');
     expect(options.buildTool, isNull);
     expect(options.help, isFalse);
+    expect(options.rest, isEmpty);
+  });
+
+  test('some args', () {
+    var options = parsePeanutOptions(
+        ['-d', 'dir', '--mode', 'debug', '-h', 'extra', 'things']);
+
+    expect(options.directory, 'dir');
+    expect(options.branch, 'gh-pages');
+    expect(options.mode, PubBuildMode.debug);
+    expect(options.modeWasParsed, isTrue);
+    expect(options.buildConfig, isNull);
+    expect(options.buildConfigWasParsed, isFalse);
+    expect(options.message, 'Built <directory>');
+    expect(options.buildTool, isNull);
+    expect(options.help, isTrue);
+    expect(options.rest, ['extra', 'things']);
   });
 
   group('with invalid args', () {
