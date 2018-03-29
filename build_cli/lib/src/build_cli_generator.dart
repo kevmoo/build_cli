@@ -3,11 +3,18 @@ import 'dart:collection';
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
+
+import 'package:logging/logging.dart';
+
 import 'package:source_gen/source_gen.dart';
 
 import 'arg_info.dart';
 import 'to_share.dart';
 import 'util.dart';
+
+final _logger = new Logger('build_cli_generator');
+
+void warn(Object obj) => _logger.warning(obj);
 
 class CliGenerator extends GeneratorForAnnotation<CliOptions> {
   const CliGenerator();
@@ -61,8 +68,13 @@ ${classElement.name} $resultParserName(ArgResults result) {
     buffer.write('''
 return ''');
 
+    String deserializeForField(FieldElement field,
+        {ParameterElement ctorParam}) {
+      return _deserializeForField(field, ctorParam, fields);
+    }
+
     var remainingFields =
-        writeNewInstance(buffer, classElement, fields, _deserializeForField);
+        writeNewInstance(buffer, classElement, fields, deserializeForField);
 
     if (remainingFields.isNotEmpty) {
       warn(remainingFields);
@@ -90,10 +102,20 @@ T enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
                 'Could not find the value `$enumValue` in enum `$enumName`.'));
 ''';
 
-String _deserializeForField(FieldElement field, {ParameterElement ctorParam}) {
+String _deserializeForField(FieldElement field, ParameterElement ctorParam,
+    Map<String, FieldElement> allFields) {
   var info = ArgInfo.fromField(field);
   if (info.argType == ArgType.rest) {
     return 'result.rest';
+  }
+
+  if (info.argType == ArgType.wasParsed) {
+    var name = field.name;
+    assert(name.endsWith(wasParsedSuffix));
+    var targetFieldName =
+        name.substring(0, name.length - wasParsedSuffix.length);
+    var targetField = allFields[targetFieldName];
+    return "result.wasParsed('${_getArgName(targetField)}')";
   }
 
   var targetType = ctorParam?.type ?? field.type;

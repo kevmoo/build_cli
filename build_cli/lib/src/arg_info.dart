@@ -21,6 +21,13 @@ final _argInfoCache = new Expando<ArgInfo>();
 
 enum ArgType { option, flag, multiOption, rest, wasParsed }
 
+final wasParsedSuffix = 'WasParsed';
+
+bool _couldBeRestArg(FieldElement element) => element.name == 'rest';
+bool _couldBeWasParsedArg(FieldElement element) =>
+    element.name.endsWith(wasParsedSuffix) &&
+    element.name.length > wasParsedSuffix.length;
+
 class ArgInfo {
   final CliOption optionData;
   final ArgType argType;
@@ -36,8 +43,14 @@ class ArgInfo {
     var option = _getOptions(element);
 
     ArgType type;
-    if (option == null && element.name == 'rest') {
-      type = ArgType.rest;
+    if (option == null) {
+      if (_couldBeRestArg(element)) {
+        type = ArgType.rest;
+      } else if (_couldBeWasParsedArg(element)) {
+        type = ArgType.wasParsed;
+      } else {
+        throw new StateError('Should never get here!');
+      }
     } else {
       type = _getArgType(element.type);
     }
@@ -74,8 +87,13 @@ CliOption _getOptions(FieldElement element) {
 
   var annotation = new ConstantReader(obj);
 
-  if (annotation.isNull && element.name == 'rest') {
-    // Should check that this is a `List<String>`
+  if (annotation.isNull && _couldBeRestArg(element)) {
+    // TODO: check this is a `List<String>`
+    return null;
+  }
+
+  if (annotation.isNull && _couldBeWasParsedArg(element)) {
+    // TODO: check this is a bool!
     return null;
   }
 

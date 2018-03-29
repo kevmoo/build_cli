@@ -45,7 +45,9 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
       branch: result['branch'] as String,
       mode: enumValueHelper(
           'PubBuildMode', PubBuildMode.values, result['mode'] as String),
+      modeWasParsed: result.wasParsed('mode'),
       buildConfig: result['build-config'] as String,
+      buildConfigWasParsed: result.wasParsed('build-config'),
       message: result['message'] as String,
       buildTool: enumValueHelper(
           'BuildTool', BuildTool.values, result['build-tool'] as String),

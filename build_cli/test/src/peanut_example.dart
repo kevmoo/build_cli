@@ -20,12 +20,16 @@ class PeanutOptions {
       defaultsTo: PubBuildMode.release, help: 'The mode to run `pub build` in.')
   final PubBuildMode mode;
 
+  final bool modeWasParsed;
+
   @CliOption(
       abbr: 'c',
       help: 'The configuration to use when running `build_runner`. '
           'If this option is not set, `$_defaultConfig` is used if '
           '`$_defaultConfigFile` exists in the current directory.')
   final String buildConfig;
+
+  final bool buildConfigWasParsed;
 
   @CliOption(abbr: 'm', defaultsTo: 'Built <$_directoryFlag>')
   final String message;
@@ -51,7 +55,9 @@ class PeanutOptions {
       {this.directory,
       this.branch,
       this.mode,
+      this.modeWasParsed,
       this.buildConfig,
+      this.buildConfigWasParsed,
       this.message,
       this.buildTool,
       this.help,
