@@ -2,6 +2,7 @@
 
 - Use the logger built into `pkg:build`.
 - Don't generate CLI entries for unassignable fields.
+- Support latest `pkg:source_gen`. 
 
 ## 0.1.0
 

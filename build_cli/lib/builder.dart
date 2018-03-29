@@ -3,11 +3,22 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'package:build/build.dart';
+import 'package:logging/logging.dart';
 
 import 'src/part_builder.dart';
 
-Builder cliBuilder(BuilderOptions options) => cliPartBuilder(
-    header: options.config['header'] as String,
-    // ignore: deprecated_member_use
-    requireLibraryDirective:
-        options.config['require_library_directive'] as bool ?? false);
+final _logger = new Logger('json_serializable');
+
+Builder cliBuilder(BuilderOptions options) {
+  var setOptions = new Map<String, dynamic>.from(options.config);
+
+  dynamic read(String key) => setOptions.remove(key);
+
+  try {
+    return cliPartBuilder(header: read('header') as String);
+  } finally {
+    if (setOptions.isNotEmpty) {
+      _logger.warning('These options were ignored: `$setOptions`.');
+    }
+  }
+}
