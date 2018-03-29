@@ -12,8 +12,6 @@ Builder cliBuilder(BuilderOptions options) {
   // elsewhere.
   var optionsMap = new Map<String, dynamic>.from(options.config);
 
-  _logger.warning(StackTrace.current);
-
   try {
     return _cliPartBuilder(header: optionsMap.remove('header') as String);
   } finally {
