@@ -1,5 +1,9 @@
 name: build_cli_annotations
-version: 0.1.0-dev
+version: 0.1.0
+description: >-
+  Contains annotations for `package:build_cli`.
+  See that package for more information.
+
 author: Kevin Moore <github@j832.com>
 homepage: https://github.com/kevmoo/build_cli
 
