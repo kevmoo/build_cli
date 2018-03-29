@@ -40,16 +40,9 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
 
     var parserFieldName = '_\$parserFor${classElement.name}';
 
-    buffer.writeln('''
-final $parserFieldName = new ArgParser()''');
-
-    for (var f in fields.values) {
-      _parserOptionFor(buffer, f);
-    }
-
     var resultParserName = '_\$parse${classElement.name}Result';
 
-    buffer.writeln(''';
+    buffer.writeln('''
 
 ${classElement.name} $resultParserName(ArgResults result) {
 
@@ -59,8 +52,7 @@ ${classElement.name} $resultParserName(ArgResults result) {
       buffer.writeln(_enumValueHelper);
     }
 
-    buffer.write('''
-return ''');
+    buffer.write('return ');
 
     String deserializeForField(FieldElement field,
         {ParameterElement ctorParam}) {
@@ -77,13 +69,19 @@ return ''');
     }
 
     buffer.writeln('''}
+
+final $parserFieldName = new ArgParser()''');
+
+    for (var f in fields.values) {
+      _parserOptionFor(buffer, f);
+    }
+
+    buffer.writeln(''';
 ${classElement.name} parse${classElement.name}(List<String> args) {
-
-var result = $parserFieldName.parse(args);
-return $resultParserName(result);
+  var result = $parserFieldName.parse(args);
+  return $resultParserName(result);
+}
 ''');
-
-    buffer.writeln('}');
 
     return buffer.toString();
   }

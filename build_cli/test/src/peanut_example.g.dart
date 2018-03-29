@@ -6,33 +6,6 @@ part of 'peanut_example.dart';
 // Generator: CliGenerator
 // **************************************************************************
 
-final _$parserForPeanutOptions = new ArgParser()
-  ..addOption('directory', abbr: 'd', defaultsTo: 'web')
-  ..addOption('branch', abbr: 'b', defaultsTo: 'gh-pages')
-  ..addOption('mode',
-      help: 'The mode to run `pub build` in.',
-      defaultsTo: 'release',
-      allowed: ['release', 'debug'])
-  ..addOption('build-config',
-      abbr: 'c',
-      help:
-          'The configuration to use when running `build_runner`. If this option is not set, `release` is used if `build.release.yaml` exists in the current directory.')
-  ..addOption('message', abbr: 'm', defaultsTo: 'Built <directory>')
-  ..addOption('build-tool',
-      abbr: 't',
-      help:
-          'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
-      allowed: [
-        'pub',
-        'build'
-      ])
-  ..addOption('bazel-options',
-      allowed: ['to-source', 'from-source', 'via-assets'])
-  ..addFlag('help',
-      abbr: 'h', help: 'Prints usage information.', negatable: false)
-  ..addFlag('secret', hide: true)
-  ..addOption('cool-bean');
-
 PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
   T enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
       enumValue == null
@@ -59,6 +32,32 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
       rest: result.rest);
 }
 
+final _$parserForPeanutOptions = new ArgParser()
+  ..addOption('directory', abbr: 'd', defaultsTo: 'web')
+  ..addOption('branch', abbr: 'b', defaultsTo: 'gh-pages')
+  ..addOption('mode',
+      help: 'The mode to run `pub build` in.',
+      defaultsTo: 'release',
+      allowed: ['release', 'debug'])
+  ..addOption('build-config',
+      abbr: 'c',
+      help:
+          'The configuration to use when running `build_runner`. If this option is not set, `release` is used if `build.release.yaml` exists in the current directory.')
+  ..addOption('message', abbr: 'm', defaultsTo: 'Built <directory>')
+  ..addOption('build-tool',
+      abbr: 't',
+      help:
+          'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
+      allowed: [
+        'pub',
+        'build'
+      ])
+  ..addOption('bazel-options',
+      allowed: ['to-source', 'from-source', 'via-assets'])
+  ..addFlag('help',
+      abbr: 'h', help: 'Prints usage information.', negatable: false)
+  ..addFlag('secret', hide: true)
+  ..addOption('cool-bean');
 PeanutOptions parsePeanutOptions(List<String> args) {
   var result = _$parserForPeanutOptions.parse(args);
   return _$parsePeanutOptionsResult(result);
