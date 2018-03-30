@@ -3,7 +3,6 @@ targets:
   $default:
     builders:
       build_cli:
-        enabled: true
         generate_for:
           include:
           - test/src/**
