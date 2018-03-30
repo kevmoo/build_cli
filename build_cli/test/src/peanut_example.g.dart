@@ -1,4 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// You can customize this header by setting the `header` option
+// in `build.yaml`.
 
 part of 'peanut_example.dart';
 
