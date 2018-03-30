@@ -33,6 +33,7 @@ final _$parserForPeanutOptions = new ArgParser()
   ..addMultiOption('ignore-packages',
       abbr: 'i',
       help: 'A comma seperated list of packages to exclude in the output.');
+
 PeanutOptions parsePeanutOptions(List<String> args) {
   var result = _$parserForPeanutOptions.parse(args);
   return _$parsePeanutOptionsResult(result);

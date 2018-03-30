@@ -57,6 +57,7 @@ final _$parserForPeanutOptions = new ArgParser()
   ..addFlag('help',
       abbr: 'h', help: 'Prints usage information.', negatable: false)
   ..addFlag('secret', hide: true);
+
 PeanutOptions parsePeanutOptions(List<String> args) {
   var result = _$parserForPeanutOptions.parse(args);
   return _$parsePeanutOptionsResult(result);

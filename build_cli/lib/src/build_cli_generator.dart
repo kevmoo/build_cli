@@ -86,6 +86,7 @@ final $parserFieldName = new ArgParser()''');
     }
 
     buffer.writeln(''';
+
 ${classElement.name} parse${classElement.name}(List<String> args) {
   var result = $parserFieldName.parse(args);
   return $resultParserName(result);
