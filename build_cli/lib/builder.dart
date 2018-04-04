@@ -16,7 +16,7 @@ import 'src/build_cli_generator.dart';
 // TODO: until we can use `log` here - github.com/dart-lang/build/issues/1223
 final _logger = new Logger('json_serializable');
 
-Builder cliBuilder(BuilderOptions options) {
+Builder buildCli(BuilderOptions options) {
   // Paranoid copy of options.config - don't assume it's mutable or needed
   // elsewhere.
   var optionsMap = new Map<String, dynamic>.from(options.config);
