@@ -15,8 +15,8 @@ targets:
 builders:
   build_cli:
     target: noop
-    import: "package:build_cli/build_cli.dart"
-    builder_factories: ["createBuilderForCliGenerator"]
+    import: "package:build_cli/builder.dart"
+    builder_factories: ["cliBuilder"]
     build_extensions: {".dart": [".g.dart"]}
     auto_apply: dependents
     build_to: source
