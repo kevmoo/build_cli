@@ -48,8 +48,7 @@ final _$parserForPeanutOptions = new ArgParser()
   ..addOption('message', abbr: 'm', defaultsTo: 'Built <directory>')
   ..addOption('build-tool',
       abbr: 't',
-      help:
-          'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
+      help: 'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
       allowed: [
         'pub',
         'build'
@@ -57,7 +56,10 @@ final _$parserForPeanutOptions = new ArgParser()
   ..addOption('bazel-options',
       allowed: ['to-source', 'from-source', 'via-assets'])
   ..addFlag('help',
-      abbr: 'h', help: 'Prints usage information.', negatable: false)
+      abbr: 'h',
+      help:
+          'Prints usage information. Which is so \"\$\" you don\'t even know it!',
+      negatable: false)
   ..addFlag('secret', hide: true);
 
 PeanutOptions parsePeanutOptions(List<String> args) {

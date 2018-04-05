@@ -63,6 +63,6 @@ void main() {
                        [pub, build]
 
     --bazel-options    [to-source, from-source, via-assets]
--h, --help             Prints usage information.''');
+-h, --help             Prints usage information. Which is so "$" you don't even know it!''');
   });
 }

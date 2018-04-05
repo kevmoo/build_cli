@@ -28,7 +28,7 @@ final _$parserForPeanutOptions = new ArgParser()
     'dot',
     'html'
   ], allowedHelp: <String, String>{
-    'dot': 'Generate a GraphViz dot file',
+    'dot': "Generate a GraphViz 'dot' file.",
     'html': 'Wrap the GraphViz dot format in an HTML template which renders it.'
   })
   ..addOption('secret', hide: true)

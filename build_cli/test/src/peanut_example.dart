@@ -43,7 +43,11 @@ class PeanutOptions {
   @CliOption()
   final BazelOptions bazelOptions;
 
-  @CliOption(abbr: 'h', negatable: false, help: 'Prints usage information.')
+  @CliOption(
+      abbr: 'h',
+      negatable: false,
+      help: 'Prints usage information. '
+          'Which is so "\$" you don\'t even know it!')
   final bool help;
 
   @CliOption(hide: true)

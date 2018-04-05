@@ -125,13 +125,13 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
     var targetFieldName =
         name.substring(0, name.length - wasParsedSuffix.length);
     var targetField = allFields[targetFieldName];
-    return "result.wasParsed('${_getArgName(targetField)}')";
+    return 'result.wasParsed(${_getArgNameStringLiteral(targetField)})';
   }
 
   var targetType = ctorParam?.type ?? field.type;
-  var argName = _getArgName(field);
+  var argName = _getArgNameStringLiteral(field);
 
-  var argAccess = "result['$argName']";
+  var argAccess = 'result[$argName]';
 
   if (stringChecker.isExactlyType(targetType) ||
       boolChecker.isExactlyType(targetType)) {
@@ -149,8 +149,8 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
   throw new UnsupportedError('Should never get here...');
 }
 
-String _getArgName(FieldElement element) =>
-    ArgInfo.fromField(element).optionData?.name ?? kebab(element.name);
+String _getArgNameStringLiteral(FieldElement element) => escapeDartString(
+    ArgInfo.fromField(element).optionData?.name ?? kebab(element.name));
 
 void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   var info = ArgInfo.fromField(element);
@@ -169,20 +169,21 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
     case ArgType.wasParsed:
       return;
   }
-  buffer.write("('${_getArgName(element)}'");
+  buffer.write('(${_getArgNameStringLiteral(element)}');
 
   var options = info.optionData;
 
   if (options.abbr != null) {
-    buffer.write(", abbr:'${options.abbr}'");
+    buffer.write(', abbr: ${escapeDartString(options.abbr)}');
   }
 
   if (options.help != null) {
-    buffer.write(", help:'${options.help}'");
+    buffer.write(', help: ${escapeDartString(options.help)}');
   }
 
   if (options.defaultsTo != null) {
-    buffer.write(", defaultsTo:'${options.defaultsTo}'");
+    buffer.write(
+        ', defaultsTo: ${escapeDartString(options.defaultsTo.toString())}');
   }
 
   if (options.allowed != null) {
@@ -192,9 +193,11 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
 
   if (options.allowedHelp != null) {
     // TODO: throw/warn if there if `allowed` is null?
-    var allowedHelpItems = options.allowedHelp.entries
-        .map((e) => "'${e.key}':'${e.value}'")
-        .join(',');
+    var allowedHelpItems = options.allowedHelp.entries.map((e) {
+      var escapedKey = escapeDartString(e.key.toString());
+      var escapedValue = escapeDartString(e.value);
+      return '$escapedKey: $escapedValue';
+    }).join(',');
     buffer.write(', allowedHelp: <String, String>{$allowedHelpItems}');
   }
 

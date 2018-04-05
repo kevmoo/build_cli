@@ -30,7 +30,7 @@ void main() {
   test('usage', () {
     expect(parser.usage, r'''
 -f, --format             
-          [dot]          Generate a GraphViz dot file
+          [dot]          Generate a GraphViz 'dot' file.
           [html]         Wrap the GraphViz dot format in an HTML template which renders it.
 
 -i, --ignore-packages    A comma seperated list of packages to exclude in the output.''');
