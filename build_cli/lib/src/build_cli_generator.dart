@@ -32,7 +32,7 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
 
     // Get all of the fields that need to be assigned
     // TODO: We only care about constructor things + writable fields, right?
-    var fieldsList = listFields(classElement);
+    var fieldsList = createSortedFieldSet(classElement);
 
     // Explicitly using `LinkedHashMap` – we want these ordered.
     var fields = new LinkedHashMap<String, FieldElement>.fromIterable(
@@ -53,27 +53,33 @@ ${classElement.name} $resultParserName(ArgResults result) {
 
 ''');
 
-    if (fields.values.any((fe) => isEnum(fe.type))) {
+    if (fieldsList.any((fe) => isEnum(fe.type))) {
       buffer.writeln(_enumValueHelper);
     }
 
     buffer.write('return ');
 
-    String deserializeForField(FieldElement field,
-        {ParameterElement ctorParam}) {
-      return _deserializeForField(field, ctorParam, fields);
+    String deserializeForField(String fieldName, {ParameterElement ctorParam}) {
+      return _deserializeForField(fields[fieldName], ctorParam, fields);
     }
 
-    var remainingFields =
-        writeNewInstance(buffer, classElement, fields, deserializeForField);
+    var usedFields = writeConstructorInvocation(
+        buffer,
+        classElement,
+        fields.keys,
+        fields.values.where((fe) => !fe.isFinal).map((fe) => fe.name),
+        {},
+        deserializeForField);
 
-    if (remainingFields.isNotEmpty) {
-      var fieldsString = remainingFields.map((f) => '`$f`').join(', ');
+    var unusedFields = fields.keys.toSet()..removeAll(usedFields);
+
+    if (unusedFields.isNotEmpty) {
+      var fieldsString = unusedFields.map((f) => '`$f`').join(', ');
       log.warning(
           'Skipping unassignable fields on `$classElement`: $fieldsString');
 
-      for (var unusedField in remainingFields) {
-        fields.remove(unusedField.name);
+      for (var unusedField in unusedFields) {
+        fields.remove(unusedField);
       }
     }
 
