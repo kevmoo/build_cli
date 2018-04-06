@@ -1,3 +1,7 @@
+## 0.1.1+1
+
+- Fix link to `package:peanut` usage example.
+
 ## 0.1.1
 
 - Add setup instructions to `README.md`.

@@ -37,5 +37,6 @@ for inspiration.
 
 Also look at the
 [`package:peanut` source code](https://github.com/kevmoo/peanut.dart).
-The [`bin` directory](https://github.com/kevmoo/peanut.dart/tree/master/bin)
+The `options` files in the 
+[`src` directory](https://github.com/kevmoo/peanut.dart/tree/master/lib/src)
 as the interesting files.
