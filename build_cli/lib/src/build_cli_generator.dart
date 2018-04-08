@@ -24,7 +24,8 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
     if (element is! ClassElement) {
       var friendlyName = friendlyNameForElement(element);
       throw new InvalidGenerationSourceError(
-          'Generator cannot target `$friendlyName`.',
+          'Generator cannot target `$friendlyName`. '
+          '`@CliOptions` can only be applied to a class.',
           todo: 'Remove the `@CliOptions` annotation from `$friendlyName`.');
     }
 
