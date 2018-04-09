@@ -44,8 +44,8 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
 
     var buffer = new StringBuffer();
 
+    var populateParserName = '_\$populate${classElement.name}Parser';
     var parserFieldName = '_\$parserFor${classElement.name}';
-
     var resultParserName = '_\$parse${classElement.name}Result';
 
     buffer.writeln('''
@@ -86,13 +86,15 @@ ${classElement.name} $resultParserName(ArgResults result) {
 
     buffer.writeln('''}
 
-final $parserFieldName = new ArgParser()''');
+ArgParser $populateParserName(ArgParser parser) => parser''');
 
     for (var f in fields.values) {
       _parserOptionFor(buffer, f);
     }
 
     buffer.writeln(''';
+
+final $parserFieldName = $populateParserName(new ArgParser());
 
 ${classElement.name} parse${classElement.name}(List<String> args) {
   var result = $parserFieldName.parse(args);

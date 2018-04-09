@@ -1,3 +1,9 @@
+## 0.1.2
+
+- Generate another private method `_$populate[OptionClassName]Parser`.
+  Allows usage for already existing `ArgParser` instances, such as with 
+  `package:args` `CommandRunner`.
+
 ## 0.1.1+1
 
 - Fix link to `package:peanut` usage example.

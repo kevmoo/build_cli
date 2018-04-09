@@ -23,7 +23,7 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
       secret: result['secret'] as String);
 }
 
-final _$parserForPeanutOptions = new ArgParser()
+ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
   ..addOption('format', abbr: 'f', defaultsTo: 'html', allowed: [
     'dot',
     'html'
@@ -35,6 +35,8 @@ final _$parserForPeanutOptions = new ArgParser()
   ..addMultiOption('ignore-packages',
       abbr: 'i',
       help: 'A comma seperated list of packages to exclude in the output.');
+
+final _$parserForPeanutOptions = _$populatePeanutOptionsParser(new ArgParser());
 
 PeanutOptions parsePeanutOptions(List<String> args) {
   var result = _$parserForPeanutOptions.parse(args);
