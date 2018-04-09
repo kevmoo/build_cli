@@ -34,7 +34,7 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
       rest: result.rest);
 }
 
-final _$parserForPeanutOptions = new ArgParser()
+ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
   ..addOption('directory', abbr: 'd', defaultsTo: 'web')
   ..addOption('branch', abbr: 'b', defaultsTo: 'gh-pages')
   ..addOption('mode',
@@ -61,6 +61,8 @@ final _$parserForPeanutOptions = new ArgParser()
           'Prints usage information. Which is so \"\$\" you don\'t even know it!',
       negatable: false)
   ..addFlag('secret', hide: true);
+
+final _$parserForPeanutOptions = _$populatePeanutOptionsParser(new ArgParser());
 
 PeanutOptions parsePeanutOptions(List<String> args) {
   var result = _$parserForPeanutOptions.parse(args);
