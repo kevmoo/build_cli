@@ -21,7 +21,9 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
           'FormatOptions', FormatOptions.values, result['format'] as String),
       secret: result['secret'] as String,
       ignorePackages: result['ignore-packages'] as List<String>,
-      productionPort: int.parse(result['production-port'] as String));
+      productionPort: int.parse(result['production-port'] as String))
+    ..numValue = num.parse(result['num-value'] as String)
+    ..doubleValue = double.parse(result['double-value'] as String);
 }
 
 ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
@@ -36,7 +38,9 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
   ..addMultiOption('ignore-packages',
       abbr: 'i',
       help: 'A comma seperated list of packages to exclude in the output.')
-  ..addOption('production-port', defaultsTo: '8080');
+  ..addOption('production-port', defaultsTo: '8080')
+  ..addOption('num-value', defaultsTo: '3.14')
+  ..addOption('double-value', defaultsTo: '3000.0');
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(new ArgParser());
 

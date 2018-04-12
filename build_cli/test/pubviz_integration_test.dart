@@ -9,6 +9,8 @@ void main() {
     expect(options.secret, isNull);
     expect(options.ignorePackages, []);
     expect(options.productionPort, 8080);
+    expect(options.numValue, 3.14);
+    expect(options.doubleValue, 3000.0);
   });
 
   group('with invalid args', () {
@@ -36,6 +38,8 @@ void main() {
           [html]         Wrap the GraphViz dot format in an HTML template which renders it.
 
 -i, --ignore-packages    A comma seperated list of packages to exclude in the output.
-    --production-port    (defaults to "8080")''');
+    --production-port    (defaults to "8080")
+    --num-value          (defaults to "3.14")
+    --double-value       (defaults to "3000.0")''');
   });
 }

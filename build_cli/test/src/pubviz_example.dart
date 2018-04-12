@@ -23,6 +23,12 @@ class PeanutOptions {
   @CliOption(defaultsTo: 8080)
   final int productionPort;
 
+  @CliOption(defaultsTo: 3.14)
+  num numValue;
+
+  @CliOption(defaultsTo: 3e3)
+  double doubleValue;
+
   //TODO: support List<num>
   //List<int> devPorts;
 
