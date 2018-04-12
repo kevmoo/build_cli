@@ -19,8 +19,9 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
   return new PeanutOptions(
       format: enumValueHelper(
           'FormatOptions', FormatOptions.values, result['format'] as String),
+      secret: result['secret'] as String,
       ignorePackages: result['ignore-packages'] as List<String>,
-      secret: result['secret'] as String);
+      productionPort: int.parse(result['production-port'] as String));
 }
 
 ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
@@ -34,7 +35,8 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
   ..addOption('secret', hide: true)
   ..addMultiOption('ignore-packages',
       abbr: 'i',
-      help: 'A comma seperated list of packages to exclude in the output.');
+      help: 'A comma seperated list of packages to exclude in the output.')
+  ..addOption('production-port', defaultsTo: '8080');
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(new ArgParser());
 

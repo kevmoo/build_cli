@@ -10,6 +10,7 @@ final _listChecker = new TypeChecker.fromRuntime(List);
 final _iterableChecker = new TypeChecker.fromRuntime(Iterable);
 final boolChecker = new TypeChecker.fromRuntime(bool);
 final stringChecker = new TypeChecker.fromRuntime(String);
+final _numChecker = new TypeChecker.fromRuntime(num);
 final _cliOptionChecker = new TypeChecker.fromRuntime(CliOption);
 
 // TODO: support Set, too...
@@ -69,11 +70,9 @@ ArgType _getArgType(DartType targetType) {
     return ArgType.flag;
   }
 
-  if (stringChecker.isExactlyType(targetType)) {
-    return ArgType.option;
-  }
-
-  if (isEnum(targetType)) {
+  if (stringChecker.isExactlyType(targetType) ||
+      isEnum(targetType) ||
+      _numChecker.isAssignableFromType(targetType)) {
     return ArgType.option;
   }
 
@@ -81,7 +80,7 @@ ArgType _getArgType(DartType targetType) {
     return ArgType.multiOption;
   }
 
-  throw new UnsupportedError('Cannot party on `$targetType`.');
+  throw new UnsupportedError('`$targetType` is not supported - yet.');
 }
 
 CliOption _getOptions(FieldElement element) {
@@ -167,10 +166,11 @@ CliOption _getOptions(FieldElement element) {
     if (isEnum(element.type)) {
       // Already taken care of above, right?
       assert(defaultsTo != null);
-    } else if (defaultsToReader.isString) {
-      defaultsTo = defaultsToReader.stringValue;
-    } else if (defaultsToReader.isBool) {
-      defaultsTo = defaultsToReader.boolValue;
+    } else if (defaultsToReader.isString ||
+        defaultsToReader.isBool ||
+        defaultsToReader.isInt ||
+        defaultsToReader.isDouble) {
+      defaultsTo = defaultsToReader.literalValue;
     } else {
       throw new UnsupportedError('Could not process the default value '
           '`${defaultsToReader.literalValue}`.');

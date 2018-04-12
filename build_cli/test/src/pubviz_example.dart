@@ -20,7 +20,11 @@ class PeanutOptions {
       help: 'A comma seperated list of packages to exclude in the output.')
   final List<String> ignorePackages;
 
-  PeanutOptions({this.format, this.ignorePackages, this.secret});
+  @CliOption(defaultsTo: 8080)
+  final int productionPort;
+
+  PeanutOptions(
+      {this.format, this.secret, this.ignorePackages, this.productionPort});
 }
 
 enum FormatOptions { dot, html }

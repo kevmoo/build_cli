@@ -156,6 +156,10 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
     return '$argAccess as List<String>';
   }
 
+  if (const TypeChecker.fromRuntime(int).isExactlyType(targetType)) {
+    return 'int.parse($argAccess as String)';
+  }
+
   throw new UnsupportedError('The type `$targetType` is not supported.');
 }
 
