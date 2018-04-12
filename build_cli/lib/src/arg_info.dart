@@ -50,13 +50,13 @@ class ArgInfo {
         } else if (_couldBeWasParsedArg(element)) {
           type = ArgType.wasParsed;
         } else {
-          throw new StateError('Should never get here!');
+          throw new UnsupportedError('Should never get here!');
         }
       } else {
         type = _getArgType(element.type);
       }
       return _argInfoCache[element] = new ArgInfo(type, option);
-    } on StateError catch (e) {
+    } on UnsupportedError catch (e) {
       throw new InvalidGenerationSourceError(
           'Could not parse field `${friendlyNameForElement(element)}` - '
           '${e.message}');
@@ -117,7 +117,7 @@ CliOption _getOptions(FieldElement element) {
     if (defaultsToReader != null && !defaultsToReader.isNull) {
       var objectValue = defaultsToReader.objectValue;
       if (objectValue.type != element.type) {
-        throw new StateError('this is also wack');
+        throw new UnsupportedError('this is also wack');
       }
 
       var enumValueIndex = objectValue.getField('index').toIntValue();
@@ -133,7 +133,7 @@ CliOption _getOptions(FieldElement element) {
   var allowedHelpReader = annotation.read('allowedHelp');
   if (!allowedHelpReader.isNull) {
     if (!allowedHelpReader.isMap) {
-      throw new StateError('What are you doing?');
+      throw new UnsupportedError('What are you doing?');
     }
 
     allowedHelp = <String, String>{};
@@ -152,7 +152,7 @@ CliOption _getOptions(FieldElement element) {
         continue;
       }
 
-      throw new StateError('I do not get it! - ${entry.key.type}');
+      throw new UnsupportedError('I do not get it! - ${entry.key.type}');
     }
   }
 
@@ -172,7 +172,7 @@ CliOption _getOptions(FieldElement element) {
     } else if (defaultsToReader.isBool) {
       defaultsTo = defaultsToReader.boolValue;
     } else {
-      throw new StateError('Could not process the default value '
+      throw new UnsupportedError('Could not process the default value '
           '`${defaultsToReader.literalValue}`.');
     }
   }
@@ -180,7 +180,7 @@ CliOption _getOptions(FieldElement element) {
   if (allowedValues != null &&
       defaultsTo != null &&
       !allowedValues.contains(defaultsTo)) {
-    throw new StateError('Boo!');
+    throw new UnsupportedError('Boo!');
   }
 
   return new CliOption(
