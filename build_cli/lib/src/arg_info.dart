@@ -40,21 +40,27 @@ class ArgInfo {
       return info;
     }
 
-    var option = _getOptions(element);
+    try {
+      var option = _getOptions(element);
 
-    ArgType type;
-    if (option == null) {
-      if (_couldBeRestArg(element)) {
-        type = ArgType.rest;
-      } else if (_couldBeWasParsedArg(element)) {
-        type = ArgType.wasParsed;
+      ArgType type;
+      if (option == null) {
+        if (_couldBeRestArg(element)) {
+          type = ArgType.rest;
+        } else if (_couldBeWasParsedArg(element)) {
+          type = ArgType.wasParsed;
+        } else {
+          throw new StateError('Should never get here!');
+        }
       } else {
-        throw new StateError('Should never get here!');
+        type = _getArgType(element.type);
       }
-    } else {
-      type = _getArgType(element.type);
+      return _argInfoCache[element] = new ArgInfo(type, option);
+    } on StateError catch (e) {
+      throw new InvalidGenerationSourceError(
+          'Could not parse field `${friendlyNameForElement(element)}` - '
+          '${e.message}');
     }
-    return _argInfoCache[element] = new ArgInfo(type, option);
   }
 }
 
