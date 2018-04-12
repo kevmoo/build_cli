@@ -1,5 +1,6 @@
 ## 0.1.2
 
+- Support `int`, `double`, and `num` for options.
 - Improve error messages for some failures.
 - Support `defaultsTo` for flags.
 - Generate another private method `_$populate[OptionClassName]Parser`.
