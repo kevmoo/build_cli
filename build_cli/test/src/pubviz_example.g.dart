@@ -31,7 +31,10 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
     ..doubleValue = double.parse(
         result['double-value'] as String,
         (source) => throw new FormatException(
-            'Cannot parse "$source" into `double` for option "double-value".'));
+            'Cannot parse "$source" into `double` for option "double-value".'))
+    ..devPort = int.parse(result['dev-port'] as String,
+        onError: (source) => throw new FormatException(
+            'Cannot parse "$source" into `int` for option "dev-port".'));
 }
 
 ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
@@ -48,7 +51,8 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
       help: 'A comma seperated list of packages to exclude in the output.')
   ..addOption('production-port', defaultsTo: '8080')
   ..addOption('num-value', defaultsTo: '3.14')
-  ..addOption('double-value', defaultsTo: '3000.0');
+  ..addOption('double-value', defaultsTo: '3000.0')
+  ..addOption('dev-port', defaultsTo: '8080', allowed: ['8080', '9090', '42']);
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(new ArgParser());
 

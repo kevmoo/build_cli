@@ -29,6 +29,9 @@ class PeanutOptions {
   @CliOption(defaultsTo: 3e3)
   double doubleValue;
 
+  @CliOption(defaultsTo: 8080, allowed: [8080, 9090, 42])
+  int devPort;
+
   //TODO: support List<num>
   //List<int> devPorts;
 

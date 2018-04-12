@@ -87,7 +87,7 @@ CliOption _getOptions(FieldElement element) {
   var obj = _cliOptionChecker.firstAnnotationOfExact(element) ??
       _cliOptionChecker.firstAnnotationOfExact(element.getter);
 
-  List<String> allowedValues;
+  List<Object> allowedValues;
   Object defaultsTo;
 
   var annotation = new ConstantReader(obj);
@@ -128,14 +128,14 @@ CliOption _getOptions(FieldElement element) {
     return new CliOption(allowed: allowedValues);
   }
 
-  Map<String, String> allowedHelp;
+  Map<Object, String> allowedHelp;
   var allowedHelpReader = annotation.read('allowedHelp');
   if (!allowedHelpReader.isNull) {
     if (!allowedHelpReader.isMap) {
       throw new UnsupportedError('What are you doing?');
     }
 
-    allowedHelp = <String, String>{};
+    allowedHelp = <Object, String>{};
     for (var entry in allowedHelpReader.mapValue.entries) {
       var mapKeyReader = new ConstantReader(entry.key);
       if (mapKeyReader.isString) {
@@ -158,7 +158,7 @@ CliOption _getOptions(FieldElement element) {
   var allowedReader = annotation.read('allowed');
   if (!allowedReader.isNull) {
     allowedValues = allowedReader.listValue
-        .map((o) => new ConstantReader(o).stringValue)
+        .map((o) => new ConstantReader(o).literalValue)
         .toList();
   }
 

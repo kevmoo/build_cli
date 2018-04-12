@@ -11,6 +11,7 @@ void main() {
     expect(options.productionPort, 8080);
     expect(options.numValue, 3.14);
     expect(options.doubleValue, 3000.0);
+    expect(options.devPort, 8080);
   });
 
   group('with invalid args', () {
@@ -55,6 +56,7 @@ void main() {
 -i, --ignore-packages    A comma seperated list of packages to exclude in the output.
     --production-port    (defaults to "8080")
     --num-value          (defaults to "3.14")
-    --double-value       (defaults to "3000.0")''');
+    --double-value       (defaults to "3000.0")
+    --dev-port           [8080 (default), 9090, 42]''');
   });
 }
