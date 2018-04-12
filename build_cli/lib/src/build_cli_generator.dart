@@ -156,23 +156,29 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
     return '$argAccess as List<String>';
   }
 
+  String numOrElseLambda(String type) =>
+      '''(source) => throw new FormatException('Cannot parse "\$source" into `$type` for option "${_getArgName(field)}".')''';
+
   if (const TypeChecker.fromRuntime(int).isExactlyType(targetType)) {
-    return 'int.parse($argAccess as String)';
+    return 'int.parse($argAccess as String, onError: ${numOrElseLambda('int')})';
   }
 
   if (const TypeChecker.fromRuntime(double).isExactlyType(targetType)) {
-    return 'double.parse($argAccess as String)';
+    return 'double.parse($argAccess as String, ${numOrElseLambda('double')})';
   }
 
   if (const TypeChecker.fromRuntime(num).isExactlyType(targetType)) {
-    return 'num.parse($argAccess as String)';
+    return 'num.parse($argAccess as String, ${numOrElseLambda('num')})';
   }
 
   throw new UnsupportedError('The type `$targetType` is not supported.');
 }
 
-String _getArgNameStringLiteral(FieldElement element) => escapeDartString(
-    ArgInfo.fromField(element).optionData?.name ?? kebab(element.name));
+String _getArgName(FieldElement element) =>
+    ArgInfo.fromField(element).optionData?.name ?? kebab(element.name);
+
+String _getArgNameStringLiteral(FieldElement element) =>
+    escapeDartString(_getArgName(element));
 
 void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   var info = ArgInfo.fromField(element);

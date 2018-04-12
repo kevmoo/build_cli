@@ -17,7 +17,22 @@ void main() {
     var items = {
       'Could not find an option named "help".': ['--no-help'],
       '"foo" is not an allowed value for option "format".': ['--format', 'foo'],
-      // TODO: pass a string in for production port!
+      'Cannot parse "3.14" into `int` for option "production-port".': [
+        '--production-port',
+        '3.14'
+      ],
+      'Cannot parse "foo" into `int` for option "production-port".': [
+        '--production-port',
+        'foo'
+      ],
+      'Cannot parse "foo" into `num` for option "num-value".': [
+        '--num-value',
+        'foo'
+      ],
+      'Cannot parse "foo" into `double` for option "double-value".': [
+        '--double-value',
+        'foo'
+      ],
     };
 
     for (var item in items.entries) {

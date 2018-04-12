@@ -21,9 +21,17 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
           'FormatOptions', FormatOptions.values, result['format'] as String),
       secret: result['secret'] as String,
       ignorePackages: result['ignore-packages'] as List<String>,
-      productionPort: int.parse(result['production-port'] as String))
-    ..numValue = num.parse(result['num-value'] as String)
-    ..doubleValue = double.parse(result['double-value'] as String);
+      productionPort: int.parse(result['production-port'] as String,
+          onError: (source) => throw new FormatException(
+              'Cannot parse "$source" into `int` for option "production-port".')))
+    ..numValue = num.parse(
+        result['num-value'] as String,
+        (source) => throw new FormatException(
+            'Cannot parse "$source" into `num` for option "num-value".'))
+    ..doubleValue = double.parse(
+        result['double-value'] as String,
+        (source) => throw new FormatException(
+            'Cannot parse "$source" into `double` for option "double-value".'));
 }
 
 ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
