@@ -23,6 +23,9 @@ class PeanutOptions {
   @CliOption(defaultsTo: 8080)
   final int productionPort;
 
+  //TODO: support List<num>
+  //List<int> devPorts;
+
   PeanutOptions(
       {this.format, this.secret, this.ignorePackages, this.productionPort});
 }
