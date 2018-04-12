@@ -185,8 +185,11 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   }
 
   if (options.defaultsTo != null) {
-    buffer.write(
-        ', defaultsTo: ${escapeDartString(options.defaultsTo.toString())}');
+    var defaultValueLiteral = (info.argType == ArgType.flag)
+        ? (options.defaultsTo as bool).toString()
+        : escapeDartString(options.defaultsTo.toString());
+
+    buffer.write(', defaultsTo: $defaultValueLiteral');
   }
 
   if (options.allowed != null) {

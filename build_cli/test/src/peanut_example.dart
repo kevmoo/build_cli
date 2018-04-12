@@ -53,6 +53,9 @@ class PeanutOptions {
   @CliOption(hide: true)
   final bool secret;
 
+  @CliOption(defaultsTo: true, negatable: true)
+  final bool release;
+
   final List<String> rest;
 
   // Explicitly not used – to validate logging behavior
@@ -69,6 +72,7 @@ class PeanutOptions {
       this.buildTool,
       this.help,
       this.bazelOptions,
+      this.release,
       this.secret,
       this.rest});
 }

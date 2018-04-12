@@ -1,5 +1,7 @@
 ## 0.1.2
 
+- Improve error messages for some failures.
+- Support `defaultsTo` for flags.
 - Generate another private method `_$populate[OptionClassName]Parser`.
   Allows usage for already existing `ArgParser` instances, such as with 
   `package:args` `CommandRunner`.

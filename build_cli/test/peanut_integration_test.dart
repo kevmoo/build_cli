@@ -15,12 +15,21 @@ void main() {
     expect(options.message, 'Built <directory>');
     expect(options.buildTool, isNull);
     expect(options.help, isFalse);
+    expect(options.release, isTrue);
     expect(options.rest, isEmpty);
   });
 
   test('some args', () {
-    var options = parsePeanutOptions(
-        ['-d', 'dir', '--mode', 'debug', '-h', 'extra', 'things']);
+    var options = parsePeanutOptions([
+      '-d',
+      'dir',
+      '--no-release',
+      '--mode',
+      'debug',
+      '-h',
+      'extra',
+      'things'
+    ]);
 
     expect(options.directory, 'dir');
     expect(options.branch, 'gh-pages');
@@ -31,6 +40,7 @@ void main() {
     expect(options.message, 'Built <directory>');
     expect(options.buildTool, isNull);
     expect(options.help, isTrue);
+    expect(options.release, isFalse);
     expect(options.rest, ['extra', 'things']);
   });
 
@@ -63,6 +73,7 @@ void main() {
                        [pub, build]
 
     --bazel-options    [to-source, from-source, via-assets]
--h, --help             Prints usage information. Which is so "$" you don't even know it!''');
+-h, --help             Prints usage information. Which is so "$" you don't even know it!
+    --[no-]release     (defaults to on)''');
   });
 }

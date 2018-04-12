@@ -30,6 +30,7 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
       help: result['help'] as bool,
       bazelOptions: enumValueHelper('BazelOptions', BazelOptions.values,
           result['bazel-options'] as String),
+      release: result['release'] as bool,
       secret: result['secret'] as bool,
       rest: result.rest);
 }
@@ -60,7 +61,8 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
       help:
           'Prints usage information. Which is so \"\$\" you don\'t even know it!',
       negatable: false)
-  ..addFlag('secret', hide: true);
+  ..addFlag('secret', hide: true)
+  ..addFlag('release', defaultsTo: true, negatable: true);
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(new ArgParser());
 

@@ -89,7 +89,7 @@ CliOption _getOptions(FieldElement element) {
       _cliOptionChecker.firstAnnotationOfExact(element.getter);
 
   List<String> allowedValues;
-  String defaultsTo;
+  Object defaultsTo;
 
   var annotation = new ConstantReader(obj);
 
@@ -169,8 +169,11 @@ CliOption _getOptions(FieldElement element) {
       assert(defaultsTo != null);
     } else if (defaultsToReader.isString) {
       defaultsTo = defaultsToReader.stringValue;
+    } else if (defaultsToReader.isBool) {
+      defaultsTo = defaultsToReader.boolValue;
     } else {
-      throw new StateError('What are you doing?');
+      throw new StateError('Could not process the default value '
+          '`${defaultsToReader.literalValue}`.');
     }
   }
 
