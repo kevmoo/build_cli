@@ -1,8 +1,50 @@
 [![Build Status](https://travis-ci.org/kevmoo/build_cli.svg?branch=master)](https://travis-ci.org/kevmoo/build_cli)
 
 Parse command line arguments directly into an annotation class
-using the power of the [Dart build system](https://github.com/dart-lang/build) 
-and [source_gen](https://pub.dartlang.org/packages/source_gen).
+using the [Dart Build System][].
+
+# Example
+
+Annotate a class with `@CliOptions()` from [package:build_cli_annotations][].
+
+```dart
+import 'package:build_cli_annotations/build_cli_annotations.dart';
+
+part 'example.g.dart';
+
+@CliOptions()
+class Options {
+  @CliOption(abbr: 'n', help: 'Required. The name to use in the greeting.')
+  final String name;
+
+  final bool nameWasParsed;
+
+  bool yell;
+
+  @CliOption(defaultsTo: Language.en, abbr: 'l')
+  Language displayLanguage;
+
+  @CliOption(negatable: false, help: 'Prints usage information.')
+  bool help;
+
+  Options(this.name, {this.nameWasParsed});
+}
+
+enum Language { en, es }
+```
+
+Configure and run the [Dart Build System][] and a set of helpers is created
+to parse the corresponding command line arguments and populate your class.
+
+```dart
+void main(List<String> args) {
+  var options = parseOptions(args);
+  if (!options.nameWasParsed) {
+    throw new ArgumentError('You must set `name`.');
+  }
+  print(options.name);
+}
+```
 
 # Setup
 
@@ -30,13 +72,17 @@ dev_dependencies:
 
 Uses [package:args](https://pub.dartlang.org/packages/args) under the covers.
 
-At the moment, this project is very light on documentation and tests.
-The `test` directory contains some
-[examples](https://github.com/kevmoo/build_cli/tree/master/build_cli/test/src)
-for inspiration.
+# More examples:
 
-Also look at the
-[`package:peanut` source code](https://github.com/kevmoo/peanut.dart).
-The `options` files in the 
-[`src` directory](https://github.com/kevmoo/peanut.dart/tree/master/lib/src)
-as the interesting files.
+- The package contains a fully documented
+  [end-to-end example](https://github.com/kevmoo/build_cli/tree/master/build_cli/example).
+- The [test directory](https://github.com/kevmoo/build_cli/tree/master/build_cli/test/src)
+  contains implementations that exercise most of the features of this package.
+- Also look at the
+  [`package:peanut` source code](https://github.com/kevmoo/peanut.dart).
+  The `options` files in the
+  [`src` directory](https://github.com/kevmoo/peanut.dart/tree/master/lib/src)
+  as the interesting files.
+
+[Dart Build System]: https://github.com/dart-lang/build
+[package:build_cli_annotations]: https://pub.dartlang.org/packages/build_cli_annotations

@@ -5,6 +5,7 @@ targets:
       build_cli:
         generate_for:
           include:
+          - example/**
           - test/src/**
         options:
           header: |+
