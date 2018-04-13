@@ -57,6 +57,9 @@ void main() {
     --production-port    (defaults to "8080")
     --num-value          (defaults to "3.14")
     --double-value       (defaults to "3000.0")
-    --dev-port           [8080 (default), 9090, 42]''');
+    --dev-port           
+          [42]           the knowledge port
+          [8080]         the cool port
+          [9090]         the alt port''');
   });
 }

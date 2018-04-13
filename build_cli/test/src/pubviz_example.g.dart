@@ -52,7 +52,15 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
   ..addOption('production-port', defaultsTo: '8080')
   ..addOption('num-value', defaultsTo: '3.14')
   ..addOption('double-value', defaultsTo: '3000.0')
-  ..addOption('dev-port', defaultsTo: '8080', allowed: ['8080', '9090', '42']);
+  ..addOption('dev-port', defaultsTo: '8080', allowed: [
+    '8080',
+    '9090',
+    '42'
+  ], allowedHelp: <String, String>{
+    '8080': 'the cool port',
+    '9090': 'the alt port',
+    '42': 'the knowledge port'
+  });
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(new ArgParser());
 

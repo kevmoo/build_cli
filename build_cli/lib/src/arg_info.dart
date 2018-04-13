@@ -138,8 +138,10 @@ CliOption _getOptions(FieldElement element) {
     allowedHelp = <Object, String>{};
     for (var entry in allowedHelpReader.mapValue.entries) {
       var mapKeyReader = new ConstantReader(entry.key);
-      if (mapKeyReader.isString) {
-        allowedHelp[mapKeyReader.stringValue] = entry.value.toStringValue();
+      if (mapKeyReader.isString ||
+          mapKeyReader.isInt ||
+          mapKeyReader.isDouble) {
+        allowedHelp[mapKeyReader.literalValue] = entry.value.toStringValue();
         continue;
       }
 

@@ -29,7 +29,15 @@ class PeanutOptions {
   @CliOption(defaultsTo: 3e3)
   double doubleValue;
 
-  @CliOption(defaultsTo: 8080, allowed: [8080, 9090, 42])
+  @CliOption(defaultsTo: 8080, allowed: const [
+    8080,
+    9090,
+    42
+  ], allowedHelp: const {
+    8080: 'the cool port',
+    9090: 'the alt port',
+    42: 'the knowledge port'
+  })
   int devPort;
 
   //TODO: support List<num>
