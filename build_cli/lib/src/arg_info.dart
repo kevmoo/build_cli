@@ -1,6 +1,7 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
+import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'to_share.dart';
@@ -29,6 +30,11 @@ bool _couldBeWasParsedArg(FieldElement element) =>
     element.name.endsWith(wasParsedSuffix) &&
     element.name.length > wasParsedSuffix.length;
 
+@alwaysThrows
+void throwUnsupported(FieldElement element, String message) =>
+    throw new InvalidGenerationSourceError(
+        'Could not handle field `${friendlyNameForElement(element)}` - $message');
+
 class ArgInfo {
   final CliOption optionData;
   final ArgType argType;
@@ -41,31 +47,26 @@ class ArgInfo {
       return info;
     }
 
-    try {
-      var option = _getOptions(element);
+    var option = _getOptions(element);
 
-      ArgType type;
-      if (option == null) {
-        if (_couldBeRestArg(element)) {
-          type = ArgType.rest;
-        } else if (_couldBeWasParsedArg(element)) {
-          type = ArgType.wasParsed;
-        } else {
-          throw new UnsupportedError('Should never get here!');
-        }
+    ArgType type;
+    if (option == null) {
+      if (_couldBeRestArg(element)) {
+        type = ArgType.rest;
+      } else if (_couldBeWasParsedArg(element)) {
+        type = ArgType.wasParsed;
       } else {
-        type = _getArgType(element.type);
+        throwUnsupported(element, 'Should never get here!');
       }
-      return _argInfoCache[element] = new ArgInfo(type, option);
-    } on UnsupportedError catch (e) {
-      throw new InvalidGenerationSourceError(
-          'Could not parse field `${friendlyNameForElement(element)}` - '
-          '${e.message}');
+    } else {
+      type = _getArgType(element);
     }
+    return _argInfoCache[element] = new ArgInfo(type, option);
   }
 }
 
-ArgType _getArgType(DartType targetType) {
+ArgType _getArgType(FieldElement element) {
+  var targetType = element.type;
   if (boolChecker.isExactlyType(targetType)) {
     return ArgType.flag;
   }
@@ -80,7 +81,7 @@ ArgType _getArgType(DartType targetType) {
     return ArgType.multiOption;
   }
 
-  throw new UnsupportedError('`$targetType` is not supported - yet.');
+  throwUnsupported(element, '`$targetType` is not supported - yet.');
 }
 
 CliOption _getOptions(FieldElement element) {
@@ -116,7 +117,7 @@ CliOption _getOptions(FieldElement element) {
     if (defaultsToReader != null && !defaultsToReader.isNull) {
       var objectValue = defaultsToReader.objectValue;
       if (objectValue.type != element.type) {
-        throw new UnsupportedError('this is also wack');
+        throwUnsupported(element, 'this is also wack');
       }
 
       var enumValueIndex = objectValue.getField('index').toIntValue();
@@ -132,7 +133,7 @@ CliOption _getOptions(FieldElement element) {
   var allowedHelpReader = annotation.read('allowedHelp');
   if (!allowedHelpReader.isNull) {
     if (!allowedHelpReader.isMap) {
-      throw new UnsupportedError('What are you doing?');
+      throwUnsupported(element, 'What are you doing?');
     }
 
     allowedHelp = <Object, String>{};
@@ -153,7 +154,7 @@ CliOption _getOptions(FieldElement element) {
         continue;
       }
 
-      throw new UnsupportedError('I do not get it! - ${entry.key.type}');
+      throwUnsupported(element, 'I do not get it! - ${entry.key.type}');
     }
   }
 
@@ -174,7 +175,9 @@ CliOption _getOptions(FieldElement element) {
         defaultsToReader.isDouble) {
       defaultsTo = defaultsToReader.literalValue;
     } else {
-      throw new UnsupportedError('Could not process the default value '
+      throwUnsupported(
+          element,
+          'Could not process the default value '
           '`${defaultsToReader.literalValue}`.');
     }
   }
@@ -182,7 +185,7 @@ CliOption _getOptions(FieldElement element) {
   if (allowedValues != null &&
       defaultsTo != null &&
       !allowedValues.contains(defaultsTo)) {
-    throw new UnsupportedError('Boo!');
+    throwUnsupported(element, 'Boo!');
   }
 
   return new CliOption(

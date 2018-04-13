@@ -60,16 +60,9 @@ ${classElement.name} $resultParserName(ArgResults result) {
 
     buffer.write('return ');
 
-    String deserializeForField(String fieldName, {ParameterElement ctorParam}) {
-      var field = fields[fieldName];
-      try {
-        return _deserializeForField(field, ctorParam, fields);
-      } on UnsupportedError catch (e) {
-        throw new InvalidGenerationSourceError(
-            'Could handle field `${friendlyNameForElement(field)}` - '
-            '${e.message}');
-      }
-    }
+    String deserializeForField(String fieldName,
+            {ParameterElement ctorParam}) =>
+        _deserializeForField(fields[fieldName], ctorParam, fields);
 
     var usedFields = writeConstructorInvocation(
         buffer,
@@ -171,7 +164,7 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
     return 'num.parse($argAccess as String, ${numOrElseLambda('num')})';
   }
 
-  throw new UnsupportedError('The type `$targetType` is not supported.');
+  throwUnsupported(field, 'The type `$targetType` is not supported.');
 }
 
 String _getArgName(FieldElement element) =>
