@@ -60,6 +60,14 @@ ${classElement.name} $resultParserName(ArgResults result) {
       buffer.writeln(_enumValueHelper);
     }
 
+    if (fieldsList.any((fe) => numChecker.isAssignableFromType(fe.type))) {
+      buffer.writeln(r'''
+
+T badNumberFormat<T extends num>(String source, String type, String argName) =>
+  throw new FormatException('Cannot parse "$source" into `$type` for option "$argName".'); 
+''');
+    }
+
     buffer.write('return ');
 
     String deserializeForField(String fieldName,
@@ -117,6 +125,12 @@ T enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
                 'Could not find the value `$enumValue` in enum `$enumName`.'));
 ''';
 
+final _numCheckers = <TypeChecker, String>{
+  numChecker: 'num',
+  const TypeChecker.fromRuntime(int): 'int',
+  const TypeChecker.fromRuntime(double): 'double'
+};
+
 String _deserializeForField(FieldElement field, ParameterElement ctorParam,
     Map<String, FieldElement> allFields) {
   var info = ArgInfo.fromField(field);
@@ -151,19 +165,11 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
     return '$argAccess as List<String>';
   }
 
-  String numOrElseLambda(String type) =>
-      '''(source) => throw new FormatException('Cannot parse "\$source" into `$type` for option "${_getArgName(field)}".')''';
-
-  if (const TypeChecker.fromRuntime(int).isExactlyType(targetType)) {
-    return 'int.parse($argAccess as String, onError: ${numOrElseLambda('int')})';
-  }
-
-  if (const TypeChecker.fromRuntime(double).isExactlyType(targetType)) {
-    return 'double.parse($argAccess as String, ${numOrElseLambda('double')})';
-  }
-
-  if (const TypeChecker.fromRuntime(num).isExactlyType(targetType)) {
-    return 'num.parse($argAccess as String, ${numOrElseLambda('num')})';
+  for (var checker in _numCheckers.entries) {
+    if (checker.key.isExactlyType(targetType)) {
+      return '${checker.value}.tryParse($argAccess as String) ?? '
+          "badNumberFormat($argAccess as String, '${checker.value}', '${_getArgName(field)}')";
+    }
   }
 
   throwUnsupported(field, 'The type `$targetType` is not supported.');

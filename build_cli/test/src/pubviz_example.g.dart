@@ -16,25 +16,26 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
               orElse: () => throw new StateError(
                   'Could not find the value `$enumValue` in enum `$enumName`.'));
 
+  T badNumberFormat<T extends num>(
+          String source, String type, String argName) =>
+      throw new FormatException(
+          'Cannot parse "$source" into `$type` for option "$argName".');
+
   return new PeanutOptions(
       format: enumValueHelper(
           'FormatOptions', FormatOptions.values, result['format'] as String),
       secret: result['secret'] as String,
       ignorePackages: result['ignore-packages'] as List<String>,
-      productionPort: int.parse(result['production-port'] as String,
-          onError: (source) => throw new FormatException(
-              'Cannot parse "$source" into `int` for option "production-port".')))
-    ..numValue = num.parse(
-        result['num-value'] as String,
-        (source) => throw new FormatException(
-            'Cannot parse "$source" into `num` for option "num-value".'))
-    ..doubleValue = double.parse(
-        result['double-value'] as String,
-        (source) => throw new FormatException(
-            'Cannot parse "$source" into `double` for option "double-value".'))
-    ..devPort = int.parse(result['dev-port'] as String,
-        onError: (source) => throw new FormatException(
-            'Cannot parse "$source" into `int` for option "dev-port".'));
+      productionPort: int.tryParse(result['production-port'] as String) ??
+          badNumberFormat(
+              result['production-port'] as String, 'int', 'production-port'))
+    ..numValue = num.tryParse(result['num-value'] as String) ??
+        badNumberFormat(result['num-value'] as String, 'num', 'num-value')
+    ..doubleValue = double.tryParse(result['double-value'] as String) ??
+        badNumberFormat(
+            result['double-value'] as String, 'double', 'double-value')
+    ..devPort = int.tryParse(result['dev-port'] as String) ??
+        badNumberFormat(result['dev-port'] as String, 'int', 'dev-port');
 }
 
 ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser

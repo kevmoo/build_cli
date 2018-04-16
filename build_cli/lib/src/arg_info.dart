@@ -11,7 +11,7 @@ final _listChecker = new TypeChecker.fromRuntime(List);
 final _iterableChecker = new TypeChecker.fromRuntime(Iterable);
 final boolChecker = new TypeChecker.fromRuntime(bool);
 final stringChecker = new TypeChecker.fromRuntime(String);
-final _numChecker = new TypeChecker.fromRuntime(num);
+const numChecker = const TypeChecker.fromRuntime(num);
 final _cliOptionChecker = new TypeChecker.fromRuntime(CliOption);
 
 // TODO: support Set, too...
@@ -73,7 +73,7 @@ ArgType _getArgType(FieldElement element) {
 
   if (stringChecker.isExactlyType(targetType) ||
       isEnum(targetType) ||
-      _numChecker.isAssignableFromType(targetType)) {
+      numChecker.isAssignableFromType(targetType)) {
     return ArgType.option;
   }
 
