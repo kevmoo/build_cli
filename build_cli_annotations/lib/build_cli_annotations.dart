@@ -9,6 +9,7 @@ class CliOption {
   final String abbr;
   final Object defaultsTo;
   final String help;
+  final String valueHelp;
   final List<Object> allowed;
   final Map<Object, String> allowedHelp;
   final bool negatable;
@@ -19,6 +20,7 @@ class CliOption {
       this.abbr,
       this.defaultsTo,
       this.help,
+      this.valueHelp,
       this.allowed,
       this.negatable,
       this.allowedHelp,

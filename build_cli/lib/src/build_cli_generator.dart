@@ -225,6 +225,10 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
     buffer.write(', help: ${escapeDartString(options.help)}');
   }
 
+  if (options.valueHelp != null) {
+    buffer.write(', valueHelp: ${escapeDartString(options.valueHelp)}');
+  }
+
   if (options.defaultsTo != null) {
     var defaultValueLiteral = (info.argType == ArgType.flag)
         ? (options.defaultsTo as bool).toString()

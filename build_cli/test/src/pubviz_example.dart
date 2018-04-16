@@ -20,7 +20,7 @@ class PeanutOptions {
       help: 'A comma seperated list of packages to exclude in the output.')
   final List<String> ignorePackages;
 
-  @CliOption(defaultsTo: 8080)
+  @CliOption(defaultsTo: 8080, valueHelp: 'PORT')
   final int productionPort;
 
   @CliOption(defaultsTo: 3.14)
