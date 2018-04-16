@@ -98,12 +98,6 @@ String _getHexLiteral(String input) {
   return '\\x$value';
 }
 
-String commonNullPrefix(
-        bool nullable, String expression, String unsafeExpression) =>
-    nullable
-        ? '$expression == null ? null : $unsafeExpression'
-        : unsafeExpression;
-
 // Copied from pkg/source_gen - lib/src/utils.
 String friendlyNameForElement(Element element) {
   var friendlyName = element.displayName;
