@@ -193,6 +193,7 @@ CliOption _getOptions(FieldElement element) {
       abbr: annotation.read('abbr').literalValue as String,
       defaultsTo: defaultsTo,
       help: annotation.read('help').literalValue as String,
+      valueHelp: annotation.read('valueHelp').literalValue as String,
       allowed: allowedValues,
       allowedHelp: allowedHelp,
       negatable: annotation.read('negatable').literalValue as bool,

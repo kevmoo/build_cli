@@ -53,7 +53,7 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
   ..addMultiOption('ignore-packages',
       abbr: 'i',
       help: 'A comma seperated list of packages to exclude in the output.')
-  ..addOption('production-port', defaultsTo: '8080')
+  ..addOption('production-port', valueHelp: 'PORT', defaultsTo: '8080')
   ..addOption('num-value', defaultsTo: '3.14')
   ..addOption('double-value', defaultsTo: '3000.0')
   ..addOption('dev-port', defaultsTo: '8080', allowed: [
