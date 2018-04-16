@@ -40,8 +40,11 @@ class PeanutOptions {
   })
   int devPort;
 
+  List listOfNothing;
+  List<dynamic> listOfDynamic;
+  List<Object> listOfObject;
   //TODO: support List<num>
-  //List<int> devPorts;
+  //List<int> listenPorts;
 
   PeanutOptions(
       {this.format, this.secret, this.ignorePackages, this.productionPort});

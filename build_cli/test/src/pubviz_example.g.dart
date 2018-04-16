@@ -35,7 +35,10 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
         badNumberFormat(
             result['double-value'] as String, 'double', 'double-value')
     ..devPort = int.tryParse(result['dev-port'] as String) ??
-        badNumberFormat(result['dev-port'] as String, 'int', 'dev-port');
+        badNumberFormat(result['dev-port'] as String, 'int', 'dev-port')
+    ..listOfNothing = result['list-of-nothing'] as List
+    ..listOfDynamic = result['list-of-dynamic'] as List
+    ..listOfObject = result['list-of-object'] as List;
 }
 
 ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
@@ -61,7 +64,10 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
     '8080': 'the cool port',
     '9090': 'the alt port',
     '42': 'the knowledge port'
-  });
+  })
+  ..addMultiOption('list-of-nothing')
+  ..addMultiOption('list-of-dynamic')
+  ..addMultiOption('list-of-object');
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(new ArgParser());
 

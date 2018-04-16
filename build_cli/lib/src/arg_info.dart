@@ -7,7 +7,7 @@ import 'package:source_gen/source_gen.dart';
 import 'to_share.dart';
 import 'util.dart';
 
-final _listChecker = new TypeChecker.fromRuntime(List);
+final listChecker = new TypeChecker.fromRuntime(List);
 final _iterableChecker = new TypeChecker.fromRuntime(Iterable);
 final boolChecker = new TypeChecker.fromRuntime(bool);
 final stringChecker = new TypeChecker.fromRuntime(String);
@@ -17,7 +17,7 @@ final _cliOptionChecker = new TypeChecker.fromRuntime(CliOption);
 // TODO: support Set, too...
 bool isMulti(DartType targetType) =>
     _iterableChecker.isExactlyType(targetType) ||
-    _listChecker.isExactlyType(targetType);
+    listChecker.isExactlyType(targetType);
 
 final _argInfoCache = new Expando<ArgInfo>();
 

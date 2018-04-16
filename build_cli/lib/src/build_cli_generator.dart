@@ -162,7 +162,22 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
   }
 
   if (isMulti(targetType)) {
-    return '$argAccess as List<String>';
+    // if the target type is dynamic, Object, or String – just send it in as-is
+
+    var args = typeArgumentsOf(targetType, listChecker);
+
+    assert(args.length == 1);
+
+    if (_dynamicChecker.isExactlyType(args.single) || args.single.isDynamic) {
+      return '$argAccess as List';
+    }
+
+    if (stringChecker.isExactlyType(args.single)) {
+      return '$argAccess as List<String>';
+    }
+
+    throwUnsupported(
+        field, 'Lists of type `${args.single}` are not supported.');
   }
 
   for (var checker in _numCheckers.entries) {
@@ -243,3 +258,5 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
 
   buffer.writeln(')');
 }
+
+final _dynamicChecker = const TypeChecker.fromRuntime(Object);

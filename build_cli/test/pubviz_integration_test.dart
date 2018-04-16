@@ -60,6 +60,10 @@ void main() {
     --dev-port           
           [42]           the knowledge port
           [8080]         the cool port
-          [9090]         the alt port''');
+          [9090]         the alt port
+
+    --list-of-nothing    
+    --list-of-dynamic    
+    --list-of-object     ''');
   });
 }
