@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:analyzer/dart/element/element.dart';
-import 'package:build/build.dart' show log;
+import 'package:build/build.dart' show log, BuildStep;
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -20,7 +20,9 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
 
   @override
   Future<String> generateForAnnotatedElement(
-      Element element, ConstantReader annotation, _) async {
+      Element element, ConstantReader annotation, BuildStep buildStep) async {
+    await validateSdkConstraint(buildStep);
+
     if (element is! ClassElement) {
       var friendlyName = friendlyNameForElement(element);
       throw new InvalidGenerationSourceError(

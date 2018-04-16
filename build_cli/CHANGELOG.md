@@ -1,3 +1,8 @@
+## 0.2.0
+
+- Fail unless the minimum SDK constraint on the target package is at least
+  `2.0.0-dev.48`.
+
 ## 0.1.2
 
 - Support `int`, `double`, and `num` for options.
