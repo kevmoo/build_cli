@@ -10,7 +10,14 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/src/dart/resolver/inheritance_manager.dart'
     show InheritanceManager;
 
+import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
+
+@alwaysThrows
+void throwUnsupported(FieldElement element, String message) =>
+    throw new InvalidGenerationSourceError(
+        'Could not handle field `${element.displayName}` - $message',
+        element: element);
 
 /// If [type] is the [Type] or implements the [Type] represented by [checker],
 /// returns the generic arguments to the [checker] [Type] if there are any.
@@ -128,40 +135,6 @@ String _getHexLiteral(String input) {
   return '\\x$value';
 }
 
-// Copied from pkg/source_gen - lib/src/utils.
-String friendlyNameForElement(Element element) {
-  var friendlyName = element.displayName;
-
-  if (friendlyName == null) {
-    throw new ArgumentError(
-        'Cannot get friendly name for $element - ${element.runtimeType}.');
-  }
-
-  var names = <String>[friendlyName];
-  if (element is ClassElement) {
-    names.insert(0, 'class');
-    if (element.isAbstract) {
-      names.insert(0, 'abstract');
-    }
-  }
-  if (element is VariableElement) {
-    names.insert(0, element.type.toString());
-
-    if (element.isConst) {
-      names.insert(0, 'const');
-    }
-
-    if (element.isFinal) {
-      names.insert(0, 'final');
-    }
-  }
-  if (element is LibraryElement) {
-    names.insert(0, 'library');
-  }
-
-  return names.join(' ');
-}
-
 /// Returns a [Set] of all instance [FieldElement] items for [element] and
 /// super classes, sorted first by their location in the inheritance hierarchy
 /// (super first) and then by their location in the source file.
@@ -190,7 +163,8 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
 
     throw new InvalidGenerationSourceError(
         'At least one field has an invalid type: $description.',
-        todo: 'Check names and imports.');
+        todo: 'Check names and imports.',
+        element: undefinedFields.first);
   }
 
   // Sort these in the order in which they appear in the class
@@ -264,7 +238,8 @@ Set<String> writeConstructorInvocation(
   if (ctor == null) {
     // TODO(kevmoo): support using another ctor - dart-lang/json_serializable#50
     throw new InvalidGenerationSourceError(
-        'The class `$className` has no default constructor.');
+        'The class `$className` has no default constructor.',
+        element: classElement);
   }
 
   var usedCtorParamsAndFields = new Set<String>();
@@ -284,7 +259,7 @@ Set<String> writeConstructorInvocation(
           msg = '$msg $additionalInfo';
         }
 
-        throw new InvalidGenerationSourceError(msg);
+        throw new InvalidGenerationSourceError(msg, element: ctor);
       }
 
       continue;
@@ -301,7 +276,7 @@ Set<String> writeConstructorInvocation(
   }
 
   _validateConstructorArguments(
-      constructorArguments.followedBy(namedConstructorArguments));
+      ctor, constructorArguments.followedBy(namedConstructorArguments));
 
   // fields that aren't already set by the constructor and that aren't final
   var remainingFieldsForInvocationBody =
@@ -341,7 +316,7 @@ Set<String> writeConstructorInvocation(
 }
 
 void _validateConstructorArguments(
-    Iterable<ParameterElement> constructorArguments) {
+    ConstructorElement ctor, Iterable<ParameterElement> constructorArguments) {
   var undefinedArgs =
       constructorArguments.where((pe) => pe.type.isUndefined).toList();
   if (undefinedArgs.isNotEmpty) {
@@ -350,6 +325,7 @@ void _validateConstructorArguments(
 
     throw new InvalidGenerationSourceError(
         'At least one constructor argument has an invalid type: $description.',
-        todo: 'Check names and imports.');
+        todo: 'Check names and imports.',
+        element: ctor);
   }
 }

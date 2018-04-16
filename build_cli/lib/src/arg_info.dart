@@ -1,7 +1,6 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
-import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'to_share.dart';
@@ -29,11 +28,6 @@ bool _couldBeRestArg(FieldElement element) => element.name == 'rest';
 bool _couldBeWasParsedArg(FieldElement element) =>
     element.name.endsWith(wasParsedSuffix) &&
     element.name.length > wasParsedSuffix.length;
-
-@alwaysThrows
-void throwUnsupported(FieldElement element, String message) =>
-    throw new InvalidGenerationSourceError(
-        'Could not handle field `${friendlyNameForElement(element)}` - $message');
 
 class ArgInfo {
   final CliOption optionData;

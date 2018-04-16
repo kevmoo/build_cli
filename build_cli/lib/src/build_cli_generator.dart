@@ -24,11 +24,12 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
     await validateSdkConstraint(buildStep);
 
     if (element is! ClassElement) {
-      var friendlyName = friendlyNameForElement(element);
+      var friendlyName = element.displayName;
       throw new InvalidGenerationSourceError(
           'Generator cannot target `$friendlyName`. '
           '`@CliOptions` can only be applied to a class.',
-          todo: 'Remove the `@CliOptions` annotation from `$friendlyName`.');
+          todo: 'Remove the `@CliOptions` annotation from `$friendlyName`.',
+          element: element);
     }
 
     var classElement = element as ClassElement;
