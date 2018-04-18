@@ -19,6 +19,10 @@ String kebab(String input) => input.replaceAllMapped(_upperCase, (match) {
     });
 
 Future validateSdkConstraint(BuildStep buildStep) async {
+  if (buildStep == null) {
+    // Not running as part of a "build" – noop.
+    return;
+  }
   var uri = 'asset:${buildStep.inputId.package}/pubspec.yaml';
   var thing = await buildStep.readAsString(new AssetId.resolve(uri));
 
