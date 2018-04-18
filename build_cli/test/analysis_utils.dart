@@ -15,12 +15,10 @@ import 'package:analyzer/src/generated/source.dart';
 import 'package:analyzer/src/generated/source_io.dart';
 import 'package:path/path.dart' as p;
 
-import 'test_utils.dart';
-
 Future<AnalysisContext> getAnalysisContextForProjectPath(
     String projectPath) async {
   // TODO: fail more clearly if this...fails
-  var sdkPath = getSdkPath();
+  var sdkPath = _getSdkPath();
 
   var resourceProvider = PhysicalResourceProvider.INSTANCE;
   var sdk = new FolderBasedDartSdk(
@@ -65,3 +63,6 @@ UriResolver _getPackageResolver(String projectPath, FolderBasedDartSdk sdk) {
   return new PackageMapUriResolver(
       PhysicalResourceProvider.INSTANCE, packageMap);
 }
+
+/// Return the path to the current Dart SDK.
+String _getSdkPath() => p.dirname(p.dirname(Platform.resolvedExecutable));

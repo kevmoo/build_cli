@@ -2,15 +2,11 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'dart:io';
 import 'dart:mirrors';
 
 import 'package:path/path.dart' as p;
 import 'package:source_gen/source_gen.dart';
 import 'package:test/test.dart';
-
-/// Return the path to the current Dart SDK.
-String getSdkPath() => p.dirname(p.dirname(Platform.resolvedExecutable));
 
 String _packagePathCache;
 
