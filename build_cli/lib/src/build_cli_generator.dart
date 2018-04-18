@@ -135,6 +135,7 @@ final _numCheckers = <TypeChecker, String>{
 String _deserializeForField(FieldElement field, ParameterElement ctorParam,
     Map<String, FieldElement> allFields) {
   var info = ArgInfo.fromField(field);
+
   if (info.argType == ArgType.rest) {
     return 'result.rest';
   }
@@ -153,6 +154,12 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
 
   var argAccess = 'result[$argName]';
 
+  var convertName = getConvertName(info.optionData);
+  if (convertName != null) {
+    assert(info.argType == ArgType.option);
+    return '$convertName($argAccess as String)';
+  }
+
   if (stringChecker.isExactlyType(targetType) ||
       boolChecker.isExactlyType(targetType)) {
     return '$argAccess as ${targetType.name}';
@@ -162,7 +169,8 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
     return "enumValueHelper('$targetType', $targetType.values, $argAccess as String)";
   }
 
-  if (isMulti(targetType)) {
+  if (info.argType == ArgType.multiOption) {
+    assert(isMulti(targetType));
     // if the target type is dynamic, Object, or String – just send it in as-is
 
     var args = typeArgumentsOf(targetType, listChecker);

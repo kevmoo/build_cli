@@ -15,6 +15,10 @@ class CliOption {
   final bool negatable;
   final bool hide;
 
+  /// A top-level [Function] that converts an option value into the destination
+  /// type.
+  final dynamic Function(String) convert;
+
   const CliOption(
       {this.name,
       this.abbr,
@@ -24,5 +28,6 @@ class CliOption {
       this.allowed,
       this.negatable,
       this.allowedHelp,
-      this.hide});
+      this.hide,
+      this.convert});
 }

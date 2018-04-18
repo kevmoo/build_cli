@@ -3,7 +3,7 @@
 - Fail unless the minimum SDK constraint on the target package is at least
   `2.0.0-dev.48`.
 
-- Added support `valueHelp` to `CliOption`.
+- Added support `valueHelp` and `covert` to `CliOption`.
 
 ## 0.1.2
 

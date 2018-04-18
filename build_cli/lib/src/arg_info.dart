@@ -13,7 +13,9 @@ final stringChecker = new TypeChecker.fromRuntime(String);
 const numChecker = const TypeChecker.fromRuntime(num);
 final _cliOptionChecker = new TypeChecker.fromRuntime(CliOption);
 
-// TODO: support Set, too...
+String getConvertName(CliOption option) => _convertName[option];
+final _convertName = new Expando<String>('convert name');
+
 bool isMulti(DartType targetType) =>
     _iterableChecker.isExactlyType(targetType) ||
     listChecker.isExactlyType(targetType);
@@ -53,14 +55,19 @@ class ArgInfo {
         throwUnsupported(element, 'Should never get here!');
       }
     } else {
-      type = _getArgType(element);
+      type = _getArgType(element, option);
     }
     return _argInfoCache[element] = new ArgInfo(type, option);
   }
 }
 
-ArgType _getArgType(FieldElement element) {
+ArgType _getArgType(FieldElement element, CliOption option) {
   var targetType = element.type;
+
+  if (getConvertName(option) != null) {
+    return ArgType.option;
+  }
+
   if (boolChecker.isExactlyType(targetType)) {
     return ArgType.flag;
   }
@@ -182,7 +189,7 @@ CliOption _getOptions(FieldElement element) {
     throwUnsupported(element, 'Boo!');
   }
 
-  return new CliOption(
+  var option = new CliOption(
       name: annotation.read('name').literalValue as String,
       abbr: annotation.read('abbr').literalValue as String,
       defaultsTo: defaultsTo,
@@ -192,4 +199,23 @@ CliOption _getOptions(FieldElement element) {
       allowedHelp: allowedHelp,
       negatable: annotation.read('negatable').literalValue as bool,
       hide: annotation.read('hide').literalValue as bool);
+
+  var convertReader = annotation.read('convert');
+  if (!convertReader.isNull) {
+    var objectValue = convertReader.objectValue;
+    var type = objectValue.type as FunctionType;
+
+    if (type.element is MethodElement) {
+      throwUnsupported(
+          element,
+          'The function provided for `convert` must be top-level.'
+          ' Static class methods (like `${type.element.name}`) are not supported - yet.');
+    }
+    var convertElement = type.element as FunctionElement;
+    // TODO: validate that this takes a single-argument – String.
+    // TODO: validate that this returns non-void thingy, too.
+    _convertName[option] = convertElement.name;
+  }
+
+  return option;
 }

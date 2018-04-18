@@ -32,7 +32,8 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
           result['bazel-options'] as String),
       release: result['release'] as bool,
       secret: result['secret'] as bool,
-      rest: result.rest);
+      rest: result.rest)
+    ..maxRuntime = _convert(result['max-runtime'] as String);
 }
 
 ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
@@ -62,7 +63,8 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
           'Prints usage information. Which is so \"\$\" you don\'t even know it!',
       negatable: false)
   ..addFlag('secret', hide: true)
-  ..addFlag('release', defaultsTo: true, negatable: true);
+  ..addFlag('release', defaultsTo: true, negatable: true)
+  ..addOption('max-runtime');
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(new ArgParser());
 

@@ -58,6 +58,9 @@ class PeanutOptions {
 
   final List<String> rest;
 
+  @CliOption(convert: _convert)
+  Duration maxRuntime;
+
   // Explicitly not used – to validate logging behavior
   final String coolBean = null;
 
@@ -75,6 +78,21 @@ class PeanutOptions {
       this.release,
       this.secret,
       this.rest});
+}
+
+Duration _convert(String source) {
+  if (source == null) {
+    return null;
+  }
+
+  var seconds = int.tryParse(source);
+
+  if (seconds == null) {
+    throw new FormatException(
+        'The value provided for "max-runtime" – "$source" – was not a number.');
+  }
+
+  return new Duration(seconds: seconds);
 }
 
 enum BuildTool { pub, build }

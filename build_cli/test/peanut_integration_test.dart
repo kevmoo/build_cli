@@ -16,6 +16,7 @@ void main() {
     expect(options.buildTool, isNull);
     expect(options.help, isFalse);
     expect(options.release, isTrue);
+    expect(options.maxRuntime, isNull);
     expect(options.rest, isEmpty);
   });
 
@@ -27,6 +28,8 @@ void main() {
       '--mode',
       'debug',
       '-h',
+      '--max-runtime',
+      '42',
       'extra',
       'things'
     ]);
@@ -41,13 +44,18 @@ void main() {
     expect(options.buildTool, isNull);
     expect(options.help, isTrue);
     expect(options.release, isFalse);
+    expect(options.maxRuntime, const Duration(seconds: 42));
     expect(options.rest, ['extra', 'things']);
   });
 
   group('with invalid args', () {
     var items = {
       'Cannot negate option "help".': ['--no-help'],
-      '"foo" is not an allowed value for option "mode".': ['--mode', 'foo']
+      '"foo" is not an allowed value for option "mode".': ['--mode', 'foo'],
+      'The value provided for "max-runtime" – "bob" – was not a number.': [
+        '--max-runtime',
+        'bob'
+      ]
     };
 
     for (var item in items.entries) {
@@ -74,6 +82,7 @@ void main() {
 
     --bazel-options    [to-source, from-source, via-assets]
 -h, --help             Prints usage information. Which is so "$" you don't even know it!
-    --[no-]release     (defaults to on)''');
+    --[no-]release     (defaults to on)
+    --max-runtime      ''');
   });
 }
