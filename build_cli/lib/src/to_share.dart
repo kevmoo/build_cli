@@ -16,7 +16,7 @@ import 'package:source_gen/source_gen.dart';
 @alwaysThrows
 void throwUnsupported(FieldElement element, String message) =>
     throw new InvalidGenerationSourceError(
-        'Could not handle field `${element.displayName}` - $message',
+        'Could not handle field `${element.displayName}`. $message',
         element: element);
 
 /// If [type] is the [Type] or implements the [Type] represented by [checker],

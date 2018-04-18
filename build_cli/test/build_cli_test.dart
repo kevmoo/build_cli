@@ -98,6 +98,98 @@ Empty parseEmpty(List<String> args) {
               'Check names and imports.'));
     });
   });
+
+  test('default values is not in allowed', () async {
+    expect(
+        runForElementNamed('DefaultNotInAllowed'),
+        throwsInvalidGenerationSourceError(
+            'Could not handle field `option`. '
+            'The `defaultsTo` value – `a` is not in `allowedValues`.',
+            ''));
+  });
+
+  test('negating an option', () async {
+    expect(
+        runForElementNamed('NegatableOption'),
+        throwsInvalidGenerationSourceError(
+            'Could not handle field `option`. '
+            '`negatable` is only valid for flags – type `bool`.',
+            ''));
+  });
+
+  test('negating a multi-option', () async {
+    expect(
+        runForElementNamed('NegatableMultiOption'),
+        throwsInvalidGenerationSourceError(
+            'Could not handle field `options`. '
+            '`negatable` is only valid for flags – type `bool`.',
+            ''));
+  });
+
+  test('convert must have the right return type', () async {
+    expect(
+        runForElementNamed('BadConvertReturn'),
+        throwsInvalidGenerationSourceError(
+            'Could not handle field `option`. '
+            'The convert function `_convertStringToDuration` return type '
+            '`Duration` is not compatible with the field type `String`.',
+            ''));
+  });
+
+  test('convert must have the right param type', () async {
+    expect(
+        runForElementNamed('BadConvertParam'),
+        throwsInvalidGenerationSourceError(
+            'Could not handle field `option`. '
+            'The convert function `_convertIntToString` must have one '
+            'positional paramater of type `String`.',
+            ''));
+  });
+
+  test('convert does not convert multi options', () async {
+    expect(
+        runForElementNamed('ConvertOnMulti'),
+        throwsInvalidGenerationSourceError(
+            'Could not handle field `option`. '
+            'The convert function `_convertStringToDuration` return type '
+            '`Duration` is not compatible with the field type `List<Duration>`.',
+            ''));
+  });
+
+  group('flag', () {
+    test('convert does not convert multi options', () async {
+      expect(
+          runForElementNamed('FlagWithStringDefault'),
+          throwsInvalidGenerationSourceError(
+              'Could not handle field `option`. '
+              'The value for `defaultsTo` must be assignable to `bool`.',
+              ''));
+    });
+    test('convert does not convert multi options', () async {
+      expect(
+          runForElementNamed('FlagWithAllowed'),
+          throwsInvalidGenerationSourceError(
+              'Could not handle field `option`. '
+              '`allowed` is not supported for flags.',
+              ''));
+    });
+    test('convert does not convert multi options', () async {
+      expect(
+          runForElementNamed('FlagWithAllowedHelp'),
+          throwsInvalidGenerationSourceError(
+              'Could not handle field `option`. '
+              '`allowedHelp` is not supported for flags.',
+              ''));
+    });
+    test('convert does not convert multi options', () async {
+      expect(
+          runForElementNamed('FlagWithValueHelp'),
+          throwsInvalidGenerationSourceError(
+              'Could not handle field `option`. '
+              '`valueHelp` is not supported for flags.',
+              ''));
+    });
+  });
 }
 
 final _formatter = new dart_style.DartFormatter();

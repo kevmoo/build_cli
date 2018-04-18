@@ -1,3 +1,4 @@
+import 'package:analyzer/analyzer.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
@@ -57,6 +58,33 @@ class ArgInfo {
     } else {
       type = _getArgType(element, option);
     }
+
+    if (option == null) {
+      assert(type == ArgType.rest || type == ArgType.wasParsed);
+    } else {
+      if (type == ArgType.flag) {
+        if (option.defaultsTo != null && option.defaultsTo is! bool) {
+          throwUnsupported(element,
+              'The value for `defaultsTo` must be assignable to `bool`.');
+        }
+        if (option.allowed != null) {
+          throwUnsupported(element, '`allowed` is not supported for flags.');
+        }
+        if (option.allowedHelp != null) {
+          throwUnsupported(
+              element, '`allowedHelp` is not supported for flags.');
+        }
+        if (option.valueHelp != null) {
+          throwUnsupported(element, '`valueHelp` is not supported for flags.');
+        }
+      } else {
+        if (option.negatable != null) {
+          throwUnsupported(
+              element, '`negatable` is only valid for flags – type `bool`.');
+        }
+      }
+    }
+
     return _argInfoCache[element] = new ArgInfo(type, option);
   }
 }
@@ -186,7 +214,8 @@ CliOption _getOptions(FieldElement element) {
   if (allowedValues != null &&
       defaultsTo != null &&
       !allowedValues.contains(defaultsTo)) {
-    throwUnsupported(element, 'Boo!');
+    throwUnsupported(element,
+        'The `defaultsTo` value – `$defaultsTo` is not in `allowedValues`.');
   }
 
   var option = new CliOption(
@@ -212,8 +241,27 @@ CliOption _getOptions(FieldElement element) {
           ' Static class methods (like `${type.element.name}`) are not supported - yet.');
     }
     var convertElement = type.element as FunctionElement;
-    // TODO: validate that this takes a single-argument – String.
-    // TODO: validate that this returns non-void thingy, too.
+
+    var positionalParams = convertElement.parameters
+        .where((pe) => pe.parameterKind == ParameterKind.REQUIRED)
+        .toList();
+
+    if (positionalParams.length != 1 ||
+        !element.context.typeProvider.stringType
+            .isAssignableTo(positionalParams.single.type)) {
+      throwUnsupported(
+          element,
+          'The convert function `${convertElement.name}` must have one '
+          'positional paramater of type `String`.');
+    }
+
+    if (!convertElement.returnType.isAssignableTo(element.type)) {
+      throwUnsupported(
+          element,
+          'The convert function `${convertElement.name}` return type '
+          '`${convertElement.returnType}` is not compatible with the field type'
+          ' `${element.type}`.');
+    }
     _convertName[option] = convertElement.name;
   }
 
