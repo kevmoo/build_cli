@@ -1,9 +1,14 @@
+## 0.2.1
+
+- Added support for `covert` to `CliOption`.
+- Throw many more errors during build that would create invalid code at runtime.
+
 ## 0.2.0
 
 - Fail unless the minimum SDK constraint on the target package is at least
   `2.0.0-dev.48`.
 
-- Added support `valueHelp` and `covert` to `CliOption`.
+- Added for support `valueHelp` to `CliOption`.
 
 ## 0.1.2
 
