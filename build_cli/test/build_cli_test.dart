@@ -132,6 +132,74 @@ class LonelyWasParsed {
 ''',
         invalidGenerationSourceErrorMatcher(
             'Could not handle field `nothingWasParsed`. Could not find expected source field `nothing`.'));
+
+    testOutput('all, not annotated', 'SpecialNotAnnotated', '''
+@CliOptions()
+class SpecialNotAnnotated {
+  String option;
+  bool rest;
+  ArgResults command;
+  bool optionWasParsed;
+}
+''', r'''SpecialNotAnnotated _$parseSpecialNotAnnotatedResult(ArgResults result) {
+  return new SpecialNotAnnotated()
+    ..option = result['option'] as String
+    ..rest = result.rest
+    ..command = result.command
+    ..optionWasParsed = result.wasParsed('option');
+}
+
+ArgParser _$populateSpecialNotAnnotatedParser(ArgParser parser) =>
+    parser..addOption('option');
+
+final _$parserForSpecialNotAnnotated =
+    _$populateSpecialNotAnnotatedParser(new ArgParser());
+
+SpecialNotAnnotated parseSpecialNotAnnotated(List<String> args) {
+  var result = _$parserForSpecialNotAnnotated.parse(args);
+  return _$parseSpecialNotAnnotatedResult(result);
+}
+''');
+
+    testBadOutput(
+        'annotated command, without parser',
+        'AnnotatedCommandNoParser',
+        r'''
+@CliOptions()
+class AnnotatedCommandNoParser {
+  @CliOption()
+  ArgResults command;
+}
+''',
+        invalidGenerationSourceErrorMatcher(
+            'Could not handle field `command`. `ArgResults` is not supported.'));
+
+    testOutput(
+        'annotated command, with parser', 'AnnotatedCommandWithParser', r'''
+@CliOptions()
+class AnnotatedCommandWithParser {
+  @CliOption(convert: _stringToArgsResults)
+  ArgResults command;
+}
+ArgResults _stringToArgsResults(String value) => null;
+''', r'''
+AnnotatedCommandWithParser _$parseAnnotatedCommandWithParserResult(
+    ArgResults result) {
+  return new AnnotatedCommandWithParser()
+    ..command = _stringToArgsResults(result['command'] as String);
+}
+
+ArgParser _$populateAnnotatedCommandWithParserParser(ArgParser parser) =>
+    parser..addOption('command');
+
+final _$parserForAnnotatedCommandWithParser =
+    _$populateAnnotatedCommandWithParserParser(new ArgParser());
+
+AnnotatedCommandWithParser parseAnnotatedCommandWithParser(List<String> args) {
+  var result = _$parserForAnnotatedCommandWithParser.parse(args);
+  return _$parseAnnotatedCommandWithParserResult(result);
+}
+''');
   });
 
   group('non-classes', () {
