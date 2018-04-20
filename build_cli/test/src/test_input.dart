@@ -1,12 +1,6 @@
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 
 @CliOptions()
-const theAnswer = 42;
-
-@CliOptions()
-void annotatedMethod() => null;
-
-@CliOptions()
 class UnknownCtorParamType {
   int number;
 

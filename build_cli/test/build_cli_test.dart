@@ -67,6 +67,15 @@ void main() {
     });
   }
 
+  void testBadOutput(String testName, String elementName, String elementContent,
+      expectedThrow) {
+    inlineContent.add(elementContent);
+
+    test(testName, () async {
+      expect(runForElementNamed(elementName), expectedThrow);
+    });
+  }
+
   setUpAll(() async {
     compUnit = await _getCompilationUnitForString(getPackagePath());
   });
@@ -90,24 +99,24 @@ Empty parseEmpty(List<String> args) {
 ''');
 
   group('non-classes', () {
-    test('const field', () async {
-      expect(
-          runForElementNamed('theAnswer'),
-          throwsInvalidGenerationSourceError(
-              'Generator cannot target `theAnswer`.'
-              ' `@CliOptions` can only be applied to a class.',
-              todo: 'Remove the `@CliOptions` annotation from `theAnswer`.'));
-    });
+    testBadOutput(
+        'const field',
+        'theAnswer',
+        r'''@CliOptions()const theAnswer = 42;''',
+        throwsInvalidGenerationSourceError(
+            'Generator cannot target `theAnswer`.'
+            ' `@CliOptions` can only be applied to a class.',
+            todo: 'Remove the `@CliOptions` annotation from `theAnswer`.'));
 
-    test('method', () async {
-      expect(
-          runForElementNamed('annotatedMethod'),
-          throwsInvalidGenerationSourceError(
-              'Generator cannot target `annotatedMethod`.'
-              ' `@CliOptions` can only be applied to a class.',
-              todo:
-                  'Remove the `@CliOptions` annotation from `annotatedMethod`.'));
-    });
+    testBadOutput(
+        'method',
+        'annotatedMethod',
+        r'''@CliOptions() void annotatedMethod() => null;''',
+        throwsInvalidGenerationSourceError(
+            'Generator cannot target `annotatedMethod`.'
+            ' `@CliOptions` can only be applied to a class.',
+            todo:
+                'Remove the `@CliOptions` annotation from `annotatedMethod`.'));
   });
 
   group('unknown types', () {
