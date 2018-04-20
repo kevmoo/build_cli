@@ -14,7 +14,13 @@ import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
 @alwaysThrows
-void throwUnsupported(FieldElement element, String message, {String todo}) =>
+T throwBugFound<T>(FieldElement element) => throwUnsupported(
+    element, "You've hit a bug in build_cli!",
+    todo:
+        'Please rerun your build with --verbose and file as issue with the stace trace.');
+
+@alwaysThrows
+T throwUnsupported<T>(FieldElement element, String message, {String todo}) =>
     throw new InvalidGenerationSourceError(
         'Could not handle field `${element.displayName}`. $message',
         element: element,

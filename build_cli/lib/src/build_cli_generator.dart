@@ -222,10 +222,11 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
     case ArgType.multiOption:
       buffer.write('..addMultiOption');
       break;
-    case ArgType.rest:
-    case ArgType.wasParsed:
-    case ArgType.command:
-      return;
+    default:
+      if (specialTypes.keys.contains(info.argType)) {
+        return;
+      }
+      throwBugFound(element);
   }
   buffer.write('(${_getArgNameStringLiteral(element)}');
 

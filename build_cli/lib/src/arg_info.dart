@@ -26,6 +26,16 @@ final _argInfoCache = new Expando<ArgInfo>();
 
 enum ArgType { option, flag, multiOption, rest, wasParsed, command }
 
+// Would hope to be able to do this in-line.
+// But hit https://github.com/dart-lang/sdk/issues/32933
+typedef _fieldChecker = bool Function(FieldElement);
+
+const specialTypes = const <ArgType, _fieldChecker>{
+  ArgType.rest: _couldBeRestArg,
+  ArgType.wasParsed: _couldBeWasParsedArg,
+  ArgType.command: _couldBeCommand
+};
+
 final wasParsedSuffix = 'WasParsed';
 
 bool _couldBeRestArg(FieldElement element) => element.name == 'rest';
@@ -55,23 +65,16 @@ class ArgInfo {
 
     ArgType type;
     if (option == null) {
-      if (_couldBeRestArg(element)) {
-        type = ArgType.rest;
-      } else if (_couldBeWasParsedArg(element)) {
-        type = ArgType.wasParsed;
-      } else if (_couldBeCommand(element)) {
-        type = ArgType.command;
-      } else {
-        throwUnsupported(element, 'Should never get here!');
-      }
+      type = specialTypes.entries
+          .singleWhere((e) => e.value(element),
+              orElse: () => throwBugFound(element))
+          .key;
     } else {
       type = _getArgType(element, option);
     }
 
     if (option == null) {
-      assert(type == ArgType.rest ||
-          type == ArgType.wasParsed ||
-          type == ArgType.command);
+      assert(specialTypes.keys.contains(type));
     } else {
       if (type == ArgType.flag) {
         if (option.defaultsTo != null && option.defaultsTo is! bool) {
@@ -133,19 +136,8 @@ CliOption _getOptions(FieldElement element) {
 
   var annotation = new ConstantReader(obj);
 
-  if (annotation.isNull) {
-    if (_couldBeRestArg(element)) {
-      // TODO: check this is a `List<String>`
-      return null;
-    }
-
-    if (_couldBeWasParsedArg(element)) {
-      return null;
-    }
-
-    if (_couldBeCommand(element)) {
-      return null;
-    }
+  if (annotation.isNull && specialTypes.values.any((p) => p(element))) {
+    return null;
   }
 
   var defaultsToReader =
