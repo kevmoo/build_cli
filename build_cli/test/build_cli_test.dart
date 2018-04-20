@@ -69,7 +69,7 @@ Empty parseEmpty(List<String> args) {
           throwsInvalidGenerationSourceError(
               'Generator cannot target `theAnswer`.'
               ' `@CliOptions` can only be applied to a class.',
-              'Remove the `@CliOptions` annotation from `theAnswer`.'));
+              todo: 'Remove the `@CliOptions` annotation from `theAnswer`.'));
     });
 
     test('method', () async {
@@ -78,7 +78,8 @@ Empty parseEmpty(List<String> args) {
           throwsInvalidGenerationSourceError(
               'Generator cannot target `annotatedMethod`.'
               ' `@CliOptions` can only be applied to a class.',
-              'Remove the `@CliOptions` annotation from `annotatedMethod`.'));
+              todo:
+                  'Remove the `@CliOptions` annotation from `annotatedMethod`.'));
     });
   });
   group('unknown types', () {
@@ -87,7 +88,7 @@ Empty parseEmpty(List<String> args) {
           runForElementNamed('UnknownCtorParamType'),
           throwsInvalidGenerationSourceError(
               'At least one constructor argument has an invalid type: `number`.',
-              'Check names and imports.'));
+              todo: 'Check names and imports.'));
     });
 
     test('in fields', () async {
@@ -95,66 +96,70 @@ Empty parseEmpty(List<String> args) {
           runForElementNamed('UnknownFieldType'),
           throwsInvalidGenerationSourceError(
               'At least one field has an invalid type: `number`.',
-              'Check names and imports.'));
+              todo: 'Check names and imports.'));
     });
+  });
+
+  test('unsupported type', () {
+    expect(
+        runForElementNamed('UnsupportedFieldType'),
+        throwsInvalidGenerationSourceError(
+          'Could not handle field `number`. `Duration` is not supported.',
+        ));
   });
 
   test('default values is not in allowed', () async {
     expect(
         runForElementNamed('DefaultNotInAllowed'),
-        throwsInvalidGenerationSourceError(
-            'Could not handle field `option`. '
-            'The `defaultsTo` value – `a` is not in `allowedValues`.',
-            ''));
+        throwsInvalidGenerationSourceError('Could not handle field `option`. '
+            'The `defaultsTo` value – `a` is not in `allowedValues`.'));
   });
 
   test('negating an option', () async {
     expect(
         runForElementNamed('NegatableOption'),
-        throwsInvalidGenerationSourceError(
-            'Could not handle field `option`. '
-            '`negatable` is only valid for flags – type `bool`.',
-            ''));
+        throwsInvalidGenerationSourceError('Could not handle field `option`. '
+            '`negatable` is only valid for flags – type `bool`.'));
   });
 
   test('negating a multi-option', () async {
     expect(
         runForElementNamed('NegatableMultiOption'),
-        throwsInvalidGenerationSourceError(
-            'Could not handle field `options`. '
-            '`negatable` is only valid for flags – type `bool`.',
-            ''));
+        throwsInvalidGenerationSourceError('Could not handle field `options`. '
+            '`negatable` is only valid for flags – type `bool`.'));
   });
 
   group('convert', () {
+    test('cannot be a static method', () async {
+      expect(
+          runForElementNamed('ConvertAsStatic'),
+          throwsInvalidGenerationSourceError('Could not handle field `option`. '
+              'The function provided for `convert` must be top-level. '
+              'Static class methods (like `_staticConvertStringToDuration`) are not supported.'));
+    });
+
     test('must have the right return type', () async {
       expect(
           runForElementNamed('BadConvertReturn'),
-          throwsInvalidGenerationSourceError(
-              'Could not handle field `option`. '
+          throwsInvalidGenerationSourceError('Could not handle field `option`. '
               'The convert function `_convertStringToDuration` return type '
-              '`Duration` is not compatible with the field type `String`.',
-              ''));
+              '`Duration` is not compatible with the field type `String`.'));
     });
 
     test('must have the right param type', () async {
       expect(
           runForElementNamed('BadConvertParam'),
-          throwsInvalidGenerationSourceError(
-              'Could not handle field `option`. '
+          throwsInvalidGenerationSourceError('Could not handle field `option`. '
               'The convert function `_convertIntToString` must have one '
-              'positional paramater of type `String`.',
-              ''));
+              'positional paramater of type `String`.'));
     });
 
     test('does not convert multi options', () async {
       expect(
           runForElementNamed('ConvertOnMulti'),
-          throwsInvalidGenerationSourceError(
-              'Could not handle field `option`. '
+          throwsInvalidGenerationSourceError('Could not handle field `option`. '
               'The convert function `_convertStringToDuration` return type '
-              '`Duration` is not compatible with the field type `List<Duration>`.',
-              ''));
+              '`Duration` is not compatible with the field type `List<Duration>`.'));
     });
   });
 
@@ -163,33 +168,27 @@ Empty parseEmpty(List<String> args) {
       expect(
           runForElementNamed('FlagWithStringDefault'),
           throwsInvalidGenerationSourceError(
-              'Could not handle field `option`. '
-              'The value for `defaultsTo` must be assignable to `bool`.',
-              ''));
+            'Could not handle field `option`. '
+                'The value for `defaultsTo` must be assignable to `bool`.',
+          ));
     });
     test('convert does not convert multi options', () async {
       expect(
           runForElementNamed('FlagWithAllowed'),
-          throwsInvalidGenerationSourceError(
-              'Could not handle field `option`. '
-              '`allowed` is not supported for flags.',
-              ''));
+          throwsInvalidGenerationSourceError('Could not handle field `option`. '
+              '`allowed` is not supported for flags.'));
     });
     test('convert does not convert multi options', () async {
       expect(
           runForElementNamed('FlagWithAllowedHelp'),
-          throwsInvalidGenerationSourceError(
-              'Could not handle field `option`. '
-              '`allowedHelp` is not supported for flags.',
-              ''));
+          throwsInvalidGenerationSourceError('Could not handle field `option`. '
+              '`allowedHelp` is not supported for flags.'));
     });
     test('convert does not convert multi options', () async {
       expect(
           runForElementNamed('FlagWithValueHelp'),
-          throwsInvalidGenerationSourceError(
-              'Could not handle field `option`. '
-              '`valueHelp` is not supported for flags.',
-              ''));
+          throwsInvalidGenerationSourceError('Could not handle field `option`. '
+              '`valueHelp` is not supported for flags.'));
     });
   });
 }

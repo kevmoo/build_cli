@@ -24,6 +24,11 @@ class UnknownFieldType {
 }
 
 @CliOptions()
+class UnsupportedFieldType {
+  Duration number;
+}
+
+@CliOptions()
 class DefaultNotInAllowed {
   @CliOption(defaultsTo: 'a', allowed: ['b'])
   String option;
@@ -39,6 +44,14 @@ class NegatableOption {
 class NegatableMultiOption {
   @CliOption(negatable: true)
   List<String> options;
+}
+
+@CliOptions()
+class ConvertAsStatic {
+  @CliOption(convert: _staticConvertStringToDuration)
+  String option;
+
+  static Duration _staticConvertStringToDuration(String source) => null;
 }
 
 @CliOptions()

@@ -110,7 +110,7 @@ ArgType _getArgType(FieldElement element, CliOption option) {
     return ArgType.multiOption;
   }
 
-  throwUnsupported(element, '`$targetType` is not supported - yet.');
+  throwUnsupported(element, '`$targetType` is not supported.');
 }
 
 CliOption _getOptions(FieldElement element) {
@@ -238,7 +238,7 @@ CliOption _getOptions(FieldElement element) {
       throwUnsupported(
           element,
           'The function provided for `convert` must be top-level.'
-          ' Static class methods (like `${type.element.name}`) are not supported - yet.');
+          ' Static class methods (like `${type.element.name}`) are not supported.');
     }
     var convertElement = type.element as FunctionElement;
 

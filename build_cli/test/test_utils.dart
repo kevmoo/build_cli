@@ -24,13 +24,13 @@ String getPackagePath() {
   return _packagePathCache;
 }
 
-Matcher throwsInvalidGenerationSourceError(messageMatcher, todoMatcher) =>
-    throwsA(allOf(
+Matcher throwsInvalidGenerationSourceError(messageMatcher, {todo}) => throwsA(
+    allOf(
         const isInstanceOf<InvalidGenerationSourceError>(),
         new FeatureMatcher<InvalidGenerationSourceError>(
             'message', (e) => e.message, messageMatcher),
         new FeatureMatcher<InvalidGenerationSourceError>(
-            'todo', (e) => e.todo, todoMatcher),
+            'todo', (e) => e.todo, todo ?? isEmpty),
         new FeatureMatcher<InvalidGenerationSourceError>(
             'element', (e) => e.element, isNotNull)));
 
