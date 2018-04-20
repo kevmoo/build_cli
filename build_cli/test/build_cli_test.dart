@@ -56,8 +56,9 @@ void main() {
     return _formatter.format(generated);
   }
 
-  void testOutput(
-      String testName, String elementName, String elementContent, expected) {
+  void testOutput(String testName, String elementName, String elementContent,
+      String expected) {
+    assert(elementContent != null);
     inlineContent.add(elementContent);
 
     test(testName, () async {
@@ -68,11 +69,12 @@ void main() {
   }
 
   void testBadOutput(String testName, String elementName, String elementContent,
-      expectedThrow) {
+      Matcher expectedThrow) {
+    assert(elementContent != null);
     inlineContent.add(elementContent);
 
     test(testName, () async {
-      expect(runForElementNamed(elementName), expectedThrow);
+      expect(runForElementNamed(elementName), throwsA(expectedThrow));
     });
   }
 
@@ -128,7 +130,7 @@ class LonelyWasParsed {
   bool nothingWasParsed;
 }
 ''',
-        throwsInvalidGenerationSourceError(
+        invalidGenerationSourceErrorMatcher(
             'Could not handle field `nothingWasParsed`. Could not find expected source field `nothing`.'));
   });
 
@@ -137,7 +139,7 @@ class LonelyWasParsed {
         'const field',
         'theAnswer',
         r'''@CliOptions()const theAnswer = 42;''',
-        throwsInvalidGenerationSourceError(
+        invalidGenerationSourceErrorMatcher(
             'Generator cannot target `theAnswer`.'
             ' `@CliOptions` can only be applied to a class.',
             todo: 'Remove the `@CliOptions` annotation from `theAnswer`.'));
@@ -146,7 +148,7 @@ class LonelyWasParsed {
         'method',
         'annotatedMethod',
         r'''@CliOptions() void annotatedMethod() => null;''',
-        throwsInvalidGenerationSourceError(
+        invalidGenerationSourceErrorMatcher(
             'Generator cannot target `annotatedMethod`.'
             ' `@CliOptions` can only be applied to a class.',
             todo:
