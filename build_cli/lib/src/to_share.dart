@@ -14,10 +14,11 @@ import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
 @alwaysThrows
-void throwUnsupported(FieldElement element, String message) =>
+void throwUnsupported(FieldElement element, String message, {String todo}) =>
     throw new InvalidGenerationSourceError(
         'Could not handle field `${element.displayName}`. $message',
-        element: element);
+        element: element,
+        todo: todo);
 
 /// If [type] is the [Type] or implements the [Type] represented by [checker],
 /// returns the generic arguments to the [checker] [Type] if there are any.
@@ -156,15 +157,11 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
     }
   }
 
-  var undefinedFields = fieldsList.where((fe) => fe.type.isUndefined).toList();
-  if (undefinedFields.isNotEmpty) {
-    var description =
-        undefinedFields.map((fe) => '`${fe.displayName}`').join(', ');
-
-    throw new InvalidGenerationSourceError(
-        'At least one field has an invalid type: $description.',
-        todo: 'Check names and imports.',
-        element: undefinedFields.first);
+  var undefinedField =
+      fieldsList.firstWhere((fe) => fe.type.isUndefined, orElse: () => null);
+  if (undefinedField != null) {
+    throwUnsupported(undefinedField, 'It has an undefined type.',
+        todo: 'Check names and imports.');
   }
 
   // Sort these in the order in which they appear in the class

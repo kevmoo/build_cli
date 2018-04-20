@@ -132,7 +132,7 @@ Empty parseEmpty(List<String> args) {
       expect(
           runForElementNamed('UnknownFieldType'),
           throwsInvalidGenerationSourceError(
-              'At least one field has an invalid type: `number`.',
+              'Could not handle field `number`. It has an undefined type.',
               todo: 'Check names and imports.'));
     });
   });
