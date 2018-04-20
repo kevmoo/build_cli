@@ -1,9 +1,6 @@
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 
 @CliOptions()
-class Empty {}
-
-@CliOptions()
 const theAnswer = 42;
 
 @CliOptions()

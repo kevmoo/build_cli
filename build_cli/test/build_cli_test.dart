@@ -17,13 +17,30 @@ import 'package:build_cli/build_cli.dart';
 import 'analysis_utils.dart';
 import 'test_utils.dart';
 
+final _formatter = new dart_style.DartFormatter();
+
 void main() {
   final generator = const CliGenerator();
   CompilationUnit compUnit;
 
-  setUpAll(() async {
-    compUnit = await _getCompilationUnitForString(getPackagePath());
-  });
+  var inlineContent = <String>[];
+
+  Future<CompilationUnit> _getCompilationUnitForString(
+      String projectPath) async {
+    var filePath = p.join(getPackagePath(), 'test', 'src', 'test_input.dart');
+
+    inlineContent.insert(0, new File(filePath).readAsStringSync());
+
+    var source = new StringSource(inlineContent.join('\n'), 'test content');
+
+    // null this out – should not be touched again
+    inlineContent = null;
+
+    var context = await getAnalysisContextForProjectPath(projectPath);
+
+    var libElement = context.computeLibraryElement(source);
+    return context.resolveCompilationUnit(source, libElement);
+  }
 
   Future<String> runForElementNamed(String name) async {
     var library = new LibraryReader(compUnit.element.library);
@@ -39,15 +56,25 @@ void main() {
     return _formatter.format(generated);
   }
 
-  void testOutput(String testName, String element, expected) {
+  void testOutput(
+      String testName, String elementName, String elementContent, expected) {
+    inlineContent.add(elementContent);
+
     test(testName, () async {
-      var actual = await runForElementNamed(element);
+      var actual = await runForElementNamed(elementName);
       printOnFailure(['`' * 72, actual, '`' * 72].join('\n'));
       expect(actual, expected);
     });
   }
 
+  setUpAll(() async {
+    compUnit = await _getCompilationUnitForString(getPackagePath());
+  });
+
   testOutput('just empty', 'Empty', r'''
+@CliOptions()
+class Empty {}
+''', r'''
 Empty _$parseEmptyResult(ArgResults result) {
   return new Empty();
 }
@@ -82,6 +109,7 @@ Empty parseEmpty(List<String> args) {
                   'Remove the `@CliOptions` annotation from `annotatedMethod`.'));
     });
   });
+
   group('unknown types', () {
     test('in constructor arguments', () async {
       expect(
@@ -191,17 +219,4 @@ Empty parseEmpty(List<String> args) {
               '`valueHelp` is not supported for flags.'));
     });
   });
-}
-
-final _formatter = new dart_style.DartFormatter();
-
-Future<CompilationUnit> _getCompilationUnitForString(String projectPath) async {
-  var filePath = p.join(getPackagePath(), 'test', 'src', 'test_input.dart');
-  var source =
-      new StringSource(new File(filePath).readAsStringSync(), 'test content');
-
-  var context = await getAnalysisContextForProjectPath(projectPath);
-
-  var libElement = context.computeLibraryElement(source);
-  return context.resolveCompilationUnit(source, libElement);
 }
