@@ -146,6 +146,12 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
     var targetFieldName =
         name.substring(0, name.length - wasParsedSuffix.length);
     var targetField = allFields[targetFieldName];
+    if (targetField == null) {
+      throwUnsupported(
+        field,
+        'Could not find expected source field `$targetFieldName`.',
+      );
+    }
     return 'result.wasParsed(${_getArgNameStringLiteral(targetField)})';
   }
 

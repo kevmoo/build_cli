@@ -98,7 +98,8 @@ Empty parseEmpty(List<String> args) {
 }
 ''');
 
-  testOutput('a command', 'WithCommand', r'''
+  group('special fields', () {
+    testOutput('a command', 'WithCommand', r'''
 @CliOptions()
 class WithCommand {
   ArgResults command;
@@ -117,6 +118,19 @@ WithCommand parseWithCommand(List<String> args) {
   return _$parseWithCommandResult(result);
 }
 ''');
+
+    testBadOutput(
+        'wasParsed without a source',
+        'LonelyWasParsed',
+        r'''
+@CliOptions()
+class LonelyWasParsed {
+  bool nothingWasParsed;
+}
+''',
+        throwsInvalidGenerationSourceError(
+            'Could not handle field `nothingWasParsed`. Could not find expected source field `nothing`.'));
+  });
 
   group('non-classes', () {
     testBadOutput(
