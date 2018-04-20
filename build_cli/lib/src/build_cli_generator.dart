@@ -149,6 +149,10 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
     return 'result.wasParsed(${_getArgNameStringLiteral(targetField)})';
   }
 
+  if (info.argType == ArgType.command) {
+    return 'result.command';
+  }
+
   var targetType = ctorParam?.type ?? field.type;
   var argName = _getArgNameStringLiteral(field);
 
@@ -220,6 +224,7 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
       break;
     case ArgType.rest:
     case ArgType.wasParsed:
+    case ArgType.command:
       return;
   }
   buffer.write('(${_getArgNameStringLiteral(element)}');

@@ -98,6 +98,26 @@ Empty parseEmpty(List<String> args) {
 }
 ''');
 
+  testOutput('a command', 'WithCommand', r'''
+@CliOptions()
+class WithCommand {
+  ArgResults command;
+}
+''', r'''
+WithCommand _$parseWithCommandResult(ArgResults result) {
+  return new WithCommand()..command = result.command;
+}
+
+ArgParser _$populateWithCommandParser(ArgParser parser) => parser;
+
+final _$parserForWithCommand = _$populateWithCommandParser(new ArgParser());
+
+WithCommand parseWithCommand(List<String> args) {
+  var result = _$parserForWithCommand.parse(args);
+  return _$parseWithCommandResult(result);
+}
+''');
+
   group('non-classes', () {
     testBadOutput(
         'const field',

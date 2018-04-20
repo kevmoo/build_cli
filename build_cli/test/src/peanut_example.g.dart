@@ -33,7 +33,8 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
       release: result['release'] as bool,
       secret: result['secret'] as bool,
       rest: result.rest)
-    ..maxRuntime = _convert(result['max-runtime'] as String);
+    ..maxRuntime = _convert(result['max-runtime'] as String)
+    ..command = result.command;
 }
 
 ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser

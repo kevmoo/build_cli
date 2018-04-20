@@ -11,6 +11,7 @@ const boolChecker = const TypeChecker.fromRuntime(bool);
 const listChecker = const TypeChecker.fromRuntime(List);
 const numChecker = const TypeChecker.fromRuntime(num);
 const stringChecker = const TypeChecker.fromRuntime(String);
+const _argResultsChecker = const TypeChecker.fromRuntime(ArgResults);
 const _cliOptionChecker = const TypeChecker.fromRuntime(CliOption);
 const _iterableChecker = const TypeChecker.fromRuntime(Iterable);
 
@@ -23,14 +24,20 @@ bool isMulti(DartType targetType) =>
 
 final _argInfoCache = new Expando<ArgInfo>();
 
-enum ArgType { option, flag, multiOption, rest, wasParsed }
+enum ArgType { option, flag, multiOption, rest, wasParsed, command }
 
 final wasParsedSuffix = 'WasParsed';
 
 bool _couldBeRestArg(FieldElement element) => element.name == 'rest';
+
 bool _couldBeWasParsedArg(FieldElement element) =>
     element.name.endsWith(wasParsedSuffix) &&
-    element.name.length > wasParsedSuffix.length;
+    element.name.length > wasParsedSuffix.length &&
+    boolChecker.isAssignableFromType(element.type);
+
+bool _couldBeCommand(FieldElement element) =>
+    element.name == 'command' &&
+    _argResultsChecker.isAssignableFromType(element.type);
 
 class ArgInfo {
   final CliOption optionData;
@@ -52,6 +59,8 @@ class ArgInfo {
         type = ArgType.rest;
       } else if (_couldBeWasParsedArg(element)) {
         type = ArgType.wasParsed;
+      } else if (_couldBeCommand(element)) {
+        type = ArgType.command;
       } else {
         throwUnsupported(element, 'Should never get here!');
       }
@@ -60,7 +69,9 @@ class ArgInfo {
     }
 
     if (option == null) {
-      assert(type == ArgType.rest || type == ArgType.wasParsed);
+      assert(type == ArgType.rest ||
+          type == ArgType.wasParsed ||
+          type == ArgType.command);
     } else {
       if (type == ArgType.flag) {
         if (option.defaultsTo != null && option.defaultsTo is! bool) {
@@ -122,14 +133,19 @@ CliOption _getOptions(FieldElement element) {
 
   var annotation = new ConstantReader(obj);
 
-  if (annotation.isNull && _couldBeRestArg(element)) {
-    // TODO: check this is a `List<String>`
-    return null;
-  }
+  if (annotation.isNull) {
+    if (_couldBeRestArg(element)) {
+      // TODO: check this is a `List<String>`
+      return null;
+    }
 
-  if (annotation.isNull && _couldBeWasParsedArg(element)) {
-    // TODO: check this is a bool!
-    return null;
+    if (_couldBeWasParsedArg(element)) {
+      return null;
+    }
+
+    if (_couldBeCommand(element)) {
+      return null;
+    }
   }
 
   var defaultsToReader =

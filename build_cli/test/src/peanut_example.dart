@@ -64,6 +64,8 @@ class PeanutOptions {
   // Explicitly not used – to validate logging behavior
   final String coolBean = null;
 
+  ArgResults command;
+
   PeanutOptions(
       {this.directory,
       this.branch,
