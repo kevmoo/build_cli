@@ -126,34 +126,36 @@ Empty parseEmpty(List<String> args) {
             ''));
   });
 
-  test('convert must have the right return type', () async {
-    expect(
-        runForElementNamed('BadConvertReturn'),
-        throwsInvalidGenerationSourceError(
-            'Could not handle field `option`. '
-            'The convert function `_convertStringToDuration` return type '
-            '`Duration` is not compatible with the field type `String`.',
-            ''));
-  });
+  group('convert', () {
+    test('must have the right return type', () async {
+      expect(
+          runForElementNamed('BadConvertReturn'),
+          throwsInvalidGenerationSourceError(
+              'Could not handle field `option`. '
+              'The convert function `_convertStringToDuration` return type '
+              '`Duration` is not compatible with the field type `String`.',
+              ''));
+    });
 
-  test('convert must have the right param type', () async {
-    expect(
-        runForElementNamed('BadConvertParam'),
-        throwsInvalidGenerationSourceError(
-            'Could not handle field `option`. '
-            'The convert function `_convertIntToString` must have one '
-            'positional paramater of type `String`.',
-            ''));
-  });
+    test('must have the right param type', () async {
+      expect(
+          runForElementNamed('BadConvertParam'),
+          throwsInvalidGenerationSourceError(
+              'Could not handle field `option`. '
+              'The convert function `_convertIntToString` must have one '
+              'positional paramater of type `String`.',
+              ''));
+    });
 
-  test('convert does not convert multi options', () async {
-    expect(
-        runForElementNamed('ConvertOnMulti'),
-        throwsInvalidGenerationSourceError(
-            'Could not handle field `option`. '
-            'The convert function `_convertStringToDuration` return type '
-            '`Duration` is not compatible with the field type `List<Duration>`.',
-            ''));
+    test('does not convert multi options', () async {
+      expect(
+          runForElementNamed('ConvertOnMulti'),
+          throwsInvalidGenerationSourceError(
+              'Could not handle field `option`. '
+              'The convert function `_convertStringToDuration` return type '
+              '`Duration` is not compatible with the field type `List<Duration>`.',
+              ''));
+    });
   });
 
   group('flag', () {
