@@ -7,12 +7,12 @@ import 'package:source_gen/source_gen.dart';
 import 'to_share.dart';
 import 'util.dart';
 
-final listChecker = new TypeChecker.fromRuntime(List);
-final _iterableChecker = new TypeChecker.fromRuntime(Iterable);
-final boolChecker = new TypeChecker.fromRuntime(bool);
-final stringChecker = new TypeChecker.fromRuntime(String);
+const boolChecker = const TypeChecker.fromRuntime(bool);
+const listChecker = const TypeChecker.fromRuntime(List);
 const numChecker = const TypeChecker.fromRuntime(num);
-final _cliOptionChecker = new TypeChecker.fromRuntime(CliOption);
+const stringChecker = const TypeChecker.fromRuntime(String);
+const _cliOptionChecker = const TypeChecker.fromRuntime(CliOption);
+const _iterableChecker = const TypeChecker.fromRuntime(Iterable);
 
 String getConvertName(CliOption option) => _convertName[option];
 final _convertName = new Expando<String>('convert name');
