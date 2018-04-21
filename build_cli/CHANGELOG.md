@@ -2,6 +2,7 @@
 
 - Added support for populating `ArgResults command` if the field is not 
   annotated.
+- Improved error output, including in cases where a bug may be found.
 
 ## 0.2.1
 

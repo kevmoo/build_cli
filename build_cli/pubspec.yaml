@@ -1,5 +1,5 @@
 name: build_cli
-version: 0.2.2-dev
+version: 0.2.2
 description: >-
   Parse command line arguments directly into an annotation class
   using the power of build_runner and source_gen.
