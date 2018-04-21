@@ -264,7 +264,7 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   }
 
   if (options.allowedHelp != null) {
-    // TODO: throw/warn if there if `allowed` is null?
+    // TODO: throw/warn if `allowed` is null or doesn't match these?
     var allowedHelpItems = options.allowedHelp.entries.map((e) {
       var escapedKey = escapeDartString(e.key.toString());
       var escapedValue = escapeDartString(e.value);

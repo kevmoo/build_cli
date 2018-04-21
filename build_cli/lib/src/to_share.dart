@@ -239,7 +239,7 @@ Set<String> writeConstructorInvocation(
 
   var ctor = classElement.unnamedConstructor;
   if (ctor == null) {
-    // TODO(kevmoo): support using another ctor - dart-lang/json_serializable#50
+    // TODO(kevmoo): support using another constructor
     throw new InvalidGenerationSourceError(
         'The class `$className` has no default constructor.',
         element: classElement);

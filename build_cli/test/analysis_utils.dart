@@ -17,7 +17,6 @@ import 'package:path/path.dart' as p;
 
 Future<AnalysisContext> getAnalysisContextForProjectPath(
     String projectPath) async {
-  // TODO: fail more clearly if this...fails
   var sdkPath = _getSdkPath();
 
   var resourceProvider = PhysicalResourceProvider.INSTANCE;
