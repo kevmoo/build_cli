@@ -51,7 +51,7 @@ void main() {
     expect(parser.usage, r'''
 -f, --format                    
           [dot]                 Generate a GraphViz 'dot' file.
-          [html]                Wrap the GraphViz dot format in an HTML template which renders it.
+          [html] (default)      Wrap the GraphViz dot format in an HTML template which renders it.
 
 -i, --ignore-packages           A comma seperated list of packages to exclude in the output.
     --production-port=<PORT>    (defaults to "8080")
@@ -59,7 +59,7 @@ void main() {
     --double-value              (defaults to "3000.0")
     --dev-port                  
           [42]                  the knowledge port
-          [8080]                the cool port
+          [8080] (default)      the cool port
           [9090]                the alt port
 
     --list-of-nothing           
