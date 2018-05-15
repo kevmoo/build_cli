@@ -1,3 +1,8 @@
+## 0.2.3
+
+- Require the latest `package:analyzer`.
+- Support convert functions with optional parameters.
+
 ## 0.2.2
 
 - Added support for populating `ArgResults command` if the field is not 

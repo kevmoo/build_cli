@@ -1,4 +1,3 @@
-import 'package:analyzer/analyzer.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
@@ -248,29 +247,27 @@ CliOption _getOptions(FieldElement element) {
           'The function provided for `convert` must be top-level.'
           ' Static class methods (like `${type.element.name}`) are not supported.');
     }
-    var convertElement = type.element as FunctionElement;
+    var functionElement = type.element as FunctionElement;
 
-    var positionalParams = convertElement.parameters
-        .where((pe) => pe.parameterKind == ParameterKind.REQUIRED)
-        .toList();
-
-    if (positionalParams.length != 1 ||
+    if (functionElement.parameters.isEmpty ||
+        functionElement.parameters.first.isNamed ||
+        functionElement.parameters.where((pe) => !pe.isOptional).length > 1 ||
         !element.context.typeProvider.stringType
-            .isAssignableTo(positionalParams.single.type)) {
+            .isAssignableTo(functionElement.parameters.first.type)) {
       throwUnsupported(
           element,
-          'The convert function `${convertElement.name}` must have one '
+          'The convert function `${functionElement.name}` must have one '
           'positional paramater of type `String`.');
     }
 
-    if (!convertElement.returnType.isAssignableTo(element.type)) {
+    if (!functionElement.returnType.isAssignableTo(element.type)) {
       throwUnsupported(
           element,
-          'The convert function `${convertElement.name}` return type '
-          '`${convertElement.returnType}` is not compatible with the field type'
+          'The convert function `${functionElement.name}` return type '
+          '`${functionElement.returnType}` is not compatible with the field type'
           ' `${element.type}`.');
     }
-    _convertName[option] = convertElement.name;
+    _convertName[option] = functionElement.name;
   }
 
   return option;
