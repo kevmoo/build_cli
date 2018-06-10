@@ -29,11 +29,9 @@ Builder buildCli(BuilderOptions options) {
   return builder;
 }
 
-Builder _cliPartBuilder({String header}) {
-  return new PartBuilder(
-    const [
-      const CliGenerator(),
-    ],
-    header: header,
-  );
-}
+Builder _cliPartBuilder({String header}) => new PartBuilder(
+      const [
+        const CliGenerator(),
+      ],
+      header: header,
+    );
