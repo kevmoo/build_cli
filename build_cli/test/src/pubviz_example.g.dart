@@ -5,7 +5,7 @@
 part of 'pubviz_example.dart';
 
 // **************************************************************************
-// Generator: CliGenerator
+// CliGenerator
 // **************************************************************************
 
 PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {

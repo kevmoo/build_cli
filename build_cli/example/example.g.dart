@@ -5,7 +5,7 @@
 part of 'example.dart';
 
 // **************************************************************************
-// Generator: CliGenerator
+// CliGenerator
 // **************************************************************************
 
 Options _$parseOptionsResult(ArgResults result) {
