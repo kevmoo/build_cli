@@ -50,10 +50,10 @@ void main() {
       fail('Could not find element `$name`.');
     }
     var annotation = generator.typeChecker.firstAnnotationOf(element);
-    var generated = await generator.generateForAnnotatedElement(
+    var generated = generator.generateForAnnotatedElement(
         element, new ConstantReader(annotation), null);
 
-    return _formatter.format(generated);
+    return _formatter.format(await generated.join('\n\n'));
   }
 
   void testOutput(String testName, String elementName, String elementContent,

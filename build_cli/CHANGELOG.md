@@ -1,3 +1,8 @@
+## 0.2.6
+
+- Helper methods that were previously generated inline within functions are now
+  generated as top-level functions and shared.
+
 ## 0.2.5
 
 - Require `package:source_gen` `^0.9.0`.

@@ -19,8 +19,8 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
   const CliGenerator();
 
   @override
-  Future<String> generateForAnnotatedElement(
-      Element element, ConstantReader annotation, BuildStep buildStep) async {
+  Stream<String> generateForAnnotatedElement(
+      Element element, ConstantReader annotation, BuildStep buildStep) async* {
     await validateSdkConstraint(buildStep);
 
     if (element is! ClassElement) {
@@ -45,31 +45,25 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
 
     // Get the constructor to use for the factory
 
-    var buffer = new StringBuffer();
-
     var populateParserName = '_\$populate${classElement.name}Parser';
     var parserFieldName = '_\$parserFor${classElement.name}';
     var resultParserName = '_\$parse${classElement.name}Result';
 
-    buffer.writeln('''
-
-${classElement.name} $resultParserName(ArgResults result) {
-
-''');
-
     if (fieldsList.any((fe) => isEnum(fe.type))) {
-      buffer.writeln(_enumValueHelper);
+      yield _enumValueHelper;
     }
 
     if (fieldsList.any((fe) => numChecker.isAssignableFromType(fe.type))) {
-      buffer.writeln(r'''
-
-T badNumberFormat<T extends num>(String source, String type, String argName) =>
+      yield r'''
+T _$badNumberFormat<T extends num>(String source, String type, String argName) =>
   throw new FormatException('Cannot parse "$source" into `$type` for option "$argName".'); 
-''');
+''';
     }
 
-    buffer.write('return ');
+    var buffer = new StringBuffer();
+    buffer.write('''
+${classElement.name} $resultParserName(ArgResults result) {
+  return ''');
 
     String deserializeForField(String fieldName,
             {ParameterElement ctorParam}) =>
@@ -94,31 +88,30 @@ T badNumberFormat<T extends num>(String source, String type, String argName) =>
         fields.remove(unusedField);
       }
     }
+    buffer.writeln('}');
+    yield buffer.toString();
 
-    buffer.writeln('''}
-
-ArgParser $populateParserName(ArgParser parser) => parser''');
-
+    buffer = new StringBuffer();
+    buffer.write('ArgParser $populateParserName(ArgParser parser) => parser');
     for (var f in fields.values) {
       _parserOptionFor(buffer, f);
     }
+    buffer.write(';');
+    yield buffer.toString();
 
-    buffer.writeln(''';
+    yield 'final $parserFieldName = $populateParserName(new ArgParser());';
 
-final $parserFieldName = $populateParserName(new ArgParser());
-
+    yield '''
 ${classElement.name} parse${classElement.name}(List<String> args) {
   var result = $parserFieldName.parse(args);
   return $resultParserName(result);
 }
-''');
-
-    return buffer.toString();
+''';
   }
 }
 
 const _enumValueHelper = r'''
-T enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
+T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
     enumValue == null
         ? null
         : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
@@ -176,7 +169,7 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
   }
 
   if (isEnum(targetType)) {
-    return "enumValueHelper('$targetType', $targetType.values, $argAccess as String)";
+    return "_\$enumValueHelper('$targetType', $targetType.values, $argAccess as String)";
   }
 
   if (info.argType == ArgType.multiOption) {
@@ -202,7 +195,7 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
   for (var checker in _numCheckers.entries) {
     if (checker.key.isExactlyType(targetType)) {
       return '${checker.value}.tryParse($argAccess as String) ?? '
-          "badNumberFormat($argAccess as String, '${checker.value}', '${_getArgName(field)}')";
+          "_\$badNumberFormat($argAccess as String, '${checker.value}', '${_getArgName(field)}')";
     }
   }
 

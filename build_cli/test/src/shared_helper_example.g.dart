@@ -1,6 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// You can customize this header by setting the `header` option
-// in `build.yaml`.
 
 part of 'shared_helper_example.dart';
 
@@ -8,24 +6,24 @@ part of 'shared_helper_example.dart';
 // CliGenerator
 // **************************************************************************
 
+T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
+    enumValue == null
+        ? null
+        : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
+            orElse: () => throw new StateError(
+                'Could not find the value `$enumValue` in enum `$enumName`.'));
+
+T _$badNumberFormat<T extends num>(
+        String source, String type, String argName) =>
+    throw new FormatException(
+        'Cannot parse "$source" into `$type` for option "$argName".');
+
 FirstOptions _$parseFirstOptionsResult(ArgResults result) {
-  T enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
-      enumValue == null
-          ? null
-          : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
-              orElse: () => throw new StateError(
-                  'Could not find the value `$enumValue` in enum `$enumName`.'));
-
-  T badNumberFormat<T extends num>(
-          String source, String type, String argName) =>
-      throw new FormatException(
-          'Cannot parse "$source" into `$type` for option "$argName".');
-
   return new FirstOptions()
-    ..value = enumValueHelper(
+    ..value = _$enumValueHelper(
         'OptionValue', OptionValue.values, result['value'] as String)
     ..count = int.tryParse(result['count'] as String) ??
-        badNumberFormat(result['count'] as String, 'int', 'count');
+        _$badNumberFormat(result['count'] as String, 'int', 'count');
 }
 
 ArgParser _$populateFirstOptionsParser(ArgParser parser) =>
@@ -39,23 +37,11 @@ FirstOptions parseFirstOptions(List<String> args) {
 }
 
 SecondOptions _$parseSecondOptionsResult(ArgResults result) {
-  T enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
-      enumValue == null
-          ? null
-          : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
-              orElse: () => throw new StateError(
-                  'Could not find the value `$enumValue` in enum `$enumName`.'));
-
-  T badNumberFormat<T extends num>(
-          String source, String type, String argName) =>
-      throw new FormatException(
-          'Cannot parse "$source" into `$type` for option "$argName".');
-
   return new SecondOptions()
-    ..value = enumValueHelper(
+    ..value = _$enumValueHelper(
         'OptionValue', OptionValue.values, result['value'] as String)
     ..count = int.tryParse(result['count'] as String) ??
-        badNumberFormat(result['count'] as String, 'int', 'count');
+        _$badNumberFormat(result['count'] as String, 'int', 'count');
 }
 
 ArgParser _$populateSecondOptionsParser(ArgParser parser) =>
