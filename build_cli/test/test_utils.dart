@@ -24,25 +24,11 @@ String getPackagePath() {
   return _packagePathCache;
 }
 
-Matcher invalidGenerationSourceErrorMatcher(messageMatcher, {todo}) => allOf(
-    const isInstanceOf<InvalidGenerationSourceError>(),
-    new FeatureMatcher<InvalidGenerationSourceError>(
-        'message', (e) => e.message, messageMatcher),
-    new FeatureMatcher<InvalidGenerationSourceError>(
-        'todo', (e) => e.todo, todo ?? isEmpty),
-    new FeatureMatcher<InvalidGenerationSourceError>(
-        'element', (e) => e.element, isNotNull));
+Matcher invalidGenerationSourceErrorMatcher(messageMatcher, {todo}) =>
+    const TypeMatcher<InvalidGenerationSourceError>()
+        .having((e) => e.message, 'message', messageMatcher)
+        .having((e) => e.todo, 'todo', todo ?? isEmpty)
+        .having((e) => e.element, 'element', isNotNull);
 
 Matcher throwsInvalidGenerationSourceError(messageMatcher, {todo}) =>
     throwsA(invalidGenerationSourceErrorMatcher(messageMatcher, todo: todo));
-
-// TODO(kevmoo) add this to pkg/matcher – is nice!
-class FeatureMatcher<T> extends CustomMatcher {
-  final dynamic Function(T value) _feature;
-
-  FeatureMatcher(String name, this._feature, matcher)
-      : super('`$name`', '`$name`', matcher);
-
-  @override
-  featureValueOf(covariant T actual) => _feature(actual);
-}
