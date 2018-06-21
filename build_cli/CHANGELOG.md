@@ -1,3 +1,7 @@
+## 0.2.4
+
+- Support the latest version of `package:build_config`.
+
 ## 0.2.3
 
 - Require the latest `package:analyzer`.
