@@ -202,7 +202,8 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
   for (var checker in _numCheckers.entries) {
     if (checker.key.isExactlyType(targetType)) {
       return '${checker.value}.tryParse($argAccess as String) ?? '
-          "badNumberFormat($argAccess as String, '${checker.value}', '${_getArgName(field)}')";
+          "badNumberFormat($argAccess as String, '${checker
+              .value}', '${_getArgName(field)}')";
     }
   }
 
