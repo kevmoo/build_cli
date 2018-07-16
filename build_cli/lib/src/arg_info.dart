@@ -245,8 +245,7 @@ CliOption _getOptions(FieldElement element) {
       throwUnsupported(
           element,
           'The function provided for `convert` must be top-level.'
-          ' Static class methods (like `${type
-              .element.name}`) are not supported.');
+          ' Static class methods (like `${type.element.name}`) are not supported.');
     }
     var functionElement = type.element as FunctionElement;
 
@@ -265,8 +264,7 @@ CliOption _getOptions(FieldElement element) {
       throwUnsupported(
           element,
           'The convert function `${functionElement.name}` return type '
-          '`${functionElement
-              .returnType}` is not compatible with the field type'
+          '`${functionElement.returnType}` is not compatible with the field type'
           ' `${element.type}`.');
     }
     _convertName[option] = functionElement.name;
