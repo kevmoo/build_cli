@@ -1,3 +1,7 @@
+## 0.2.4+1
+
+- Support Dart 2 stable.
+
 ## 0.2.4
 
 - Support the latest version of `package:build_config`.
