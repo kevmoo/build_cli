@@ -13,25 +13,15 @@ import 'package:source_gen/source_gen.dart';
 import 'src/build_cli_generator.dart';
 
 Builder buildCli(BuilderOptions options) {
-  // Paranoid copy of options.config - don't assume it's mutable or needed
-  // elsewhere.
-  var optionsMap = new Map<String, dynamic>.from(options.config);
-
-  var builder = _cliPartBuilder(header: optionsMap.remove('header') as String);
-
-  if (optionsMap.isNotEmpty) {
+  if (options.config.isNotEmpty) {
     if (log == null) {
       throw new StateError('Requires build_runner >=0.8.2 – please upgrade.');
     }
-    log.warning('These options were ignored: `$optionsMap`.');
+    log.warning(
+        'These options were ignored: `${options.config.keys.join(', ')}`.');
   }
 
-  return builder;
+  return new SharedPartBuilder(const [
+    const CliGenerator(),
+  ], 'build_cli');
 }
-
-Builder _cliPartBuilder({String header}) => new PartBuilder(
-      const [
-        const CliGenerator(),
-      ],
-      header: header,
-    );

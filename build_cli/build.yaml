@@ -7,16 +7,12 @@ targets:
           include:
           - example/**
           - test/src/*_example*
-        options:
-          header: |+
-            // GENERATED CODE - DO NOT MODIFY BY HAND
-            // You can customize this header by setting the `header` option
-            // in `build.yaml`.
 
 builders:
   build_cli:
     import: "package:build_cli/builder.dart"
     builder_factories: ["buildCli"]
-    build_extensions: {".dart": [".g.dart"]}
+    build_extensions: {".dart": [".build_cli.g.part"]}
     auto_apply: dependents
-    build_to: source
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]
