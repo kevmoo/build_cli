@@ -13,16 +13,15 @@ import 'package:source_gen/source_gen.dart';
 import 'src/build_cli_generator.dart';
 
 Builder buildCli(BuilderOptions options) {
-  var builder = new SharedPartBuilder(const [
-    const CliGenerator(),
-  ], 'build_cli');
-
   if (options.config.isNotEmpty) {
     if (log == null) {
       throw new StateError('Requires build_runner >=0.8.2 – please upgrade.');
     }
-    log.warning('These options were ignored: `${options.config}`.');
+    log.warning(
+        'These options were ignored: `${options.config.keys.join(', ')}`.');
   }
 
-  return builder;
+  return new SharedPartBuilder(const [
+    const CliGenerator(),
+  ], 'build_cli');
 }
