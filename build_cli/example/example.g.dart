@@ -13,14 +13,13 @@ T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
             orElse: () => throw new StateError(
                 'Could not find the value `$enumValue` in enum `$enumName`.'));
 
-Options _$parseOptionsResult(ArgResults result) {
-  return new Options(result['name'] as String,
-      nameWasParsed: result.wasParsed('name'))
-    ..yell = result['yell'] as bool
-    ..displayLanguage = _$enumValueHelper(
-        'Language', Language.values, result['display-language'] as String)
-    ..help = result['help'] as bool;
-}
+Options _$parseOptionsResult(ArgResults result) =>
+    new Options(result['name'] as String,
+        nameWasParsed: result.wasParsed('name'))
+      ..yell = result['yell'] as bool
+      ..displayLanguage = _$enumValueHelper(
+          'Language', Language.values, result['display-language'] as String)
+      ..help = result['help'] as bool;
 
 ArgParser _$populateOptionsParser(ArgParser parser) => parser
   ..addOption('name',

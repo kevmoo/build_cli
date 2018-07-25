@@ -18,26 +18,25 @@ T _$badNumberFormat<T extends num>(
     throw new FormatException(
         'Cannot parse "$source" into `$type` for option "$argName".');
 
-PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
-  return new PeanutOptions(
-      format: _$enumValueHelper(
-          'FormatOptions', FormatOptions.values, result['format'] as String),
-      secret: result['secret'] as String,
-      ignorePackages: result['ignore-packages'] as List<String>,
-      productionPort: int.tryParse(result['production-port'] as String) ??
+PeanutOptions _$parsePeanutOptionsResult(ArgResults result) =>
+    new PeanutOptions(
+        format: _$enumValueHelper(
+            'FormatOptions', FormatOptions.values, result['format'] as String),
+        secret: result['secret'] as String,
+        ignorePackages: result['ignore-packages'] as List<String>,
+        productionPort: int.tryParse(result['production-port'] as String) ??
+            _$badNumberFormat(
+                result['production-port'] as String, 'int', 'production-port'))
+      ..numValue = num.tryParse(result['num-value'] as String) ??
+          _$badNumberFormat(result['num-value'] as String, 'num', 'num-value')
+      ..doubleValue = double.tryParse(result['double-value'] as String) ??
           _$badNumberFormat(
-              result['production-port'] as String, 'int', 'production-port'))
-    ..numValue = num.tryParse(result['num-value'] as String) ??
-        _$badNumberFormat(result['num-value'] as String, 'num', 'num-value')
-    ..doubleValue = double.tryParse(result['double-value'] as String) ??
-        _$badNumberFormat(
-            result['double-value'] as String, 'double', 'double-value')
-    ..devPort = int.tryParse(result['dev-port'] as String) ??
-        _$badNumberFormat(result['dev-port'] as String, 'int', 'dev-port')
-    ..listOfNothing = result['list-of-nothing'] as List
-    ..listOfDynamic = result['list-of-dynamic'] as List
-    ..listOfObject = result['list-of-object'] as List;
-}
+              result['double-value'] as String, 'double', 'double-value')
+      ..devPort = int.tryParse(result['dev-port'] as String) ??
+          _$badNumberFormat(result['dev-port'] as String, 'int', 'dev-port')
+      ..listOfNothing = result['list-of-nothing'] as List
+      ..listOfDynamic = result['list-of-dynamic'] as List
+      ..listOfObject = result['list-of-object'] as List;
 
 ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
   ..addOption('format', abbr: 'f', defaultsTo: 'html', allowed: [

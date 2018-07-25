@@ -18,13 +18,11 @@ T _$badNumberFormat<T extends num>(
     throw new FormatException(
         'Cannot parse "$source" into `$type` for option "$argName".');
 
-FirstOptions _$parseFirstOptionsResult(ArgResults result) {
-  return new FirstOptions()
-    ..value = _$enumValueHelper(
-        'OptionValue', OptionValue.values, result['value'] as String)
-    ..count = int.tryParse(result['count'] as String) ??
-        _$badNumberFormat(result['count'] as String, 'int', 'count');
-}
+FirstOptions _$parseFirstOptionsResult(ArgResults result) => new FirstOptions()
+  ..value = _$enumValueHelper(
+      'OptionValue', OptionValue.values, result['value'] as String)
+  ..count = int.tryParse(result['count'] as String) ??
+      _$badNumberFormat(result['count'] as String, 'int', 'count');
 
 ArgParser _$populateFirstOptionsParser(ArgParser parser) =>
     parser..addOption('value', allowed: ['a', 'b', 'c'])..addOption('count');
@@ -36,13 +34,12 @@ FirstOptions parseFirstOptions(List<String> args) {
   return _$parseFirstOptionsResult(result);
 }
 
-SecondOptions _$parseSecondOptionsResult(ArgResults result) {
-  return new SecondOptions()
-    ..value = _$enumValueHelper(
-        'OptionValue', OptionValue.values, result['value'] as String)
-    ..count = int.tryParse(result['count'] as String) ??
-        _$badNumberFormat(result['count'] as String, 'int', 'count');
-}
+SecondOptions _$parseSecondOptionsResult(ArgResults result) =>
+    new SecondOptions()
+      ..value = _$enumValueHelper(
+          'OptionValue', OptionValue.values, result['value'] as String)
+      ..count = int.tryParse(result['count'] as String) ??
+          _$badNumberFormat(result['count'] as String, 'int', 'count');
 
 ArgParser _$populateSecondOptionsParser(ArgParser parser) =>
     parser..addOption('value', allowed: ['a', 'b', 'c'])..addOption('count');

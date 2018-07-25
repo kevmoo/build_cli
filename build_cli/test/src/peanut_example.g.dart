@@ -13,27 +13,26 @@ T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
             orElse: () => throw new StateError(
                 'Could not find the value `$enumValue` in enum `$enumName`.'));
 
-PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
-  return new PeanutOptions(
-      directory: result['directory'] as String,
-      branch: result['branch'] as String,
-      mode: _$enumValueHelper(
-          'PubBuildMode', PubBuildMode.values, result['mode'] as String),
-      modeWasParsed: result.wasParsed('mode'),
-      buildConfig: result['build-config'] as String,
-      buildConfigWasParsed: result.wasParsed('build-config'),
-      message: result['message'] as String,
-      buildTool: _$enumValueHelper(
-          'BuildTool', BuildTool.values, result['build-tool'] as String),
-      help: result['help'] as bool,
-      bazelOptions: _$enumValueHelper('BazelOptions', BazelOptions.values,
-          result['bazel-options'] as String),
-      release: result['release'] as bool,
-      secret: result['secret'] as bool,
-      rest: result.rest)
-    ..maxRuntime = _convert(result['max-runtime'] as String)
-    ..command = result.command;
-}
+PeanutOptions _$parsePeanutOptionsResult(ArgResults result) =>
+    new PeanutOptions(
+        directory: result['directory'] as String,
+        branch: result['branch'] as String,
+        mode: _$enumValueHelper(
+            'PubBuildMode', PubBuildMode.values, result['mode'] as String),
+        modeWasParsed: result.wasParsed('mode'),
+        buildConfig: result['build-config'] as String,
+        buildConfigWasParsed: result.wasParsed('build-config'),
+        message: result['message'] as String,
+        buildTool: _$enumValueHelper(
+            'BuildTool', BuildTool.values, result['build-tool'] as String),
+        help: result['help'] as bool,
+        bazelOptions: _$enumValueHelper('BazelOptions', BazelOptions.values,
+            result['bazel-options'] as String),
+        release: result['release'] as bool,
+        secret: result['secret'] as bool,
+        rest: result.rest)
+      ..maxRuntime = _convert(result['max-runtime'] as String)
+      ..command = result.command;
 
 ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
   ..addOption('directory', abbr: 'd', defaultsTo: 'web')

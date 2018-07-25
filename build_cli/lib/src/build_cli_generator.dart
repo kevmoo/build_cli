@@ -62,8 +62,7 @@ T _$badNumberFormat<T extends num>(String source, String type, String argName) =
 
     var buffer = new StringBuffer();
     buffer.write('''
-${classElement.name} $resultParserName(ArgResults result) {
-  return ''');
+${classElement.name} $resultParserName(ArgResults result) =>''');
 
     String deserializeForField(String fieldName,
             {ParameterElement ctorParam}) =>
@@ -88,7 +87,6 @@ ${classElement.name} $resultParserName(ArgResults result) {
         fields.remove(unusedField);
       }
     }
-    buffer.writeln('}');
     yield buffer.toString();
 
     buffer = new StringBuffer();
