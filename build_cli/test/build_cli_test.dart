@@ -50,10 +50,10 @@ void main() {
       fail('Could not find element `$name`.');
     }
     var annotation = generator.typeChecker.firstAnnotationOf(element);
-    var generated = await generator.generateForAnnotatedElement(
+    var generated = generator.generateForAnnotatedElement(
         element, new ConstantReader(annotation), null);
 
-    return _formatter.format(generated);
+    return _formatter.format(await generated.join('\n\n'));
   }
 
   void testOutput(String testName, String elementName, String elementContent,
@@ -86,9 +86,7 @@ void main() {
 @CliOptions()
 class Empty {}
 ''', r'''
-Empty _$parseEmptyResult(ArgResults result) {
-  return new Empty();
-}
+Empty _$parseEmptyResult(ArgResults result) => new Empty();
 
 ArgParser _$populateEmptyParser(ArgParser parser) => parser;
 
@@ -107,9 +105,8 @@ class WithCommand {
   ArgResults command;
 }
 ''', r'''
-WithCommand _$parseWithCommandResult(ArgResults result) {
-  return new WithCommand()..command = result.command;
-}
+WithCommand _$parseWithCommandResult(ArgResults result) =>
+    new WithCommand()..command = result.command;
 
 ArgParser _$populateWithCommandParser(ArgParser parser) => parser;
 
@@ -141,13 +138,13 @@ class SpecialNotAnnotated {
   ArgResults command;
   bool optionWasParsed;
 }
-''', r'''SpecialNotAnnotated _$parseSpecialNotAnnotatedResult(ArgResults result) {
-  return new SpecialNotAnnotated()
-    ..option = result['option'] as String
-    ..rest = result.rest
-    ..command = result.command
-    ..optionWasParsed = result.wasParsed('option');
-}
+''', r'''
+SpecialNotAnnotated _$parseSpecialNotAnnotatedResult(ArgResults result) =>
+    new SpecialNotAnnotated()
+      ..option = result['option'] as String
+      ..rest = result.rest
+      ..command = result.command
+      ..optionWasParsed = result.wasParsed('option');
 
 ArgParser _$populateSpecialNotAnnotatedParser(ArgParser parser) =>
     parser..addOption('option');
@@ -184,10 +181,9 @@ class AnnotatedCommandWithParser {
 ArgResults _stringToArgsResults(String value) => null;
 ''', r'''
 AnnotatedCommandWithParser _$parseAnnotatedCommandWithParserResult(
-    ArgResults result) {
-  return new AnnotatedCommandWithParser()
-    ..command = _stringToArgsResults(result['command'] as String);
-}
+        ArgResults result) =>
+    new AnnotatedCommandWithParser()
+      ..command = _stringToArgsResults(result['command'] as String);
 
 ArgParser _$populateAnnotatedCommandWithParserParser(ArgParser parser) =>
     parser..addOption('command');

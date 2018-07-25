@@ -6,38 +6,37 @@ part of 'pubviz_example.dart';
 // CliGenerator
 // **************************************************************************
 
-PeanutOptions _$parsePeanutOptionsResult(ArgResults result) {
-  T enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
-      enumValue == null
-          ? null
-          : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
-              orElse: () => throw new StateError(
-                  'Could not find the value `$enumValue` in enum `$enumName`.'));
+T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
+    enumValue == null
+        ? null
+        : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
+            orElse: () => throw new StateError(
+                'Could not find the value `$enumValue` in enum `$enumName`.'));
 
-  T badNumberFormat<T extends num>(
-          String source, String type, String argName) =>
-      throw new FormatException(
-          'Cannot parse "$source" into `$type` for option "$argName".');
+T _$badNumberFormat<T extends num>(
+        String source, String type, String argName) =>
+    throw new FormatException(
+        'Cannot parse "$source" into `$type` for option "$argName".');
 
-  return new PeanutOptions(
-      format: enumValueHelper(
-          'FormatOptions', FormatOptions.values, result['format'] as String),
-      secret: result['secret'] as String,
-      ignorePackages: result['ignore-packages'] as List<String>,
-      productionPort: int.tryParse(result['production-port'] as String) ??
-          badNumberFormat(
-              result['production-port'] as String, 'int', 'production-port'))
-    ..numValue = num.tryParse(result['num-value'] as String) ??
-        badNumberFormat(result['num-value'] as String, 'num', 'num-value')
-    ..doubleValue = double.tryParse(result['double-value'] as String) ??
-        badNumberFormat(
-            result['double-value'] as String, 'double', 'double-value')
-    ..devPort = int.tryParse(result['dev-port'] as String) ??
-        badNumberFormat(result['dev-port'] as String, 'int', 'dev-port')
-    ..listOfNothing = result['list-of-nothing'] as List
-    ..listOfDynamic = result['list-of-dynamic'] as List
-    ..listOfObject = result['list-of-object'] as List;
-}
+PeanutOptions _$parsePeanutOptionsResult(ArgResults result) =>
+    new PeanutOptions(
+        format: _$enumValueHelper(
+            'FormatOptions', FormatOptions.values, result['format'] as String),
+        secret: result['secret'] as String,
+        ignorePackages: result['ignore-packages'] as List<String>,
+        productionPort: int.tryParse(result['production-port'] as String) ??
+            _$badNumberFormat(
+                result['production-port'] as String, 'int', 'production-port'))
+      ..numValue = num.tryParse(result['num-value'] as String) ??
+          _$badNumberFormat(result['num-value'] as String, 'num', 'num-value')
+      ..doubleValue = double.tryParse(result['double-value'] as String) ??
+          _$badNumberFormat(
+              result['double-value'] as String, 'double', 'double-value')
+      ..devPort = int.tryParse(result['dev-port'] as String) ??
+          _$badNumberFormat(result['dev-port'] as String, 'int', 'dev-port')
+      ..listOfNothing = result['list-of-nothing'] as List
+      ..listOfDynamic = result['list-of-dynamic'] as List
+      ..listOfObject = result['list-of-object'] as List;
 
 ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
   ..addOption('format', abbr: 'f', defaultsTo: 'html', allowed: [

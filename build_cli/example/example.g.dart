@@ -6,21 +6,20 @@ part of 'example.dart';
 // CliGenerator
 // **************************************************************************
 
-Options _$parseOptionsResult(ArgResults result) {
-  T enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
-      enumValue == null
-          ? null
-          : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
-              orElse: () => throw new StateError(
-                  'Could not find the value `$enumValue` in enum `$enumName`.'));
+T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
+    enumValue == null
+        ? null
+        : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
+            orElse: () => throw new StateError(
+                'Could not find the value `$enumValue` in enum `$enumName`.'));
 
-  return new Options(result['name'] as String,
-      nameWasParsed: result.wasParsed('name'))
-    ..yell = result['yell'] as bool
-    ..displayLanguage = enumValueHelper(
-        'Language', Language.values, result['display-language'] as String)
-    ..help = result['help'] as bool;
-}
+Options _$parseOptionsResult(ArgResults result) =>
+    new Options(result['name'] as String,
+        nameWasParsed: result.wasParsed('name'))
+      ..yell = result['yell'] as bool
+      ..displayLanguage = _$enumValueHelper(
+          'Language', Language.values, result['display-language'] as String)
+      ..help = result['help'] as bool;
 
 ArgParser _$populateOptionsParser(ArgParser parser) => parser
   ..addOption('name',
