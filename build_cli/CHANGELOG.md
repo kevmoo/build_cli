@@ -1,3 +1,9 @@
+## 0.2.5
+
+- Require `package:source_gen` `^0.9.0`.
+
+- The `header` configuration option is no longer supported. (It's ignored.)
+
 ## 0.2.4+1
 
 - Support Dart 2 stable.
