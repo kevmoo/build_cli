@@ -1,3 +1,7 @@
+## 1.0.0
+
+- Update the version of `package:args` to `'>=1.5.0 <1.6.0'`.
+
 ## 0.1.2+1
 
 - Support Dart 2 stable.
