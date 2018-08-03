@@ -2,10 +2,11 @@ import 'package:build_cli_annotations/build_cli_annotations.dart';
 
 part 'pubviz_example.g.dart';
 
-ArgParser get parser => _$parserForPeanutOptions;
+ArgParser get prettyParser =>
+    _$populatePubvizOptionsParser(new ArgParser(usageLineLength: 80));
 
 @CliOptions()
-class PeanutOptions {
+class PubvizOptions {
   @CliOption(
       abbr: 'f',
       defaultsTo: FormatOptions.html,
@@ -46,7 +47,7 @@ class PeanutOptions {
   //TODO: support List<num>
   //List<int> listenPorts;
 
-  PeanutOptions(
+  PubvizOptions(
       {this.format, this.secret, this.ignorePackages, this.productionPort});
 }
 

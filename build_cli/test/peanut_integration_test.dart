@@ -70,18 +70,27 @@ void main() {
   });
 
   test('usage', () {
-    expect(parser.usage, r'''-d, --directory        (defaults to "web")
+    var prettyUsage = prettyParser.usage;
+    printOnFailure(prettyUsage);
+    expect(prettyUsage, r'''
+-d, --directory        (defaults to "web")
 -b, --branch           (defaults to "gh-pages")
     --mode             The mode to run `pub build` in.
                        [release (default), debug]
 
--c, --build-config     The configuration to use when running `build_runner`. If this option is not set, `release` is used if `build.release.yaml` exists in the current directory.
+-c, --build-config     The configuration to use when running `build_runner`. If
+                       this option is not set, `release` is used if
+                       `build.release.yaml` exists in the current directory.
+
 -m, --message          (defaults to "Built <directory>")
--t, --build-tool       If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".
+-t, --build-tool       If `build.release.yaml` exists in the current directory,
+                       defaults to "build". Otherwise, "pub".
                        [pub, build]
 
     --bazel-options    [to-source, from-source, via-assets]
--h, --help             Prints usage information. Which is so "$" you don't even know it!
+-h, --help             Prints usage information. Which is so "$" you don't even
+                       know it!
+
     --[no-]release     (defaults to on)
     --max-runtime      ''');
   });

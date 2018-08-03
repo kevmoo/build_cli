@@ -18,8 +18,8 @@ T _$badNumberFormat<T extends num>(
     throw new FormatException(
         'Cannot parse "$source" into `$type` for option "$argName".');
 
-PeanutOptions _$parsePeanutOptionsResult(ArgResults result) =>
-    new PeanutOptions(
+PubvizOptions _$parsePubvizOptionsResult(ArgResults result) =>
+    new PubvizOptions(
         format: _$enumValueHelper(
             'FormatOptions', FormatOptions.values, result['format'] as String),
         secret: result['secret'] as String,
@@ -38,7 +38,7 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) =>
       ..listOfDynamic = result['list-of-dynamic'] as List
       ..listOfObject = result['list-of-object'] as List;
 
-ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
+ArgParser _$populatePubvizOptionsParser(ArgParser parser) => parser
   ..addOption('format', abbr: 'f', defaultsTo: 'html', allowed: [
     'dot',
     'html'
@@ -66,9 +66,9 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
   ..addMultiOption('list-of-dynamic')
   ..addMultiOption('list-of-object');
 
-final _$parserForPeanutOptions = _$populatePeanutOptionsParser(new ArgParser());
+final _$parserForPubvizOptions = _$populatePubvizOptionsParser(new ArgParser());
 
-PeanutOptions parsePeanutOptions(List<String> args) {
-  var result = _$parserForPeanutOptions.parse(args);
-  return _$parsePeanutOptionsResult(result);
+PubvizOptions parsePubvizOptions(List<String> args) {
+  var result = _$parserForPubvizOptions.parse(args);
+  return _$parsePubvizOptionsResult(result);
 }

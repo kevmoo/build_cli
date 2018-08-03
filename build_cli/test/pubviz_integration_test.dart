@@ -4,7 +4,7 @@ import 'src/pubviz_example.dart';
 
 void main() {
   test('no args', () {
-    var options = parsePeanutOptions([]);
+    var options = parsePubvizOptions([]);
 
     expect(options.secret, isNull);
     expect(options.ignorePackages, []);
@@ -38,7 +38,7 @@ void main() {
 
     for (var item in items.entries) {
       test('`${item.value.join(' ')}`', () {
-        expect(() => parsePeanutOptions(item.value), throwsA((error) {
+        expect(() => parsePubvizOptions(item.value), throwsA((error) {
           expect(error, isFormatException);
           expect((error as FormatException).message, item.key);
           return true;
@@ -48,12 +48,17 @@ void main() {
   });
 
   test('usage', () {
-    expect(parser.usage, r'''
+    var prettyUsage = prettyParser.usage;
+    printOnFailure(prettyUsage);
+    expect(prettyUsage, r'''
 -f, --format                    
           [dot]                 Generate a GraphViz 'dot' file.
-          [html] (default)      Wrap the GraphViz dot format in an HTML template which renders it.
+          [html] (default)      Wrap the GraphViz dot format in an HTML template
+                                which renders it.
 
--i, --ignore-packages           A comma seperated list of packages to exclude in the output.
+-i, --ignore-packages           A comma seperated list of packages to exclude in
+                                the output.
+
     --production-port=<PORT>    (defaults to "8080")
     --num-value                 (defaults to "3.14")
     --double-value              (defaults to "3000.0")

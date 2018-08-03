@@ -6,7 +6,8 @@ const _defaultConfig = 'release';
 const _defaultConfigFile = 'build.$_defaultConfig.yaml';
 const _directoryFlag = 'directory';
 
-ArgParser get parser => _$parserForPeanutOptions;
+ArgParser get prettyParser =>
+    _$populatePeanutOptionsParser(new ArgParser(usageLineLength: 80));
 
 @CliOptions()
 class PeanutOptions {

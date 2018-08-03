@@ -1,3 +1,7 @@
+## 1.0.0
+
+- Support `package:build_cli_annotations` `v1`.
+
 ## 0.2.6
 
 - Helper methods that were previously generated inline within functions are now
