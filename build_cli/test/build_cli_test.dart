@@ -36,14 +36,14 @@ void main() {
     // null this out – should not be touched again
     inlineContent = null;
 
-    var context = await getAnalysisContextForProjectPath(projectPath);
+    var context = await getAnalysisContextForProjectPath();
 
     var libElement = context.computeLibraryElement(source);
     return context.resolveCompilationUnit(source, libElement);
   }
 
   Future<String> runForElementNamed(String name) async {
-    var library = new LibraryReader(compUnit.element.library);
+    var library = new LibraryReader(compUnit.declaredElement.library);
     var element = library.allElements
         .singleWhere((e) => e.name == name, orElse: () => null);
     if (element == null) {
