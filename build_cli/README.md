@@ -1,9 +1,8 @@
 [![Build Status](https://travis-ci.org/kevmoo/build_cli.svg?branch=master)](https://travis-ci.org/kevmoo/build_cli)
 ![Dart Packages](https://img.shields.io/pub/v/build_cli.svg)
 
-
-Parse command line arguments directly into an annotation class
-using the [Dart Build System][].
+Parse command line arguments directly into an annotation class using the 
+[Dart Build System][].
 
 # Example
 
@@ -54,11 +53,11 @@ Add three packages to `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  build_cli_annotations: ^0.1.0
+  build_cli_annotations: ^1.0.0
 
 dev_dependencies:
-  build_cli: ^0.2.0
-  build_runner: '>=0.7.10 <0.9.0'
+  build_cli: ^1.0.0
+  build_runner: ^1.0.0
 ```
 
 - `build_cli_annotations` is a separate package containing the annotations you
