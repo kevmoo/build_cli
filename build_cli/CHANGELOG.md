@@ -1,3 +1,7 @@
+## 1.0.1
+
+- Support `package:build` `v1`.
+
 ## 1.0.0
 
 - Support `package:build_cli_annotations` `v1`.
