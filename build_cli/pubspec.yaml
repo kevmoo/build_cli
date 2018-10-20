@@ -1,5 +1,5 @@
 name: build_cli
-version: 1.0.1
+version: 1.0.2
 description: >-
   Parse command line arguments directly into an annotation class
   using the power of build_runner and source_gen.
@@ -7,10 +7,10 @@ author: Kevin Moore <github@j832.com>
 homepage: https://github.com/kevmoo/build_cli
 
 environment:
-  sdk: '>=2.0.0-dev.48 <3.0.0'
+  sdk: '>=2.0.0 <3.0.0'
 
 dependencies:
-  analyzer: ^0.32.5
+  analyzer: '>=0.32.5 <0.34.0'
   build: '>=0.9.0 <2.0.0'
   # Limit version range on build_cli_annotations
   # new features need to stay in sync

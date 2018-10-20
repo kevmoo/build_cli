@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Support the latest release of `package:analyzer`.
+
 ## 1.0.1
 
 - Support `package:build` `v1`.

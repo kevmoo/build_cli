@@ -152,6 +152,7 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
 
   var manager = new InheritanceManager(element.library);
 
+  // ignore: deprecated_member_use
   for (var v in manager.getMembersInheritedFromClasses(element).values) {
     assert(v is! FieldElement);
     if (_dartCoreObjectChecker.isExactly(v.enclosingElement)) {
