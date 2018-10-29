@@ -14,6 +14,7 @@ class CliOption {
   final Map<Object, String> allowedHelp;
   final bool negatable;
   final bool hide;
+  final bool nullable;
 
   /// A top-level [Function] that converts an option value into the destination
   /// type.
@@ -29,5 +30,7 @@ class CliOption {
       this.negatable,
       this.allowedHelp,
       this.hide,
-      this.convert});
+      this.convert,
+      this.nullable,
+      });
 }
