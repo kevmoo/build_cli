@@ -20,17 +20,17 @@ class CliOption {
   /// type.
   final dynamic Function(String) convert;
 
-  const CliOption(
-      {this.name,
-      this.abbr,
-      this.defaultsTo,
-      this.help,
-      this.valueHelp,
-      this.allowed,
-      this.negatable,
-      this.allowedHelp,
-      this.hide,
-      this.convert,
-      this.nullable,
-      });
+  const CliOption({
+    this.name,
+    this.abbr,
+    this.defaultsTo,
+    this.help,
+    this.valueHelp,
+    this.allowed,
+    this.negatable,
+    this.allowedHelp,
+    this.hide,
+    this.convert,
+    this.nullable,
+  });
 }
