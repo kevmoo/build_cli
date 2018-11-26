@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Support nullable annotation
+
 ## 1.0.2
 
 - Support the latest release of `package:analyzer`.

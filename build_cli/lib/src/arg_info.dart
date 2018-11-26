@@ -234,6 +234,7 @@ CliOption _getOptions(FieldElement element) {
       allowed: allowedValues,
       allowedHelp: allowedHelp,
       negatable: annotation.read('negatable').literalValue as bool,
+      nullable: (annotation.read('nullable')?.literalValue ?? false) as bool,
       hide: annotation.read('hide').literalValue as bool);
 
   var convertReader = annotation.read('convert');
