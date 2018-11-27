@@ -3,7 +3,7 @@ import 'package:build_cli_annotations/build_cli_annotations.dart';
 part 'pubviz_example.g.dart';
 
 ArgParser get prettyParser =>
-    _$populatePubvizOptionsParser(new ArgParser(usageLineLength: 80));
+    _$populatePubvizOptionsParser(ArgParser(usageLineLength: 80));
 
 @CliOptions()
 class PubvizOptions {
@@ -30,11 +30,11 @@ class PubvizOptions {
   @CliOption(defaultsTo: 3e3)
   double doubleValue;
 
-  @CliOption(defaultsTo: 8080, allowed: const [
+  @CliOption(defaultsTo: 8080, allowed: [
     8080,
     9090,
     42
-  ], allowedHelp: const {
+  ], allowedHelp: {
     8080: 'the cool port',
     9090: 'the alt port',
     42: 'the knowledge port'
@@ -53,7 +53,7 @@ class PubvizOptions {
 
 enum FormatOptions { dot, html }
 
-const _formatOptionsHelp = const <FormatOptions, String>{
+const _formatOptionsHelp = <FormatOptions, String>{
   FormatOptions.dot: "Generate a GraphViz 'dot' file.",
   FormatOptions.html:
       'Wrap the GraphViz dot format in an HTML template which renders it.'

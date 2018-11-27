@@ -7,7 +7,7 @@ const _defaultConfigFile = 'build.$_defaultConfig.yaml';
 const _directoryFlag = 'directory';
 
 ArgParser get prettyParser =>
-    _$populatePeanutOptionsParser(new ArgParser(usageLineLength: 80));
+    _$populatePeanutOptionsParser(ArgParser(usageLineLength: 80));
 
 @CliOptions()
 class PeanutOptions {
@@ -91,11 +91,11 @@ Duration _convert(String source) {
   var seconds = int.tryParse(source);
 
   if (seconds == null) {
-    throw new FormatException(
+    throw FormatException(
         'The value provided for "max-runtime" – "$source" – was not a number.');
   }
 
-  return new Duration(seconds: seconds);
+  return Duration(seconds: seconds);
 }
 
 enum BuildTool { pub, build }

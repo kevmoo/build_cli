@@ -4,8 +4,8 @@ import 'package:build_cli_annotations/build_cli_annotations.dart';
 class UnknownCtorParamType {
   int number;
 
-  // ignore: undefined_class, field_initializer_not_assignable
-  UnknownCtorParamType(Bob number) : this.number = number;
+  // ignore: undefined_class, field_initializer_not_assignable, prefer_initializing_formals
+  UnknownCtorParamType(Bob number) : number = number;
 }
 
 @CliOptions()

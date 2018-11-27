@@ -7,13 +7,12 @@ part of 'undefined_boolean_example.dart';
 // **************************************************************************
 
 NullableOptions _$parseNullableOptionsResult(ArgResults result) =>
-    new NullableOptions(result['nullable-option'] as bool);
+    NullableOptions(result['nullable-option'] as bool);
 
 ArgParser _$populateNullableOptionsParser(ArgParser parser) =>
     parser..addFlag('nullable-option', defaultsTo: null);
 
-final _$parserForNullableOptions =
-    _$populateNullableOptionsParser(new ArgParser());
+final _$parserForNullableOptions = _$populateNullableOptionsParser(ArgParser());
 
 NullableOptions parseNullableOptions(List<String> args) {
   var result = _$parserForNullableOptions.parse(args);

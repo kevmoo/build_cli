@@ -1,3 +1,8 @@
+## 1.2.0
+
+- Require Dart 2.0 "gold" in the target package.
+- Omit `new` keyword in generated code.
+
 ## 1.1.0
 
 - Support nullable annotation

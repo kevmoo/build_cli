@@ -21,7 +21,7 @@ T throwBugFound<T>(FieldElement element) => throwUnsupported(
 
 @alwaysThrows
 T throwUnsupported<T>(FieldElement element, String message, {String todo}) =>
-    throw new InvalidGenerationSourceError(
+    throw InvalidGenerationSourceError(
         'Could not handle field `${element.displayName}`. $message',
         element: element,
         todo: todo);
@@ -114,10 +114,10 @@ String escapeDartString(String value) {
   return "'$string'";
 }
 
-final _dollarQuoteRegexp = new RegExp(r"""(?=[$'"])""");
+final _dollarQuoteRegexp = RegExp(r"""(?=[$'"])""");
 
 /// A [Map] between whitespace characters & `\` and their escape sequences.
-const _escapeMap = const {
+const _escapeMap = {
   '\b': r'\b', // 08 - backspace
   '\t': r'\t', // 09 - tab
   '\n': r'\n', // 0A - new line
@@ -132,8 +132,7 @@ final _escapeMapRegexp = _escapeMap.keys.map(_getHexLiteral).join();
 
 /// A [RegExp] that matches whitespace characters that should be escaped and
 /// single-quote, double-quote, and `$`
-final _escapeRegExp =
-    new RegExp('[\$\'"\\x00-\\x07\\x0E-\\x1F$_escapeMapRegexp]');
+final _escapeRegExp = RegExp('[\$\'"\\x00-\\x07\\x0E-\\x1F$_escapeMapRegexp]');
 
 /// Given single-character string, return the hex-escaped equivalent.
 String _getHexLiteral(String input) {
@@ -150,7 +149,7 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
   // TODO: support overriding the field set with an annotation option
   var fieldsList = element.fields.where((e) => !e.isStatic).toList();
 
-  var manager = new InheritanceManager(element.library);
+  var manager = InheritanceManager(element.library);
 
   // ignore: deprecated_member_use
   for (var v in manager.getMembersInheritedFromClasses(element).values) {
@@ -179,7 +178,7 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
 }
 
 int _sortByLocation(FieldElement a, FieldElement b) {
-  var checkerA = new TypeChecker.fromStatic(a.enclosingElement.type);
+  var checkerA = TypeChecker.fromStatic(a.enclosingElement.type);
 
   if (!checkerA.isExactly(b.enclosingElement)) {
     // in this case, you want to prioritize the enclosingElement that is more
@@ -189,7 +188,7 @@ int _sortByLocation(FieldElement a, FieldElement b) {
       return -1;
     }
 
-    var checkerB = new TypeChecker.fromStatic(b.enclosingElement.type);
+    var checkerB = TypeChecker.fromStatic(b.enclosingElement.type);
 
     if (checkerB.isSuperOf(a.enclosingElement)) {
       return 1;
@@ -241,12 +240,12 @@ Set<String> writeConstructorInvocation(
   var ctor = classElement.unnamedConstructor;
   if (ctor == null) {
     // TODO(kevmoo): support using another constructor
-    throw new InvalidGenerationSourceError(
+    throw InvalidGenerationSourceError(
         'The class `$className` has no default constructor.',
         element: classElement);
   }
 
-  var usedCtorParamsAndFields = new Set<String>();
+  var usedCtorParamsAndFields = Set<String>();
   var constructorArguments = <ParameterElement>[];
   var namedConstructorArguments = <ParameterElement>[];
 
@@ -263,7 +262,7 @@ Set<String> writeConstructorInvocation(
           msg = '$msg $additionalInfo';
         }
 
-        throw new InvalidGenerationSourceError(msg, element: ctor);
+        throw InvalidGenerationSourceError(msg, element: ctor);
       }
 
       continue;
@@ -289,7 +288,7 @@ Set<String> writeConstructorInvocation(
   //
   // Generate the static factory method
   //
-  buffer.write('new $className(');
+  buffer.write('$className(');
   buffer.writeAll(
       constructorArguments.map((paramElement) =>
           deserializeForField(paramElement.name, ctorParam: paramElement)),
@@ -327,7 +326,7 @@ void _validateConstructorArguments(
     var description =
         undefinedArgs.map((fe) => '`${fe.displayName}`').join(', ');
 
-    throw new InvalidGenerationSourceError(
+    throw InvalidGenerationSourceError(
         'At least one constructor argument has an invalid type: $description.',
         todo: 'Check names and imports.',
         element: ctor);

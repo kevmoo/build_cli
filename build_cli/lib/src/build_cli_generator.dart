@@ -25,7 +25,7 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
 
     if (element is! ClassElement) {
       var friendlyName = element.displayName;
-      throw new InvalidGenerationSourceError(
+      throw InvalidGenerationSourceError(
           'Generator cannot target `$friendlyName`. '
           '`@CliOptions` can only be applied to a class.',
           todo: 'Remove the `@CliOptions` annotation from `$friendlyName`.',
@@ -39,8 +39,7 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
     var fieldsList = createSortedFieldSet(classElement);
 
     // Explicitly using `LinkedHashMap` – we want these ordered.
-    var fields = new LinkedHashMap<String, FieldElement>.fromIterable(
-        fieldsList,
+    var fields = LinkedHashMap<String, FieldElement>.fromIterable(fieldsList,
         key: (f) => (f as FieldElement).name);
 
     // Get the constructor to use for the factory
@@ -56,11 +55,11 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
     if (fieldsList.any((fe) => numChecker.isAssignableFromType(fe.type))) {
       yield r'''
 T _$badNumberFormat<T extends num>(String source, String type, String argName) =>
-  throw new FormatException('Cannot parse "$source" into `$type` for option "$argName".'); 
+  throw FormatException('Cannot parse "$source" into `$type` for option "$argName".'); 
 ''';
     }
 
-    var buffer = new StringBuffer();
+    var buffer = StringBuffer();
     buffer.write('''
 ${classElement.name} $resultParserName(ArgResults result) =>''');
 
@@ -89,7 +88,7 @@ ${classElement.name} $resultParserName(ArgResults result) =>''');
     }
     yield buffer.toString();
 
-    buffer = new StringBuffer();
+    buffer = StringBuffer();
     buffer.write('ArgParser $populateParserName(ArgParser parser) => parser');
     for (var f in fields.values) {
       _parserOptionFor(buffer, f);
@@ -97,7 +96,7 @@ ${classElement.name} $resultParserName(ArgResults result) =>''');
     buffer.write(';');
     yield buffer.toString();
 
-    yield 'final $parserFieldName = $populateParserName(new ArgParser());';
+    yield 'final $parserFieldName = $populateParserName(ArgParser());';
 
     yield '''
 ${classElement.name} parse${classElement.name}(List<String> args) {
@@ -113,7 +112,7 @@ T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
     enumValue == null
         ? null
         : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
-            orElse: () => throw new StateError(
+            orElse: () => throw StateError(
                 'Could not find the value `$enumValue` in enum `$enumName`.'));
 ''';
 
