@@ -86,11 +86,11 @@ void main() {
 @CliOptions()
 class Empty {}
 ''', r'''
-Empty _$parseEmptyResult(ArgResults result) => new Empty();
+Empty _$parseEmptyResult(ArgResults result) => Empty();
 
 ArgParser _$populateEmptyParser(ArgParser parser) => parser;
 
-final _$parserForEmpty = _$populateEmptyParser(new ArgParser());
+final _$parserForEmpty = _$populateEmptyParser(ArgParser());
 
 Empty parseEmpty(List<String> args) {
   var result = _$parserForEmpty.parse(args);
@@ -106,11 +106,11 @@ class WithCommand {
 }
 ''', r'''
 WithCommand _$parseWithCommandResult(ArgResults result) =>
-    new WithCommand()..command = result.command;
+    WithCommand()..command = result.command;
 
 ArgParser _$populateWithCommandParser(ArgParser parser) => parser;
 
-final _$parserForWithCommand = _$populateWithCommandParser(new ArgParser());
+final _$parserForWithCommand = _$populateWithCommandParser(ArgParser());
 
 WithCommand parseWithCommand(List<String> args) {
   var result = _$parserForWithCommand.parse(args);
@@ -140,7 +140,7 @@ class SpecialNotAnnotated {
 }
 ''', r'''
 SpecialNotAnnotated _$parseSpecialNotAnnotatedResult(ArgResults result) =>
-    new SpecialNotAnnotated()
+    SpecialNotAnnotated()
       ..option = result['option'] as String
       ..rest = result.rest
       ..command = result.command
@@ -150,7 +150,7 @@ ArgParser _$populateSpecialNotAnnotatedParser(ArgParser parser) =>
     parser..addOption('option');
 
 final _$parserForSpecialNotAnnotated =
-    _$populateSpecialNotAnnotatedParser(new ArgParser());
+    _$populateSpecialNotAnnotatedParser(ArgParser());
 
 SpecialNotAnnotated parseSpecialNotAnnotated(List<String> args) {
   var result = _$parserForSpecialNotAnnotated.parse(args);
@@ -182,14 +182,14 @@ ArgResults _stringToArgsResults(String value) => null;
 ''', r'''
 AnnotatedCommandWithParser _$parseAnnotatedCommandWithParserResult(
         ArgResults result) =>
-    new AnnotatedCommandWithParser()
+    AnnotatedCommandWithParser()
       ..command = _stringToArgsResults(result['command'] as String);
 
 ArgParser _$populateAnnotatedCommandWithParserParser(ArgParser parser) =>
     parser..addOption('command');
 
 final _$parserForAnnotatedCommandWithParser =
-    _$populateAnnotatedCommandWithParserParser(new ArgParser());
+    _$populateAnnotatedCommandWithParserParser(ArgParser());
 
 AnnotatedCommandWithParser parseAnnotatedCommandWithParser(List<String> args) {
   var result = _$parserForAnnotatedCommandWithParser.parse(args);
