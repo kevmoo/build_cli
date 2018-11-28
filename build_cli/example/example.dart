@@ -47,7 +47,7 @@ void main(List<String> args) {
   try {
     options = parseOptions(args);
     if (!options.nameWasParsed) {
-      throw new FormatException('You must provide a name.');
+      throw const FormatException('You must provide a name.');
     }
   } on FormatException catch (e) {
     print(red.wrap(e.message));
@@ -62,7 +62,7 @@ void main(List<String> args) {
     return;
   }
 
-  var buffer = new StringBuffer();
+  var buffer = StringBuffer();
 
   switch (options.displayLanguage) {
     case Language.en:

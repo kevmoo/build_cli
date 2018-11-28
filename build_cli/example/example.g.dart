@@ -10,12 +10,11 @@ T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
     enumValue == null
         ? null
         : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
-            orElse: () => throw new StateError(
+            orElse: () => throw StateError(
                 'Could not find the value `$enumValue` in enum `$enumName`.'));
 
 Options _$parseOptionsResult(ArgResults result) =>
-    new Options(result['name'] as String,
-        nameWasParsed: result.wasParsed('name'))
+    Options(result['name'] as String, nameWasParsed: result.wasParsed('name'))
       ..yell = result['yell'] as bool
       ..displayLanguage = _$enumValueHelper(
           'Language', Language.values, result['display-language'] as String)
@@ -29,7 +28,7 @@ ArgParser _$populateOptionsParser(ArgParser parser) => parser
       abbr: 'l', defaultsTo: 'en', allowed: ['en', 'es'])
   ..addFlag('help', help: 'Prints usage information.', negatable: false);
 
-final _$parserForOptions = _$populateOptionsParser(new ArgParser());
+final _$parserForOptions = _$populateOptionsParser(ArgParser());
 
 Options parseOptions(List<String> args) {
   var result = _$parserForOptions.parse(args);

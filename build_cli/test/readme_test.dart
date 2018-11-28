@@ -3,9 +3,9 @@ import 'package:test/test.dart';
 
 void main() {
   test('readme contents', () {
-    var readmeContent = new File('README.md').readAsStringSync();
+    var readmeContent = File('README.md').readAsStringSync();
 
-    var exampleContent = new File('example/example.dart')
+    var exampleContent = File('example/example.dart')
         .readAsLinesSync()
         .skipWhile(
             (line) => !line.startsWith("import 'package:build_cli_annotations"))

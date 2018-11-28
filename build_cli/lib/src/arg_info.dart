@@ -6,22 +6,22 @@ import 'package:source_gen/source_gen.dart';
 import 'to_share.dart';
 import 'util.dart';
 
-const boolChecker = const TypeChecker.fromRuntime(bool);
-const listChecker = const TypeChecker.fromRuntime(List);
-const numChecker = const TypeChecker.fromRuntime(num);
-const stringChecker = const TypeChecker.fromRuntime(String);
-const _argResultsChecker = const TypeChecker.fromRuntime(ArgResults);
-const _cliOptionChecker = const TypeChecker.fromRuntime(CliOption);
-const _iterableChecker = const TypeChecker.fromRuntime(Iterable);
+const boolChecker = TypeChecker.fromRuntime(bool);
+const listChecker = TypeChecker.fromRuntime(List);
+const numChecker = TypeChecker.fromRuntime(num);
+const stringChecker = TypeChecker.fromRuntime(String);
+const _argResultsChecker = TypeChecker.fromRuntime(ArgResults);
+const _cliOptionChecker = TypeChecker.fromRuntime(CliOption);
+const _iterableChecker = TypeChecker.fromRuntime(Iterable);
 
 String getConvertName(CliOption option) => _convertName[option];
-final _convertName = new Expando<String>('convert name');
+final _convertName = Expando<String>('convert name');
 
 bool isMulti(DartType targetType) =>
     _iterableChecker.isExactlyType(targetType) ||
     listChecker.isExactlyType(targetType);
 
-final _argInfoCache = new Expando<ArgInfo>();
+final _argInfoCache = Expando<ArgInfo>();
 
 enum ArgType { option, flag, multiOption, rest, wasParsed, command }
 
@@ -29,7 +29,7 @@ enum ArgType { option, flag, multiOption, rest, wasParsed, command }
 // But hit https://github.com/dart-lang/sdk/issues/32933
 typedef _fieldChecker = bool Function(FieldElement);
 
-const specialTypes = const <ArgType, _fieldChecker>{
+const specialTypes = <ArgType, _fieldChecker>{
   ArgType.rest: _couldBeRestArg,
   ArgType.wasParsed: _couldBeWasParsedArg,
   ArgType.command: _couldBeCommand
@@ -98,7 +98,7 @@ class ArgInfo {
       }
     }
 
-    return _argInfoCache[element] = new ArgInfo(type, option);
+    return _argInfoCache[element] = ArgInfo(type, option);
   }
 }
 
@@ -133,7 +133,7 @@ CliOption _getOptions(FieldElement element) {
   List<Object> allowedValues;
   Object defaultsTo;
 
-  var annotation = new ConstantReader(obj);
+  var annotation = ConstantReader(obj);
 
   if (annotation.isNull && specialTypes.values.any((p) => p(element))) {
     return null;
@@ -162,7 +162,7 @@ CliOption _getOptions(FieldElement element) {
   }
 
   if (annotation.isNull) {
-    return new CliOption(allowed: allowedValues);
+    return CliOption(allowed: allowedValues);
   }
 
   Map<Object, String> allowedHelp;
@@ -174,7 +174,7 @@ CliOption _getOptions(FieldElement element) {
 
     allowedHelp = <Object, String>{};
     for (var entry in allowedHelpReader.mapValue.entries) {
-      var mapKeyReader = new ConstantReader(entry.key);
+      var mapKeyReader = ConstantReader(entry.key);
       if (mapKeyReader.isString ||
           mapKeyReader.isInt ||
           mapKeyReader.isDouble) {
@@ -197,7 +197,7 @@ CliOption _getOptions(FieldElement element) {
   var allowedReader = annotation.read('allowed');
   if (!allowedReader.isNull) {
     allowedValues = allowedReader.listValue
-        .map((o) => new ConstantReader(o).literalValue)
+        .map((o) => ConstantReader(o).literalValue)
         .toList();
   }
 
@@ -225,7 +225,7 @@ CliOption _getOptions(FieldElement element) {
         'The `defaultsTo` value – `$defaultsTo` is not in `allowedValues`.');
   }
 
-  var option = new CliOption(
+  var option = CliOption(
       name: annotation.read('name').literalValue as String,
       abbr: annotation.read('abbr').literalValue as String,
       defaultsTo: defaultsTo,
