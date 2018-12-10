@@ -10,7 +10,7 @@ environment:
   sdk: '>=2.0.0 <3.0.0'
 
 dependencies:
-  analyzer: '>=0.32.5 <0.34.0'
+  analyzer: '>=0.33.0 <0.35.0'
   build: '>=0.9.0 <2.0.0'
   # Limit version range on build_cli_annotations
   # new features need to stay in sync

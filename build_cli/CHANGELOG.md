@@ -2,6 +2,7 @@
 
 - Require Dart 2.0 "gold" in the target package.
 - Omit `new` keyword in generated code.
+- Update `package:analyzer` constraint to `>=0.33.0 <0.35.0`.
 
 ## 1.1.0
 
