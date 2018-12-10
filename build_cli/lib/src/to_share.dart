@@ -266,7 +266,6 @@ Set<String> writeConstructorInvocation(
       continue;
     }
 
-
     // TODO: validate that the types match!
     if (arg.isNamed) {
       namedConstructorArguments.add(arg);
