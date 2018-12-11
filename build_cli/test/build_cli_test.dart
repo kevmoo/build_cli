@@ -6,13 +6,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/src/dart/element/element.dart';
 import 'package:analyzer/src/string_source.dart';
+import 'package:build_cli/build_cli.dart';
 import 'package:dart_style/dart_style.dart' as dart_style;
 import 'package:path/path.dart' as p;
 import 'package:source_gen/source_gen.dart';
 import 'package:test/test.dart';
-
-import 'package:build_cli/build_cli.dart';
 
 import 'analysis_utils.dart';
 import 'test_utils.dart';
@@ -44,8 +44,9 @@ void main() {
 
   Future<String> runForElementNamed(String name) async {
     var library = LibraryReader(compUnit.declaredElement.library);
-    var element = library.allElements
-        .singleWhere((e) => e.name == name, orElse: () => null);
+    var element = library.allElements.singleWhere(
+        (e) => e.name == name && e is! ConstVariableElement,
+        orElse: () => null);
     if (element == null) {
       fail('Could not find element `$name`.');
     }
