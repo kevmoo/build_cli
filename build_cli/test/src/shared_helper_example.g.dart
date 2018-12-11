@@ -30,7 +30,7 @@ ArgParser _$populateFirstOptionsParser(ArgParser parser) =>
 final _$parserForFirstOptions = _$populateFirstOptionsParser(ArgParser());
 
 FirstOptions parseFirstOptions(List<String> args) {
-  var result = _$parserForFirstOptions.parse(args);
+  final result = _$parserForFirstOptions.parse(args);
   return _$parseFirstOptionsResult(result);
 }
 
@@ -46,6 +46,6 @@ ArgParser _$populateSecondOptionsParser(ArgParser parser) =>
 final _$parserForSecondOptions = _$populateSecondOptionsParser(ArgParser());
 
 SecondOptions parseSecondOptions(List<String> args) {
-  var result = _$parserForSecondOptions.parse(args);
+  final result = _$parserForSecondOptions.parse(args);
   return _$parseSecondOptionsResult(result);
 }

@@ -68,6 +68,6 @@ ArgParser _$populatePubvizOptionsParser(ArgParser parser) => parser
 final _$parserForPubvizOptions = _$populatePubvizOptionsParser(ArgParser());
 
 PubvizOptions parsePubvizOptions(List<String> args) {
-  var result = _$parserForPubvizOptions.parse(args);
+  final result = _$parserForPubvizOptions.parse(args);
   return _$parsePubvizOptionsResult(result);
 }

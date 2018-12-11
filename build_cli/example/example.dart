@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:io/ansi.dart';
 import 'package:io/io.dart';
-
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 
 part 'example.g.dart';
@@ -62,7 +61,7 @@ void main(List<String> args) {
     return;
   }
 
-  var buffer = StringBuffer();
+  final buffer = StringBuffer();
 
   switch (options.displayLanguage) {
     case Language.en:

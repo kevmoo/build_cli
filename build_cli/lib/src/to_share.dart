@@ -30,7 +30,7 @@ T throwUnsupported<T>(FieldElement element, String message, {String todo}) =>
 ///
 /// If the [checker] [Type] doesn't have generic arguments, `null` is returned.
 List<DartType> typeArgumentsOf(DartType type, TypeChecker checker) {
-  var implementation = _getImplementationType(type, checker) as InterfaceType;
+  final implementation = _getImplementationType(type, checker) as InterfaceType;
 
   return implementation?.typeArguments;
 }
@@ -39,7 +39,7 @@ DartType _getImplementationType(DartType type, TypeChecker checker) {
   if (checker.isExactlyType(type)) return type;
 
   if (type is InterfaceType) {
-    var match = [type.interfaces, type.mixins]
+    final match = [type.interfaces, type.mixins]
         .expand((e) => e)
         .map((type) => _getImplementationType(type, checker))
         .firstWhere((value) => value != null, orElse: () => null);
@@ -67,7 +67,7 @@ String escapeDartString(String value) {
   var canBeRaw = true;
 
   value = value.replaceAllMapped(_escapeRegExp, (match) {
-    var value = match[0];
+    final value = match[0];
     if (value == "'") {
       hasSingleQuote = true;
       return value;
@@ -109,7 +109,7 @@ String escapeDartString(String value) {
 
   // The only safe way to wrap the content is to escape all of the
   // problematic characters - `$`, `'`, and `"`
-  var string = value.replaceAll(_dollarQuoteRegexp, r'\');
+  final string = value.replaceAll(_dollarQuoteRegexp, r'\');
   return "'$string'";
 }
 
@@ -135,8 +135,8 @@ final _escapeRegExp = RegExp('[\$\'"\\x00-\\x07\\x0E-\\x1F$_escapeMapRegexp]');
 
 /// Given single-character string, return the hex-escaped equivalent.
 String _getHexLiteral(String input) {
-  var rune = input.runes.single;
-  var value = rune.toRadixString(16).toUpperCase().padLeft(2, '0');
+  final rune = input.runes.single;
+  final value = rune.toRadixString(16).toUpperCase().padLeft(2, '0');
   return '\\x$value';
 }
 
@@ -146,9 +146,9 @@ String _getHexLiteral(String input) {
 Set<FieldElement> createSortedFieldSet(ClassElement element) {
   // Get all of the fields that need to be assigned
   // TODO: support overriding the field set with an annotation option
-  var fieldsList = element.fields.where((e) => !e.isStatic).toList();
+  final fieldsList = element.fields.where((e) => !e.isStatic).toList();
 
-  var manager = InheritanceManager(element.library);
+  final manager = InheritanceManager(element.library);
 
   // ignore: deprecated_member_use
   for (var v in manager.getMembersInheritedFromClasses(element).values) {
@@ -162,7 +162,7 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
     }
   }
 
-  var undefinedField =
+  final undefinedField =
       fieldsList.firstWhere((fe) => fe.type.isUndefined, orElse: () => null);
   if (undefinedField != null) {
     throwUnsupported(undefinedField, 'It has an undefined type.',
@@ -177,7 +177,7 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
 }
 
 int _sortByLocation(FieldElement a, FieldElement b) {
-  var checkerA = TypeChecker.fromStatic(a.enclosingElement.type);
+  final checkerA = TypeChecker.fromStatic(a.enclosingElement.type);
 
   if (!checkerA.isExactly(b.enclosingElement)) {
     // in this case, you want to prioritize the enclosingElement that is more
@@ -187,7 +187,7 @@ int _sortByLocation(FieldElement a, FieldElement b) {
       return -1;
     }
 
-    var checkerB = TypeChecker.fromStatic(b.enclosingElement.type);
+    final checkerB = TypeChecker.fromStatic(b.enclosingElement.type);
 
     if (checkerB.isSuperOf(a.enclosingElement)) {
       return 1;
@@ -234,9 +234,9 @@ Set<String> writeConstructorInvocation(
     Map<String, String> unavailableReasons,
     String deserializeForField(String paramOrFieldName,
         {ParameterElement ctorParam})) {
-  var className = classElement.displayName;
+  final className = classElement.displayName;
 
-  var ctor = classElement.unnamedConstructor;
+  final ctor = classElement.unnamedConstructor;
   if (ctor == null) {
     // TODO(kevmoo): support using another constructor
     throw InvalidGenerationSourceError(
@@ -244,9 +244,9 @@ Set<String> writeConstructorInvocation(
         element: classElement);
   }
 
-  var usedCtorParamsAndFields = Set<String>();
-  var constructorArguments = <ParameterElement>[];
-  var namedConstructorArguments = <ParameterElement>[];
+  final usedCtorParamsAndFields = Set<String>();
+  final constructorArguments = <ParameterElement>[];
+  final namedConstructorArguments = <ParameterElement>[];
 
   for (var arg in ctor.parameters) {
     if (!availableConstructorParameters.contains(arg.name)) {
@@ -254,7 +254,7 @@ Set<String> writeConstructorInvocation(
         var msg = 'Cannot populate the required constructor '
             'argument: ${arg.displayName}.';
 
-        var additionalInfo = unavailableReasons[arg.name];
+        final additionalInfo = unavailableReasons[arg.name];
 
         if (additionalInfo != null) {
           msg = '$msg $additionalInfo';
@@ -279,7 +279,7 @@ Set<String> writeConstructorInvocation(
       ctor, constructorArguments.followedBy(namedConstructorArguments));
 
   // fields that aren't already set by the constructor and that aren't final
-  var remainingFieldsForInvocationBody =
+  final remainingFieldsForInvocationBody =
       writeableFields.toSet().difference(usedCtorParamsAndFields);
 
   //
@@ -294,7 +294,8 @@ Set<String> writeConstructorInvocation(
     buffer.write(', ');
   }
   buffer.writeAll(namedConstructorArguments.map((paramElement) {
-    var value = deserializeForField(paramElement.name, ctorParam: paramElement);
+    final value =
+        deserializeForField(paramElement.name, ctorParam: paramElement);
     return '${paramElement.name}: $value';
   }), ', ');
 
@@ -317,10 +318,10 @@ Set<String> writeConstructorInvocation(
 
 void _validateConstructorArguments(
     ConstructorElement ctor, Iterable<ParameterElement> constructorArguments) {
-  var undefinedArgs =
+  final undefinedArgs =
       constructorArguments.where((pe) => pe.type.isUndefined).toList();
   if (undefinedArgs.isNotEmpty) {
-    var description =
+    final description =
         undefinedArgs.map((fe) => '`${fe.displayName}`').join(', ');
 
     throw InvalidGenerationSourceError(

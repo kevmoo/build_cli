@@ -27,31 +27,31 @@ void main() {
 
   Future<CompilationUnit> _getCompilationUnitForString(
       String projectPath) async {
-    var filePath = p.join(getPackagePath(), 'test', 'src', 'test_input.dart');
+    final filePath = p.join(getPackagePath(), 'test', 'src', 'test_input.dart');
 
     inlineContent.insert(0, File(filePath).readAsStringSync());
 
-    var source = StringSource(inlineContent.join('\n'), 'test content');
+    final source = StringSource(inlineContent.join('\n'), 'test content');
 
     // null this out – should not be touched again
     inlineContent = null;
 
-    var context = await getAnalysisContextForProjectPath();
+    final context = await getAnalysisContextForProjectPath();
 
-    var libElement = context.computeLibraryElement(source);
+    final libElement = context.computeLibraryElement(source);
     return context.resolveCompilationUnit(source, libElement);
   }
 
   Future<String> runForElementNamed(String name) async {
-    var library = LibraryReader(compUnit.declaredElement.library);
-    var element = library.allElements.singleWhere(
+    final library = LibraryReader(compUnit.declaredElement.library);
+    final element = library.allElements.singleWhere(
         (e) => e.name == name && e is! ConstVariableElement,
         orElse: () => null);
     if (element == null) {
       fail('Could not find element `$name`.');
     }
-    var annotation = generator.typeChecker.firstAnnotationOf(element);
-    var generated = generator.generateForAnnotatedElement(
+    final annotation = generator.typeChecker.firstAnnotationOf(element);
+    final generated = generator.generateForAnnotatedElement(
         element, ConstantReader(annotation), null);
 
     return _formatter.format(await generated.join('\n\n'));
@@ -63,7 +63,7 @@ void main() {
     inlineContent.add(elementContent);
 
     test(testName, () async {
-      var actual = await runForElementNamed(elementName);
+      final actual = await runForElementNamed(elementName);
       printOnFailure(['`' * 72, actual, '`' * 72].join('\n'));
       expect(actual, expected);
     });
@@ -94,7 +94,7 @@ ArgParser _$populateEmptyParser(ArgParser parser) => parser;
 final _$parserForEmpty = _$populateEmptyParser(ArgParser());
 
 Empty parseEmpty(List<String> args) {
-  var result = _$parserForEmpty.parse(args);
+  final result = _$parserForEmpty.parse(args);
   return _$parseEmptyResult(result);
 }
 ''');
@@ -114,7 +114,7 @@ ArgParser _$populateWithCommandParser(ArgParser parser) => parser;
 final _$parserForWithCommand = _$populateWithCommandParser(ArgParser());
 
 WithCommand parseWithCommand(List<String> args) {
-  var result = _$parserForWithCommand.parse(args);
+  final result = _$parserForWithCommand.parse(args);
   return _$parseWithCommandResult(result);
 }
 ''');
@@ -154,7 +154,7 @@ final _$parserForSpecialNotAnnotated =
     _$populateSpecialNotAnnotatedParser(ArgParser());
 
 SpecialNotAnnotated parseSpecialNotAnnotated(List<String> args) {
-  var result = _$parserForSpecialNotAnnotated.parse(args);
+  final result = _$parserForSpecialNotAnnotated.parse(args);
   return _$parseSpecialNotAnnotatedResult(result);
 }
 ''');
@@ -193,7 +193,7 @@ final _$parserForAnnotatedCommandWithParser =
     _$populateAnnotatedCommandWithParserParser(ArgParser());
 
 AnnotatedCommandWithParser parseAnnotatedCommandWithParser(List<String> args) {
-  var result = _$parserForAnnotatedCommandWithParser.parse(args);
+  final result = _$parserForAnnotatedCommandWithParser.parse(args);
   return _$parseAnnotatedCommandWithParserResult(result);
 }
 ''');

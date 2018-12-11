@@ -66,6 +66,6 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(ArgParser());
 
 PeanutOptions parsePeanutOptions(List<String> args) {
-  var result = _$parserForPeanutOptions.parse(args);
+  final result = _$parserForPeanutOptions.parse(args);
   return _$parsePeanutOptionsResult(result);
 }

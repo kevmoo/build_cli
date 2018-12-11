@@ -24,7 +24,7 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
     await validateSdkConstraint(buildStep);
 
     if (element is! ClassElement) {
-      var friendlyName = element.displayName;
+      final friendlyName = element.displayName;
       throw InvalidGenerationSourceError(
           'Generator cannot target `$friendlyName`. '
           '`@CliOptions` can only be applied to a class.',
@@ -32,21 +32,21 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
           element: element);
     }
 
-    var classElement = element as ClassElement;
+    final classElement = element as ClassElement;
 
     // Get all of the fields that need to be assigned
     // TODO: We only care about constructor things + writable fields, right?
-    var fieldsList = createSortedFieldSet(classElement);
+    final fieldsList = createSortedFieldSet(classElement);
 
     // Explicitly using `LinkedHashMap` – we want these ordered.
-    var fields = LinkedHashMap<String, FieldElement>.fromIterable(fieldsList,
+    final fields = LinkedHashMap<String, FieldElement>.fromIterable(fieldsList,
         key: (f) => (f as FieldElement).name);
 
     // Get the constructor to use for the factory
 
-    var populateParserName = '_\$populate${classElement.name}Parser';
-    var parserFieldName = '_\$parserFor${classElement.name}';
-    var resultParserName = '_\$parse${classElement.name}Result';
+    final populateParserName = '_\$populate${classElement.name}Parser';
+    final parserFieldName = '_\$parserFor${classElement.name}';
+    final resultParserName = '_\$parse${classElement.name}Result';
 
     if (fieldsList.any((fe) => isEnum(fe.type))) {
       yield _enumValueHelper;
@@ -67,7 +67,7 @@ ${classElement.name} $resultParserName(ArgResults result) =>''');
             {ParameterElement ctorParam}) =>
         _deserializeForField(fields[fieldName], ctorParam, fields);
 
-    var usedFields = writeConstructorInvocation(
+    final usedFields = writeConstructorInvocation(
         buffer,
         classElement,
         fields.keys,
@@ -75,10 +75,10 @@ ${classElement.name} $resultParserName(ArgResults result) =>''');
         {},
         deserializeForField);
 
-    var unusedFields = fields.keys.toSet()..removeAll(usedFields);
+    final unusedFields = fields.keys.toSet()..removeAll(usedFields);
 
     if (unusedFields.isNotEmpty) {
-      var fieldsString = unusedFields.map((f) => '`$f`').join(', ');
+      final fieldsString = unusedFields.map((f) => '`$f`').join(', ');
       log.warning(
           'Skipping unassignable fields on `$classElement`: $fieldsString');
 
@@ -100,7 +100,7 @@ ${classElement.name} $resultParserName(ArgResults result) =>''');
 
     yield '''
 ${classElement.name} parse${classElement.name}(List<String> args) {
-  var result = $parserFieldName.parse(args);
+  final result = $parserFieldName.parse(args);
   return $resultParserName(result);
 }
 ''';
@@ -124,18 +124,18 @@ final _numCheckers = <TypeChecker, String>{
 
 String _deserializeForField(FieldElement field, ParameterElement ctorParam,
     Map<String, FieldElement> allFields) {
-  var info = ArgInfo.fromField(field);
+  final info = ArgInfo.fromField(field);
 
   if (info.argType == ArgType.rest) {
     return 'result.rest';
   }
 
   if (info.argType == ArgType.wasParsed) {
-    var name = field.name;
+    final name = field.name;
     assert(name.endsWith(wasParsedSuffix));
-    var targetFieldName =
+    final targetFieldName =
         name.substring(0, name.length - wasParsedSuffix.length);
-    var targetField = allFields[targetFieldName];
+    final targetField = allFields[targetFieldName];
     if (targetField == null) {
       throwUnsupported(
         field,
@@ -149,12 +149,12 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
     return 'result.command';
   }
 
-  var targetType = ctorParam?.type ?? field.type;
-  var argName = _getArgNameStringLiteral(field);
+  final targetType = ctorParam?.type ?? field.type;
+  final argName = _getArgNameStringLiteral(field);
 
-  var argAccess = 'result[$argName]';
+  final argAccess = 'result[$argName]';
 
-  var convertName = getConvertName(info.optionData);
+  final convertName = getConvertName(info.optionData);
   if (convertName != null) {
     assert(info.argType == ArgType.option);
     return '$convertName($argAccess as String)';
@@ -173,7 +173,7 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
     assert(isMulti(targetType));
     // if the target type is dynamic, Object, or String – just send it in as-is
 
-    var args = typeArgumentsOf(targetType, listChecker);
+    final args = typeArgumentsOf(targetType, listChecker);
 
     assert(args.length == 1);
 
@@ -206,7 +206,7 @@ String _getArgNameStringLiteral(FieldElement element) =>
     escapeDartString(_getArgName(element));
 
 void _parserOptionFor(StringBuffer buffer, FieldElement element) {
-  var info = ArgInfo.fromField(element);
+  final info = ArgInfo.fromField(element);
 
   switch (info.argType) {
     case ArgType.flag:
@@ -226,7 +226,7 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   }
   buffer.write('(${_getArgNameStringLiteral(element)}');
 
-  var options = info.optionData;
+  final options = info.optionData;
 
   if (options.abbr != null) {
     buffer.write(', abbr: ${escapeDartString(options.abbr)}');
@@ -243,7 +243,7 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   if (info.argType == ArgType.flag && options.nullable == true) {
     buffer.write(', defaultsTo: ${(options.defaultsTo as bool).toString()}');
   } else if (options.defaultsTo != null) {
-    var defaultValueLiteral = (info.argType == ArgType.flag)
+    final defaultValueLiteral = (info.argType == ArgType.flag)
         ? (options.defaultsTo as bool).toString()
         : escapeDartString(options.defaultsTo.toString());
 
@@ -251,15 +251,15 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   }
 
   if (options.allowed != null) {
-    var allowedItems = options.allowed.map((e) => "'$e'").join(', ');
+    final allowedItems = options.allowed.map((e) => "'$e'").join(', ');
     buffer.write(', allowed: [$allowedItems]');
   }
 
   if (options.allowedHelp != null) {
     // TODO: throw/warn if `allowed` is null or doesn't match these?
-    var allowedHelpItems = options.allowedHelp.entries.map((e) {
-      var escapedKey = escapeDartString(e.key.toString());
-      var escapedValue = escapeDartString(e.value);
+    final allowedHelpItems = options.allowedHelp.entries.map((e) {
+      final escapedKey = escapeDartString(e.key.toString());
+      final escapedValue = escapeDartString(e.value);
       return '$escapedKey: $escapedValue';
     }).join(',');
     buffer.write(', allowedHelp: <String, String>{$allowedHelpItems}');

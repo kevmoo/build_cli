@@ -55,12 +55,12 @@ class ArgInfo {
   ArgInfo(this.argType, this.optionData);
 
   static ArgInfo fromField(FieldElement element) {
-    var info = _argInfoCache[element];
+    final info = _argInfoCache[element];
     if (info != null) {
       return info;
     }
 
-    var option = _getOptions(element);
+    final option = _getOptions(element);
 
     ArgType type;
     if (option == null) {
@@ -103,7 +103,7 @@ class ArgInfo {
 }
 
 ArgType _getArgType(FieldElement element, CliOption option) {
-  var targetType = element.type;
+  final targetType = element.type;
 
   if (getConvertName(option) != null) {
     return ArgType.option;
@@ -127,23 +127,23 @@ ArgType _getArgType(FieldElement element, CliOption option) {
 }
 
 CliOption _getOptions(FieldElement element) {
-  var obj = _cliOptionChecker.firstAnnotationOfExact(element) ??
+  final obj = _cliOptionChecker.firstAnnotationOfExact(element) ??
       _cliOptionChecker.firstAnnotationOfExact(element.getter);
 
   List<Object> allowedValues;
   Object defaultsTo;
 
-  var annotation = ConstantReader(obj);
+  final annotation = ConstantReader(obj);
 
   if (annotation.isNull && specialTypes.values.any((p) => p(element))) {
     return null;
   }
 
-  var defaultsToReader =
+  final defaultsToReader =
       annotation.isNull ? null : annotation?.read('defaultsTo');
 
   if (isEnum(element.type)) {
-    var interfaceType = element.type as InterfaceType;
+    final interfaceType = element.type as InterfaceType;
 
     allowedValues = interfaceType.accessors
         .where((p) => p.returnType == element.type)
@@ -151,12 +151,12 @@ CliOption _getOptions(FieldElement element) {
         .toList();
 
     if (defaultsToReader != null && !defaultsToReader.isNull) {
-      var objectValue = defaultsToReader.objectValue;
+      final objectValue = defaultsToReader.objectValue;
       if (objectValue.type != element.type) {
         throwUnsupported(element, 'this is also wack');
       }
 
-      var enumValueIndex = objectValue.getField('index').toIntValue();
+      final enumValueIndex = objectValue.getField('index').toIntValue();
       defaultsTo = allowedValues[enumValueIndex];
     }
   }
@@ -166,7 +166,7 @@ CliOption _getOptions(FieldElement element) {
   }
 
   Map<Object, String> allowedHelp;
-  var allowedHelpReader = annotation.read('allowedHelp');
+  final allowedHelpReader = annotation.read('allowedHelp');
   if (!allowedHelpReader.isNull) {
     if (!allowedHelpReader.isMap) {
       throwUnsupported(element, 'What are you doing?');
@@ -174,7 +174,7 @@ CliOption _getOptions(FieldElement element) {
 
     allowedHelp = <Object, String>{};
     for (var entry in allowedHelpReader.mapValue.entries) {
-      var mapKeyReader = ConstantReader(entry.key);
+      final mapKeyReader = ConstantReader(entry.key);
       if (mapKeyReader.isString ||
           mapKeyReader.isInt ||
           mapKeyReader.isDouble) {
@@ -184,8 +184,8 @@ CliOption _getOptions(FieldElement element) {
 
       if (isEnum(entry.key.type)) {
         assert(allowedValues != null);
-        var enumValueIndex = entry.key.getField('index').toIntValue();
-        var stringValue = allowedValues[enumValueIndex];
+        final enumValueIndex = entry.key.getField('index').toIntValue();
+        final stringValue = allowedValues[enumValueIndex];
         allowedHelp[stringValue] = entry.value.toStringValue();
         continue;
       }
@@ -194,7 +194,7 @@ CliOption _getOptions(FieldElement element) {
     }
   }
 
-  var allowedReader = annotation.read('allowed');
+  final allowedReader = annotation.read('allowed');
   if (!allowedReader.isNull) {
     allowedValues = allowedReader.listValue
         .map((o) => ConstantReader(o).literalValue)
@@ -225,7 +225,7 @@ CliOption _getOptions(FieldElement element) {
         'The `defaultsTo` value – `$defaultsTo` is not in `allowedValues`.');
   }
 
-  var option = CliOption(
+  final option = CliOption(
       name: annotation.read('name').literalValue as String,
       abbr: annotation.read('abbr').literalValue as String,
       defaultsTo: defaultsTo,
@@ -237,10 +237,10 @@ CliOption _getOptions(FieldElement element) {
       nullable: (annotation.read('nullable')?.literalValue ?? false) as bool,
       hide: annotation.read('hide').literalValue as bool);
 
-  var convertReader = annotation.read('convert');
+  final convertReader = annotation.read('convert');
   if (!convertReader.isNull) {
-    var objectValue = convertReader.objectValue;
-    var type = objectValue.type as FunctionType;
+    final objectValue = convertReader.objectValue;
+    final type = objectValue.type as FunctionType;
 
     if (type.element is MethodElement) {
       throwUnsupported(
@@ -248,7 +248,7 @@ CliOption _getOptions(FieldElement element) {
           'The function provided for `convert` must be top-level.'
           ' Static class methods (like `${type.element.name}`) are not supported.');
     }
-    var functionElement = type.element as FunctionElement;
+    final functionElement = type.element as FunctionElement;
 
     if (functionElement.parameters.isEmpty ||
         functionElement.parameters.first.isNamed ||
