@@ -15,6 +15,6 @@ ArgParser _$populateNullableOptionsParser(ArgParser parser) =>
 final _$parserForNullableOptions = _$populateNullableOptionsParser(ArgParser());
 
 NullableOptions parseNullableOptions(List<String> args) {
-  var result = _$parserForNullableOptions.parse(args);
+  final result = _$parserForNullableOptions.parse(args);
   return _$parseNullableOptionsResult(result);
 }

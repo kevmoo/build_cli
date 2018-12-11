@@ -4,7 +4,7 @@ import 'src/peanut_example.dart';
 
 void main() {
   test('no args', () {
-    var options = parsePeanutOptions([]);
+    final options = parsePeanutOptions([]);
 
     expect(options.directory, 'web');
     expect(options.branch, 'gh-pages');
@@ -21,7 +21,7 @@ void main() {
   });
 
   test('some args', () {
-    var options = parsePeanutOptions([
+    final options = parsePeanutOptions([
       '-d',
       'dir',
       '--no-release',
@@ -49,7 +49,7 @@ void main() {
   });
 
   group('with invalid args', () {
-    var items = {
+    final items = {
       'Cannot negate option "help".': ['--no-help'],
       '"foo" is not an allowed value for option "mode".': ['--mode', 'foo'],
       'The value provided for "max-runtime" – "bob" – was not a number.': [
@@ -70,7 +70,7 @@ void main() {
   });
 
   test('usage', () {
-    var prettyUsage = prettyParser.usage;
+    final prettyUsage = prettyParser.usage;
     printOnFailure(prettyUsage);
     expect(prettyUsage, r'''
 -d, --directory        (defaults to "web")

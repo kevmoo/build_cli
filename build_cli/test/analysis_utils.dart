@@ -4,14 +4,14 @@
 
 import 'dart:async';
 
-import 'package:build/build.dart';
 import 'package:analyzer/src/generated/engine.dart';
+import 'package:build/build.dart';
 import 'package:build_test/build_test.dart';
 
 Future<AnalysisContext> getAnalysisContextForProjectPath() async {
-  var library = await resolveAsset(
+  final library = await resolveAsset(
       AssetId.parse('build_cli|test/src/test_input.dart'), (resolver) async {
-    var allLibs = await resolver.libraries.toList();
+    final allLibs = await resolver.libraries.toList();
     return allLibs.first;
   });
 

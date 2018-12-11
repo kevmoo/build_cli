@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:build/build.dart' show BuildStep, AssetId;
-import 'package:source_gen/source_gen.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:source_gen/source_gen.dart';
 import 'package:yaml/yaml.dart';
 
 final _upperCase = RegExp('[A-Z]');
@@ -23,17 +23,17 @@ Future validateSdkConstraint(BuildStep buildStep) async {
     // Not running as part of a "build" – noop.
     return;
   }
-  var uri = 'asset:${buildStep.inputId.package}/pubspec.yaml';
-  var thing = await buildStep.readAsString(AssetId.resolve(uri));
+  final uri = 'asset:${buildStep.inputId.package}/pubspec.yaml';
+  final thing = await buildStep.readAsString(AssetId.resolve(uri));
 
-  var pubSpecYaml = loadYaml(thing, sourceUrl: uri) as YamlMap;
+  final pubSpecYaml = loadYaml(thing, sourceUrl: uri) as YamlMap;
 
-  var environment = pubSpecYaml['environment'];
+  final environment = pubSpecYaml['environment'];
 
   if (environment is YamlMap) {
-    var sdk = environment['sdk'];
+    final sdk = environment['sdk'];
     if (sdk is String) {
-      var constraint = VersionConstraint.parse(sdk);
+      final constraint = VersionConstraint.parse(sdk);
 
       if (constraint.allowsAny(
           VersionRange(max: _lowestSdkSupported, includeMax: false))) {

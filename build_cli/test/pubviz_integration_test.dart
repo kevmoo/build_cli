@@ -4,7 +4,7 @@ import 'src/pubviz_example.dart';
 
 void main() {
   test('no args', () {
-    var options = parsePubvizOptions([]);
+    final options = parsePubvizOptions([]);
 
     expect(options.secret, isNull);
     expect(options.ignorePackages, []);
@@ -15,7 +15,7 @@ void main() {
   });
 
   group('with invalid args', () {
-    var items = {
+    final items = {
       'Could not find an option named "help".': ['--no-help'],
       '"foo" is not an allowed value for option "format".': ['--format', 'foo'],
       'Cannot parse "3.14" into `int` for option "production-port".': [
@@ -48,7 +48,7 @@ void main() {
   });
 
   test('usage', () {
-    var prettyUsage = prettyParser.usage;
+    final prettyUsage = prettyParser.usage;
     printOnFailure(prettyUsage);
     expect(prettyUsage, r'''
 -f, --format                    

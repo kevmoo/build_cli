@@ -88,7 +88,7 @@ Duration _convert(String source) {
     return null;
   }
 
-  var seconds = int.tryParse(source);
+  final seconds = int.tryParse(source);
 
   if (seconds == null) {
     throw FormatException(

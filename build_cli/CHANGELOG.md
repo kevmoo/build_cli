@@ -1,3 +1,8 @@
+## 1.2.1
+
+- Generate all local variables as `final` where applicable.
+  Allows consumers to enable the `prefer_final_locals` lint. 
+
 ## 1.2.0
 
 - Require Dart 2.0 "gold" in the target package.
