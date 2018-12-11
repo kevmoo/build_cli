@@ -94,7 +94,7 @@ ArgParser _$populateEmptyParser(ArgParser parser) => parser;
 final _$parserForEmpty = _$populateEmptyParser(ArgParser());
 
 Empty parseEmpty(List<String> args) {
-  var result = _$parserForEmpty.parse(args);
+  final result = _$parserForEmpty.parse(args);
   return _$parseEmptyResult(result);
 }
 ''');
@@ -114,7 +114,7 @@ ArgParser _$populateWithCommandParser(ArgParser parser) => parser;
 final _$parserForWithCommand = _$populateWithCommandParser(ArgParser());
 
 WithCommand parseWithCommand(List<String> args) {
-  var result = _$parserForWithCommand.parse(args);
+  final result = _$parserForWithCommand.parse(args);
   return _$parseWithCommandResult(result);
 }
 ''');
@@ -154,7 +154,7 @@ final _$parserForSpecialNotAnnotated =
     _$populateSpecialNotAnnotatedParser(ArgParser());
 
 SpecialNotAnnotated parseSpecialNotAnnotated(List<String> args) {
-  var result = _$parserForSpecialNotAnnotated.parse(args);
+  final result = _$parserForSpecialNotAnnotated.parse(args);
   return _$parseSpecialNotAnnotatedResult(result);
 }
 ''');
@@ -193,7 +193,7 @@ final _$parserForAnnotatedCommandWithParser =
     _$populateAnnotatedCommandWithParserParser(ArgParser());
 
 AnnotatedCommandWithParser parseAnnotatedCommandWithParser(List<String> args) {
-  var result = _$parserForAnnotatedCommandWithParser.parse(args);
+  final result = _$parserForAnnotatedCommandWithParser.parse(args);
   return _$parseAnnotatedCommandWithParserResult(result);
 }
 ''');
