@@ -4,19 +4,17 @@
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-
 // ignore: implementation_imports
 import 'package:analyzer/src/dart/resolver/inheritance_manager.dart'
     show InheritanceManager;
-
 import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
 @alwaysThrows
-T throwBugFound<T>(FieldElement element) => throwUnsupported(
-    element, "You've hit a bug in build_cli!",
-    todo:
-        'Please rerun your build with --verbose and file as issue with the stace trace.');
+T throwBugFound<T>(FieldElement element) =>
+    throwUnsupported(element, "You've hit a bug in build_cli!",
+        todo: 'Please rerun your build with --verbose and file as issue '
+            'with the stace trace.');
 
 @alwaysThrows
 T throwUnsupported<T>(FieldElement element, String message, {String todo}) =>
@@ -207,7 +205,7 @@ int _sortByLocation(FieldElement a, FieldElement b) {
   return _offsetFor(a).compareTo(_offsetFor(b));
 }
 
-final _dartCoreObjectChecker = const TypeChecker.fromRuntime(Object);
+const _dartCoreObjectChecker = TypeChecker.fromRuntime(Object);
 
 /// Writes the invocation of the default constructor – `new Class(...)` for the
 /// type defined in [classElement] to the provided [buffer].
@@ -232,8 +230,8 @@ Set<String> writeConstructorInvocation(
     Iterable<String> availableConstructorParameters,
     Iterable<String> writeableFields,
     Map<String, String> unavailableReasons,
-    String deserializeForField(String paramOrFieldName,
-        {ParameterElement ctorParam})) {
+    String Function(String paramOrFieldName,
+        {ParameterElement ctorParam}) deserializeForField) {
   final className = classElement.displayName;
 
   final ctor = classElement.unnamedConstructor;

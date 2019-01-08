@@ -82,9 +82,7 @@ ${classElement.name} $resultParserName(ArgResults result) =>''');
       log.warning(
           'Skipping unassignable fields on `$classElement`: $fieldsString');
 
-      for (var unusedField in unusedFields) {
-        fields.remove(unusedField);
-      }
+      unusedFields.forEach(fields.remove);
     }
     yield buffer.toString();
 
@@ -166,7 +164,8 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
   }
 
   if (isEnum(targetType)) {
-    return "_\$enumValueHelper('$targetType', $targetType.values, $argAccess as String)";
+    return '_\$enumValueHelper'
+        "('$targetType', $targetType.values, $argAccess as String)";
   }
 
   if (info.argType == ArgType.multiOption) {
@@ -192,7 +191,8 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
   for (var checker in _numCheckers.entries) {
     if (checker.key.isExactlyType(targetType)) {
       return '${checker.value}.tryParse($argAccess as String) ?? '
-          "_\$badNumberFormat($argAccess as String, '${checker.value}', '${_getArgName(field)}')";
+          "_\$badNumberFormat($argAccess as String, '${checker.value}', "
+          "'${_getArgName(field)}')";
     }
   }
 
@@ -276,4 +276,4 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   buffer.writeln(')');
 }
 
-final _dynamicChecker = const TypeChecker.fromRuntime(Object);
+const _dynamicChecker = TypeChecker.fromRuntime(Object);

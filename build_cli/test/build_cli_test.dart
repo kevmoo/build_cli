@@ -20,7 +20,7 @@ import 'test_utils.dart';
 final _formatter = dart_style.DartFormatter();
 
 void main() {
-  final generator = const CliGenerator();
+  const generator =  CliGenerator();
   CompilationUnit compUnit;
 
   var inlineContent = <String>[];

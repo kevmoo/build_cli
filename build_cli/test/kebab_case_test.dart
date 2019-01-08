@@ -2,7 +2,7 @@ import 'package:test/test.dart';
 
 import 'package:build_cli/src/util.dart';
 
-final _items = const {
+const _items = {
   'simple': 'simple',
   'twoWords': 'two-words',
   'FirstBig': 'first-big'

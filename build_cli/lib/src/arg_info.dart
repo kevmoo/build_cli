@@ -25,17 +25,13 @@ final _argInfoCache = Expando<ArgInfo>();
 
 enum ArgType { option, flag, multiOption, rest, wasParsed, command }
 
-// Would hope to be able to do this in-line.
-// But hit https://github.com/dart-lang/sdk/issues/32933
-typedef _fieldChecker = bool Function(FieldElement);
-
-const specialTypes = <ArgType, _fieldChecker>{
+const specialTypes = <ArgType, bool Function(FieldElement)>{
   ArgType.rest: _couldBeRestArg,
   ArgType.wasParsed: _couldBeWasParsedArg,
   ArgType.command: _couldBeCommand
 };
 
-final wasParsedSuffix = 'WasParsed';
+const wasParsedSuffix = 'WasParsed';
 
 bool _couldBeRestArg(FieldElement element) => element.name == 'rest';
 
@@ -246,7 +242,8 @@ CliOption _getOptions(FieldElement element) {
       throwUnsupported(
           element,
           'The function provided for `convert` must be top-level.'
-          ' Static class methods (like `${type.element.name}`) are not supported.');
+          ' Static class methods (like `${type.element.name}`) are not '
+          'supported.');
     }
     final functionElement = type.element as FunctionElement;
 
@@ -265,8 +262,8 @@ CliOption _getOptions(FieldElement element) {
       throwUnsupported(
           element,
           'The convert function `${functionElement.name}` return type '
-          '`${functionElement.returnType}` is not compatible with the field type'
-          ' `${element.type}`.');
+          '`${functionElement.returnType}` is not compatible with the field '
+          'type `${element.type}`.');
     }
     _convertName[option] = functionElement.name;
   }
