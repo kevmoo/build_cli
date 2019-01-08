@@ -119,7 +119,7 @@ ArgType _getArgType(FieldElement element, CliOption option) {
     return ArgType.multiOption;
   }
 
-  throwUnsupported(element, '`$targetType` is not supported.');
+  throwUnsupported(element, '`$targetType` is not a supported type.');
 }
 
 CliOption _getOptions(FieldElement element) {

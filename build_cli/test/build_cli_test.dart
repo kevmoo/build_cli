@@ -170,7 +170,7 @@ class AnnotatedCommandNoParser {
 }
 ''',
         invalidGenerationSourceErrorMatcher(
-            'Could not handle field `command`. `ArgResults` is not supported.'));
+            'Could not handle field `command`. `ArgResults` is not a supported type.'));
 
     testOutput(
         'annotated command, with parser', 'AnnotatedCommandWithParser', r'''
@@ -242,7 +242,7 @@ AnnotatedCommandWithParser parseAnnotatedCommandWithParser(List<String> args) {
     expect(
         runForElementNamed('UnsupportedFieldType'),
         throwsInvalidGenerationSourceError(
-          'Could not handle field `number`. `Duration` is not supported.',
+          'Could not handle field `number`. `Duration` is not a supported type.',
         ));
   });
 
