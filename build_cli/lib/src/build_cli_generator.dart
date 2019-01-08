@@ -114,10 +114,10 @@ T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
                 'Could not find the value `$enumValue` in enum `$enumName`.'));
 ''';
 
-final _numCheckers = <TypeChecker, String>{
+const _numCheckers = <TypeChecker, String>{
   numChecker: 'num',
-  const TypeChecker.fromRuntime(int): 'int',
-  const TypeChecker.fromRuntime(double): 'double'
+  TypeChecker.fromRuntime(int): 'int',
+  TypeChecker.fromRuntime(double): 'double'
 };
 
 String _deserializeForField(FieldElement field, ParameterElement ctorParam,
