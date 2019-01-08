@@ -230,8 +230,8 @@ Set<String> writeConstructorInvocation(
     Iterable<String> availableConstructorParameters,
     Iterable<String> writeableFields,
     Map<String, String> unavailableReasons,
-    String Function(String paramOrFieldName,
-        {ParameterElement ctorParam}) deserializeForField) {
+    String Function(String paramOrFieldName, {ParameterElement ctorParam})
+        deserializeForField) {
   final className = classElement.displayName;
 
   final ctor = classElement.unnamedConstructor;
