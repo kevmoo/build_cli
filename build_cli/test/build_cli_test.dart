@@ -5,9 +5,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/src/dart/element/element.dart';
-import 'package:analyzer/src/string_source.dart';
 import 'package:build_cli/build_cli.dart';
 import 'package:dart_style/dart_style.dart' as dart_style;
 import 'package:path/path.dart' as p;
@@ -21,30 +19,25 @@ final _formatter = dart_style.DartFormatter();
 
 void main() {
   const generator = CliGenerator();
-  CompilationUnit compUnit;
+  LibraryReader libraryReader;
 
   var inlineContent = <String>[];
 
-  Future<CompilationUnit> _getCompilationUnitForString(
-      String projectPath) async {
+  Future<LibraryReader> _getCompilationUnitForString(String projectPath) async {
     final filePath = p.join(getPackagePath(), 'test', 'src', 'test_input.dart');
 
     inlineContent.insert(0, File(filePath).readAsStringSync());
 
-    final source = StringSource(inlineContent.join('\n'), 'test content');
+    final source = inlineContent.join('\n');
 
     // null this out – should not be touched again
     inlineContent = null;
 
-    final context = await getAnalysisContextForProjectPath();
-
-    final libElement = context.computeLibraryElement(source);
-    return context.resolveCompilationUnit(source, libElement);
+    return libReaderForContent(source);
   }
 
   Future<String> runForElementNamed(String name) async {
-    final library = LibraryReader(compUnit.declaredElement.library);
-    final element = library.allElements.singleWhere(
+    final element = libraryReader.allElements.singleWhere(
         (e) => e.name == name && e is! ConstVariableElement,
         orElse: () => null);
     if (element == null) {
@@ -80,7 +73,7 @@ void main() {
   }
 
   setUpAll(() async {
-    compUnit = await _getCompilationUnitForString(getPackagePath());
+    libraryReader = await _getCompilationUnitForString(getPackagePath());
   });
 
   testOutput('just empty', 'Empty', r'''

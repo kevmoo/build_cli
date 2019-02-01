@@ -4,16 +4,18 @@
 
 import 'dart:async';
 
-import 'package:analyzer/src/generated/engine.dart';
 import 'package:build/build.dart';
 import 'package:build_test/build_test.dart';
+import 'package:source_gen/source_gen.dart';
 
-Future<AnalysisContext> getAnalysisContextForProjectPath() async {
-  final library = await resolveAsset(
-      AssetId.parse('build_cli|test/src/test_input.dart'), (resolver) async {
-    final allLibs = await resolver.libraries.toList();
-    return allLibs.first;
+Future<LibraryReader> libReaderForContent(String content) async {
+  final fileMap = {'a|lib/test_input.dart': content};
+
+  final library = await resolveSources(fileMap, (resolver) async {
+    final assetId = AssetId.parse('a|lib/test_input.dart');
+    final lib = await resolver.libraryFor(assetId);
+    return lib;
   });
 
-  return library.context;
+  return LibraryReader(library);
 }

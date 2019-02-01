@@ -1,3 +1,7 @@
+## 1.2.2
+
+- Support the latest release of `package:analyzer`.
+
 ## 1.2.1
 
 - Generate all local variables as `final` where applicable.

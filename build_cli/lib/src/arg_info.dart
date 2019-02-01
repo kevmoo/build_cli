@@ -1,3 +1,4 @@
+import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
@@ -152,8 +153,8 @@ CliOption _getOptions(FieldElement element) {
         throwUnsupported(element, 'this is also wack');
       }
 
-      final enumValueIndex = objectValue.getField('index').toIntValue();
-      defaultsTo = allowedValues[enumValueIndex];
+      defaultsTo = _enumValueForDartObject<String>(
+          objectValue, allowedValues.cast<String>(), (v) => v);
     }
   }
 
@@ -180,8 +181,8 @@ CliOption _getOptions(FieldElement element) {
 
       if (isEnum(entry.key.type)) {
         assert(allowedValues != null);
-        final enumValueIndex = entry.key.getField('index').toIntValue();
-        final stringValue = allowedValues[enumValueIndex];
+        final stringValue = _enumValueForDartObject<String>(
+            entry.key, allowedValues.cast<String>(), (v) => v);
         allowedHelp[stringValue] = entry.value.toStringValue();
         continue;
       }
@@ -270,3 +271,11 @@ CliOption _getOptions(FieldElement element) {
 
   return option;
 }
+
+T _enumValueForDartObject<T>(
+        DartObject source, List<T> items, String Function(T) name) =>
+    items.singleWhere(
+      (v) => source.getField(name(v)) != null,
+      // TODO: remove once pkg:analyzer < 0.35.0 is no longer supported
+      orElse: () => items[source.getField('index').toIntValue()],
+    );
