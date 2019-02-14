@@ -91,3 +91,14 @@ class FlagWithValueHelp {
   @CliOption(valueHelp: 'string')
   bool option;
 }
+
+@CliOptions()
+class DefaultOverride {
+  @CliOption(provideDefaultToOverride: true)
+  bool shouldDoThing;
+
+  @CliOption(provideDefaultToOverride: true, defaultsTo: 'default value')
+  String otherSetting;
+
+// TODO: enum field
+}

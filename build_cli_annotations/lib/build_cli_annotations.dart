@@ -15,6 +15,7 @@ class CliOption {
   final bool negatable;
   final bool hide;
   final bool nullable;
+  final bool provideDefaultToOverride;
 
   /// A top-level [Function] that converts an option value into the destination
   /// type.
@@ -32,5 +33,6 @@ class CliOption {
     this.hide,
     this.convert,
     this.nullable,
+    this.provideDefaultToOverride,
   });
 }

@@ -1,3 +1,10 @@
+## 1.3.0
+
+- Added support for the new `provideDefaultToOverride` value on `CliOption` to
+  allow users to provide an override to `defaultsTo` by including an optional
+  `[fieldName]DefaultOverride` param to the generated 
+  `_$populate[ClassName]Parser` function.
+
 ## 1.2.2
 
 - Support the latest release of `package:analyzer`.

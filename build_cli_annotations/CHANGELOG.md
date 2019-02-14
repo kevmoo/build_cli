@@ -1,3 +1,8 @@
+## 1.1.0
+
+- Added `provideDefaultToOverride` to `CliOption` to allow users to provide an
+  override to `defaultsTo`.
+
 ## 1.0.1
 
 - Support nullable annotation

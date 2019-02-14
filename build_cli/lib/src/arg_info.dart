@@ -48,8 +48,10 @@ bool _couldBeCommand(FieldElement element) =>
 class ArgInfo {
   final CliOption optionData;
   final ArgType argType;
+  final DartType dartType;
 
-  ArgInfo(this.argType, this.optionData);
+  ArgInfo(this.argType, this.optionData, FieldElement element)
+      : dartType = element.type;
 
   static ArgInfo fromField(FieldElement element) {
     final info = _argInfoCache[element];
@@ -95,7 +97,7 @@ class ArgInfo {
       }
     }
 
-    return _argInfoCache[element] = ArgInfo(type, option);
+    return _argInfoCache[element] = ArgInfo(type, option, element);
   }
 }
 
@@ -223,16 +225,20 @@ CliOption _getOptions(FieldElement element) {
   }
 
   final option = CliOption(
-      name: annotation.read('name').literalValue as String,
-      abbr: annotation.read('abbr').literalValue as String,
-      defaultsTo: defaultsTo,
-      help: annotation.read('help').literalValue as String,
-      valueHelp: annotation.read('valueHelp').literalValue as String,
-      allowed: allowedValues,
-      allowedHelp: allowedHelp,
-      negatable: annotation.read('negatable').literalValue as bool,
-      nullable: (annotation.read('nullable')?.literalValue ?? false) as bool,
-      hide: annotation.read('hide').literalValue as bool);
+    abbr: annotation.read('abbr').literalValue as String,
+    allowed: allowedValues,
+    allowedHelp: allowedHelp,
+    defaultsTo: defaultsTo,
+    help: annotation.read('help').literalValue as String,
+    hide: annotation.read('hide').literalValue as bool,
+    name: annotation.read('name').literalValue as String,
+    negatable: annotation.read('negatable').literalValue as bool,
+    nullable: (annotation.read('nullable')?.literalValue ?? false) as bool,
+    provideDefaultToOverride:
+        annotation.read('provideDefaultToOverride').literalValue as bool ??
+            false,
+    valueHelp: annotation.read('valueHelp').literalValue as String,
+  );
 
   final convertReader = annotation.read('convert');
   if (!convertReader.isNull) {

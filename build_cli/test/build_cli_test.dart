@@ -339,4 +339,35 @@ AnnotatedCommandWithParser parseAnnotatedCommandWithParser(List<String> args) {
       );
     });
   });
+
+  group('provideDefaultToOverride', () {
+    test('output is interesting', () async {
+      final result = await runForElementNamed('DefaultOverride');
+
+      printOnFailure("r'''\n$result'''");
+      expect(result, r'''
+DefaultOverride _$parseDefaultOverrideResult(ArgResults result) =>
+    DefaultOverride()
+      ..shouldDoThing = result['should-do-thing'] as bool
+      ..otherSetting = result['other-setting'] as String;
+
+ArgParser _$populateDefaultOverrideParser(
+  ArgParser parser, {
+  bool shouldDoThingDefaultOverride,
+  String otherSettingDefaultOverride,
+}) =>
+    parser
+      ..addFlag('should-do-thing', defaultsTo: shouldDoThingDefaultOverride)
+      ..addOption('other-setting',
+          defaultsTo: otherSettingDefaultOverride ?? 'default value');
+
+final _$parserForDefaultOverride = _$populateDefaultOverrideParser(ArgParser());
+
+DefaultOverride parseDefaultOverride(List<String> args) {
+  final result = _$parserForDefaultOverride.parse(args);
+  return _$parseDefaultOverrideResult(result);
+}
+''');
+    });
+  });
 }

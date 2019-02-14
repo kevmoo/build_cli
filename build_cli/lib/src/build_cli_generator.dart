@@ -86,8 +86,22 @@ ${classElement.name} $resultParserName(ArgResults result) =>''');
     }
     yield buffer.toString();
 
+    final provideOverrides = fields
+        .map((k, v) => MapEntry(k, ArgInfo.fromField(v)))
+          ..removeWhere(
+              (k, v) => !(v?.optionData?.provideDefaultToOverride ?? false));
+
+    var overrideArgs = '';
+    if (provideOverrides.isNotEmpty) {
+      overrideArgs = provideOverrides.entries
+          .map((e) => '${e.value.dartType} ${_overrideParamName(e.key)},')
+          .join();
+      overrideArgs = ',{$overrideArgs}';
+    }
+
     buffer = StringBuffer();
-    buffer.write('ArgParser $populateParserName(ArgParser parser) => parser');
+    buffer.write(
+        'ArgParser $populateParserName(ArgParser parser$overrideArgs) => parser');
     for (var f in fields.values) {
       _parserOptionFor(buffer, f);
     }
@@ -104,6 +118,8 @@ ${classElement.name} parse${classElement.name}(List<String> args) {
 ''';
   }
 }
+
+String _overrideParamName(String fieldName) => '${fieldName}DefaultOverride';
 
 const _enumValueHelper = r'''
 T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
@@ -240,14 +256,27 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
     buffer.write(', valueHelp: ${escapeDartString(options.valueHelp)}');
   }
 
+  final defaultsToValues = <String>[];
+
+  if (info.optionData.provideDefaultToOverride) {
+    defaultsToValues.add(_overrideParamName(element.name));
+  }
+
   if (info.argType == ArgType.flag && options.nullable == true) {
-    buffer.write(', defaultsTo: ${(options.defaultsTo as bool).toString()}');
+    // If it's a flag (boolean) and the option is nullable, use the default
+    // value – even if it's null.
+    defaultsToValues.add((options.defaultsTo as bool).toString());
   } else if (options.defaultsTo != null) {
     final defaultValueLiteral = (info.argType == ArgType.flag)
         ? (options.defaultsTo as bool).toString()
         : escapeDartString(options.defaultsTo.toString());
 
-    buffer.write(', defaultsTo: $defaultValueLiteral');
+    defaultsToValues.add(defaultValueLiteral);
+  }
+
+  if (defaultsToValues.isNotEmpty) {
+    assert(defaultsToValues.length <= 2);
+    buffer.write(', defaultsTo: ${defaultsToValues.join(' ?? ')}');
   }
 
   if (options.allowed != null) {
