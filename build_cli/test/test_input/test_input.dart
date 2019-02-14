@@ -242,3 +242,64 @@ const theAnswer = 42;
     todo: 'Remove the `@CliOptions` annotation from `annotatedMethod`.')
 @CliOptions()
 Object annotatedMethod() => null;
+
+@ShouldGenerate(r'''
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) {
+  if (source == null) {
+    return null;
+  }
+  return enumValues.entries
+      .singleWhere((e) => e.value == source,
+          orElse: () => throw ArgumentError(
+              '`$source` is not one of the supported values: '
+              '${enumValues.values.join(', ')}'))
+      .key;
+}
+
+DefaultOverride _$parseDefaultOverrideResult(ArgResults result) =>
+    DefaultOverride()
+      ..shouldDoThing = result['should-do-thing'] as bool
+      ..otherSetting = result['other-setting'] as String
+      ..enumValue =
+          _$enumValueHelper(_$TestEnumEnumMap, result['enum-value'] as String);
+
+const _$TestEnumEnumMap = <TestEnum, String>{
+  TestEnum.alpha: 'alpha',
+  TestEnum.beta: 'beta',
+  TestEnum.$gama: r'$gama'
+};
+
+ArgParser _$populateDefaultOverrideParser(
+  ArgParser parser, {
+  bool shouldDoThingDefaultOverride,
+  String otherSettingDefaultOverride,
+  TestEnum enumValueDefaultOverride,
+}) =>
+    parser
+      ..addFlag('should-do-thing', defaultsTo: shouldDoThingDefaultOverride)
+      ..addOption('other-setting',
+          defaultsTo: otherSettingDefaultOverride ?? 'default value')
+      ..addOption('enum-value',
+          defaultsTo: _$TestEnumEnumMap[enumValueDefaultOverride],
+          allowed: ['alpha', 'beta', r'$gama']);
+
+final _$parserForDefaultOverride = _$populateDefaultOverrideParser(ArgParser());
+
+DefaultOverride parseDefaultOverride(List<String> args) {
+  final result = _$parserForDefaultOverride.parse(args);
+  return _$parseDefaultOverrideResult(result);
+}
+''')
+@CliOptions()
+class DefaultOverride {
+  @CliOption(provideDefaultToOverride: true)
+  bool shouldDoThing;
+
+  @CliOption(provideDefaultToOverride: true, defaultsTo: 'default value')
+  String otherSetting;
+
+  @CliOption(provideDefaultToOverride: true)
+  TestEnum enumValue;
+}
+
+enum TestEnum { alpha, beta, $gama }

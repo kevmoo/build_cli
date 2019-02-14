@@ -15,22 +15,23 @@ class CliOption {
   final bool negatable;
   final bool hide;
   final bool nullable;
+  final bool provideDefaultToOverride;
 
   /// A top-level [Function] that converts an option value into the destination
   /// type.
   final dynamic Function(String) convert;
 
-  const CliOption({
-    this.name,
-    this.abbr,
-    this.defaultsTo,
-    this.help,
-    this.valueHelp,
-    this.allowed,
-    this.negatable,
-    this.allowedHelp,
-    this.hide,
-    this.convert,
-    this.nullable,
-  });
+  const CliOption(
+      {this.name,
+      this.abbr,
+      this.defaultsTo,
+      this.help,
+      this.valueHelp,
+      this.allowed,
+      this.negatable,
+      this.allowedHelp,
+      this.hide,
+      this.convert,
+      this.nullable,
+      this.provideDefaultToOverride = false});
 }

@@ -11,7 +11,9 @@ import 'package:test/test.dart';
 Future<void> main() async {
   const generator = CliGenerator();
   final libraryReader = await initializeLibraryReaderForDirectory(
-      'test/test_input', 'test_input.dart');
+    'test/test_input',
+    'test_input.dart',
+  );
 
   group('integration tests', () {
     initializeBuildLogTracking();
@@ -27,6 +29,7 @@ Future<void> main() async {
         'ConvertAsStatic',
         'ConvertOnMulti',
         'DefaultNotInAllowed',
+        'DefaultOverride',
         'Empty',
         'FlagWithAllowed',
         'FlagWithAllowedHelp',
