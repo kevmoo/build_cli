@@ -6,7 +6,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 // ignore: implementation_imports
 import 'package:analyzer/src/dart/resolver/inheritance_manager.dart'
-    show InheritanceManager;
+    show InheritanceManager; // ignore: deprecated_member_use
 import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -146,7 +146,8 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
   // TODO: support overriding the field set with an annotation option
   final fieldsList = element.fields.where((e) => !e.isStatic).toList();
 
-  final manager = InheritanceManager(element.library);
+  final manager =
+      InheritanceManager(element.library); // ignore: deprecated_member_use
 
   // ignore: deprecated_member_use
   for (var v in manager.getMembersInheritedFromClasses(element).values) {
