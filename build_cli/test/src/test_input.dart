@@ -68,25 +68,25 @@ class ConvertOnMulti {
   List<Duration> option;
 }
 
-@CliOption()
+@CliOptions()
 class FlagWithStringDefault {
   @CliOption(defaultsTo: 'string')
   bool option;
 }
 
-@CliOption()
+@CliOptions()
 class FlagWithAllowed {
   @CliOption(allowed: [])
   bool option;
 }
 
-@CliOption()
+@CliOptions()
 class FlagWithAllowedHelp {
   @CliOption(allowedHelp: {})
   bool option;
 }
 
-@CliOption()
+@CliOptions()
 class FlagWithValueHelp {
   @CliOption(valueHelp: 'string')
   bool option;
