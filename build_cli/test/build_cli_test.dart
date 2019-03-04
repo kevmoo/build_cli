@@ -5,17 +5,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:analyzer/src/dart/element/element.dart';
 import 'package:build_cli/build_cli.dart';
-import 'package:dart_style/dart_style.dart' as dart_style;
 import 'package:path/path.dart' as p;
 import 'package:source_gen/source_gen.dart';
+import 'package:source_gen_test/source_gen_test.dart';
 import 'package:test/test.dart';
-
-import 'analysis_utils.dart';
-import 'test_utils.dart';
-
-final _formatter = dart_style.DartFormatter();
 
 void main() {
   const generator = CliGenerator();
@@ -23,8 +17,8 @@ void main() {
 
   var inlineContent = <String>[];
 
-  Future<LibraryReader> _getCompilationUnitForString(String projectPath) async {
-    final filePath = p.join(getPackagePath(), 'test', 'src', 'test_input.dart');
+  Future<LibraryReader> _getCompilationUnitForString() async {
+    final filePath = p.join('test', 'src', 'test_input.dart');
 
     inlineContent.insert(0, File(filePath).readAsStringSync());
 
@@ -33,22 +27,11 @@ void main() {
     // null this out – should not be touched again
     inlineContent = null;
 
-    return libReaderForContent(source);
+    return initializeLibraryReader({'lib.dart': source}, 'lib.dart');
   }
 
-  Future<String> runForElementNamed(String name) async {
-    final element = libraryReader.allElements.singleWhere(
-        (e) => e.name == name && e is! ConstVariableElement,
-        orElse: () => null);
-    if (element == null) {
-      fail('Could not find element `$name`.');
-    }
-    final annotation = generator.typeChecker.firstAnnotationOf(element);
-    final generated = generator.generateForAnnotatedElement(
-        element, ConstantReader(annotation), null);
-
-    return _formatter.format(await generated.join('\n\n'));
-  }
+  Future<String> runForElementNamed(String name) async =>
+      generateForElement(generator, libraryReader, name);
 
   void testOutput(String testName, String elementName, String elementContent,
       String expected) {
@@ -68,12 +51,12 @@ void main() {
     inlineContent.add(elementContent);
 
     test(testName, () async {
-      expect(runForElementNamed(elementName), throwsA(expectedThrow));
+      expect(runForElementNamed(elementName), expectedThrow);
     });
   }
 
   setUpAll(() async {
-    libraryReader = await _getCompilationUnitForString(getPackagePath());
+    libraryReader = await _getCompilationUnitForString();
   });
 
   testOutput('just empty', 'Empty', r'''
@@ -121,7 +104,7 @@ class LonelyWasParsed {
   bool nothingWasParsed;
 }
 ''',
-      invalidGenerationSourceErrorMatcher(
+      throwsInvalidGenerationSourceError(
           'Could not handle field `nothingWasParsed`. Could not find expected source field `nothing`.'),
     );
 
@@ -163,7 +146,7 @@ class AnnotatedCommandNoParser {
   ArgResults command;
 }
 ''',
-      invalidGenerationSourceErrorMatcher(
+      throwsInvalidGenerationSourceError(
           'Could not handle field `command`. `ArgResults` is not a supported type.'),
     );
 
@@ -199,20 +182,21 @@ AnnotatedCommandWithParser parseAnnotatedCommandWithParser(List<String> args) {
       'const field',
       'theAnswer',
       r'''@CliOptions()const theAnswer = 42;''',
-      invalidGenerationSourceErrorMatcher(
+      throwsInvalidGenerationSourceError(
           'Generator cannot target `theAnswer`.'
           ' `@CliOptions` can only be applied to a class.',
-          todo: 'Remove the `@CliOptions` annotation from `theAnswer`.'),
+          todoMatcher: 'Remove the `@CliOptions` annotation from `theAnswer`.'),
     );
 
     testBadOutput(
       'method',
       'annotatedMethod',
       r'''@CliOptions() void annotatedMethod() => null;''',
-      invalidGenerationSourceErrorMatcher(
+      throwsInvalidGenerationSourceError(
           'Generator cannot target `annotatedMethod`.'
           ' `@CliOptions` can only be applied to a class.',
-          todo: 'Remove the `@CliOptions` annotation from `annotatedMethod`.'),
+          todoMatcher:
+              'Remove the `@CliOptions` annotation from `annotatedMethod`.'),
     );
   });
 
@@ -222,7 +206,7 @@ AnnotatedCommandWithParser parseAnnotatedCommandWithParser(List<String> args) {
         runForElementNamed('UnknownCtorParamType'),
         throwsInvalidGenerationSourceError(
             'At least one constructor argument has an invalid type: `number`.',
-            todo: 'Check names and imports.'),
+            todoMatcher: 'Check names and imports.'),
       );
     });
 
@@ -231,7 +215,7 @@ AnnotatedCommandWithParser parseAnnotatedCommandWithParser(List<String> args) {
         runForElementNamed('UnknownFieldType'),
         throwsInvalidGenerationSourceError(
             'Could not handle field `number`. It has an undefined type.',
-            todo: 'Check names and imports.'),
+            todoMatcher: 'Check names and imports.'),
       );
     });
   });

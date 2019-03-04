@@ -26,9 +26,8 @@ dev_dependencies:
   # package use features in ^1.5.0
   args: ^1.5.0
   build_runner: ^1.0.0
-  build_test: ^0.10.0
   build_verify: ^1.0.0
-  dart_style: # Skipping version here - brings in alpha analyzer
   io: ^0.3.2
   path: ^1.5.1
+  source_gen_test: ^0.1.0
   test: ^1.0.0
