@@ -2,11 +2,12 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+// ignore_for_file: implementation_imports,deprecated_member_use
+
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-// ignore: implementation_imports
 import 'package:analyzer/src/dart/resolver/inheritance_manager.dart'
-    show InheritanceManager; // ignore: deprecated_member_use
+    show InheritanceManager;
 import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -243,7 +244,7 @@ Set<String> writeConstructorInvocation(
         element: classElement);
   }
 
-  final usedCtorParamsAndFields = Set<String>();
+  final usedCtorParamsAndFields = <String>{};
   final constructorArguments = <ParameterElement>[];
   final namedConstructorArguments = <ParameterElement>[];
 
