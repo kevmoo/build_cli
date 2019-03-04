@@ -1,3 +1,7 @@
+## 1.2.3
+
+- Require Dart `>=2.2.0 <3.0.0`.
+
 ## 1.2.2
 
 - Support the latest release of `package:analyzer`.

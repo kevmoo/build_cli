@@ -7,7 +7,7 @@ author: Kevin Moore <github@j832.com>
 homepage: https://github.com/kevmoo/build_cli
 
 environment:
-  sdk: '>=2.0.0 <3.0.0'
+  sdk: '>=2.2.0 <3.0.0'
 
 dependencies:
   analyzer: '>=0.33.3 <0.36.0'
