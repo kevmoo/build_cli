@@ -41,6 +41,12 @@ class PeanutOptions {
           ' to "build". Otherwise, "pub".')
   final BuildTool buildTool;
 
+  @CliOption(
+    help: 'The build tool to use for debugging.',
+    defaultsTo: BuildTool.$loco,
+  )
+  final BuildTool debugBuildTool;
+
   @CliOption()
   final BazelOptions bazelOptions;
 
@@ -67,20 +73,22 @@ class PeanutOptions {
 
   ArgResults command;
 
-  PeanutOptions(
-      {this.directory,
-      this.branch,
-      this.mode,
-      this.modeWasParsed,
-      this.buildConfig,
-      this.buildConfigWasParsed,
-      this.message,
-      this.buildTool,
-      this.help,
-      this.bazelOptions,
-      this.release,
-      this.secret,
-      this.rest});
+  PeanutOptions({
+    this.bazelOptions,
+    this.branch,
+    this.buildConfig,
+    this.buildConfigWasParsed,
+    this.buildTool,
+    this.debugBuildTool,
+    this.directory,
+    this.help,
+    this.message,
+    this.mode,
+    this.modeWasParsed,
+    this.release,
+    this.rest,
+    this.secret,
+  });
 }
 
 Duration _convert(String source) {

@@ -14,6 +14,7 @@ void main() {
     expect(options.buildConfigWasParsed, isFalse);
     expect(options.message, 'Built <directory>');
     expect(options.buildTool, isNull);
+    expect(options.debugBuildTool, BuildTool.$loco);
     expect(options.help, isFalse);
     expect(options.release, isTrue);
     expect(options.maxRuntime, isNull);
@@ -32,6 +33,8 @@ void main() {
       '-h',
       '--max-runtime',
       '42',
+      '--debug-build-tool',
+      'pub',
       'extra',
       'things'
     ]);
@@ -45,6 +48,7 @@ void main() {
     expect(options.bazelOptions, BazelOptions.toSource);
     expect(options.message, 'Built <directory>');
     expect(options.buildTool, isNull);
+    expect(options.debugBuildTool, BuildTool.pub);
     expect(options.help, isTrue);
     expect(options.release, isFalse);
     expect(options.maxRuntime, const Duration(seconds: 42));
@@ -76,25 +80,28 @@ void main() {
     final prettyUsage = prettyParser.usage;
     printOnFailure(prettyUsage);
     expect(prettyUsage, r'''
--d, --directory        (defaults to "web")
--b, --branch           (defaults to "gh-pages")
-    --mode             The mode to run `pub build` in.
-                       [release (default), debug]
+-d, --directory           (defaults to "web")
+-b, --branch              (defaults to "gh-pages")
+    --mode                The mode to run `pub build` in.
+                          [release (default), debug]
 
--c, --build-config     The configuration to use when running `build_runner`. If
-                       this option is not set, `release` is used if
-                       `build.release.yaml` exists in the current directory.
+-c, --build-config        The configuration to use when running `build_runner`.
+                          If this option is not set, `release` is used if
+                          `build.release.yaml` exists in the current directory.
 
--m, --message          (defaults to "Built <directory>")
--t, --build-tool       If `build.release.yaml` exists in the current directory,
-                       defaults to "build". Otherwise, "pub".
-                       [pub, build, $loco]
+-m, --message             (defaults to "Built <directory>")
+-t, --build-tool          If `build.release.yaml` exists in the current
+                          directory, defaults to "build". Otherwise, "pub".
+                          [pub, build, $loco]
 
-    --bazel-options    [to-source, from-source, via-assets]
--h, --help             Prints usage information. Which is so "$" you don't even
-                       know it!
+    --debug-build-tool    The build tool to use for debugging.
+                          [pub, build, $loco (default)]
 
-    --[no-]release     (defaults to on)
-    --max-runtime      ''');
+    --bazel-options       [to-source, from-source, via-assets]
+-h, --help                Prints usage information. Which is so "$" you don't
+                          even know it!
+
+    --[no-]release        (defaults to on)
+    --max-runtime         ''');
   });
 }

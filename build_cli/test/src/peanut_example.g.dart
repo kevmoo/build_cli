@@ -19,21 +19,23 @@ T _$enumValueHelper<T>(Map<T, String> enumValues, String source) {
 }
 
 PeanutOptions _$parsePeanutOptionsResult(ArgResults result) => PeanutOptions(
-    directory: result['directory'] as String,
-    branch: result['branch'] as String,
-    mode: _$enumValueHelper(_$PubBuildModeEnumMap, result['mode'] as String),
-    modeWasParsed: result.wasParsed('mode'),
-    buildConfig: result['build-config'] as String,
-    buildConfigWasParsed: result.wasParsed('build-config'),
-    message: result['message'] as String,
-    buildTool:
-        _$enumValueHelper(_$BuildToolEnumMap, result['build-tool'] as String),
-    help: result['help'] as bool,
     bazelOptions: _$enumValueHelper(
         _$BazelOptionsEnumMap, result['bazel-options'] as String),
+    branch: result['branch'] as String,
+    buildConfig: result['build-config'] as String,
+    buildConfigWasParsed: result.wasParsed('build-config'),
+    buildTool:
+        _$enumValueHelper(_$BuildToolEnumMap, result['build-tool'] as String),
+    debugBuildTool: _$enumValueHelper(
+        _$BuildToolEnumMap, result['debug-build-tool'] as String),
+    directory: result['directory'] as String,
+    help: result['help'] as bool,
+    message: result['message'] as String,
+    mode: _$enumValueHelper(_$PubBuildModeEnumMap, result['mode'] as String),
+    modeWasParsed: result.wasParsed('mode'),
     release: result['release'] as bool,
-    secret: result['secret'] as bool,
-    rest: result.rest)
+    rest: result.rest,
+    secret: result['secret'] as bool)
   ..maxRuntime = _convert(result['max-runtime'] as String)
   ..command = result.command;
 
@@ -74,6 +76,10 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
         'build',
         r'$loco'
       ])
+  ..addOption('debug-build-tool',
+      help: 'The build tool to use for debugging.',
+      defaultsTo: r'$loco',
+      allowed: ['pub', 'build', r'$loco'])
   ..addOption('bazel-options',
       allowed: ['to-source', 'from-source', 'via-assets'])
   ..addFlag('help',
