@@ -98,7 +98,7 @@ Duration _convert(String source) {
   return Duration(seconds: seconds);
 }
 
-enum BuildTool { pub, build }
+enum BuildTool { pub, build, $loco }
 
 enum PubBuildMode { release, debug }
 

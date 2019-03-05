@@ -85,7 +85,7 @@ void main() {
 -m, --message          (defaults to "Built <directory>")
 -t, --build-tool       If `build.release.yaml` exists in the current directory,
                        defaults to "build". Otherwise, "pub".
-                       [pub, build]
+                       [pub, build, $loco]
 
     --bazel-options    [to-source, from-source, via-assets]
 -h, --help             Prints usage information. Which is so "$" you don't even

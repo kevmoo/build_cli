@@ -251,7 +251,8 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   }
 
   if (options.allowed != null) {
-    final allowedItems = options.allowed.map((e) => "'$e'").join(', ');
+    final allowedItems =
+        options.allowed.map((e) => escapeDartString(e.toString())).join(', ');
     buffer.write(', allowed: [$allowedItems]');
   }
 

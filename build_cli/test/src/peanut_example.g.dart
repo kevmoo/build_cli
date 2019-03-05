@@ -50,7 +50,8 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
       help: 'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
       allowed: [
         'pub',
-        'build'
+        'build',
+        r'$loco'
       ])
   ..addOption('bazel-options',
       allowed: ['to-source', 'from-source', 'via-assets'])
