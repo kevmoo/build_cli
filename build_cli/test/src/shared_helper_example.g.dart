@@ -6,12 +6,17 @@ part of 'shared_helper_example.dart';
 // CliGenerator
 // **************************************************************************
 
-T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
-    enumValue == null
-        ? null
-        : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
-            orElse: () => throw StateError(
-                'Could not find the value `$enumValue` in enum `$enumName`.'));
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) {
+  if (source == null) {
+    return null;
+  }
+  return enumValues.entries
+      .singleWhere((e) => e.value == source,
+          orElse: () => throw ArgumentError(
+              '`$source` is not one of the supported values: '
+              '${enumValues.values.join(', ')}'))
+      .key;
+}
 
 T _$badNumberFormat<T extends num>(
         String source, String type, String argName) =>
@@ -19,10 +24,15 @@ T _$badNumberFormat<T extends num>(
         'Cannot parse "$source" into `$type` for option "$argName".');
 
 FirstOptions _$parseFirstOptionsResult(ArgResults result) => FirstOptions()
-  ..value = _$enumValueHelper(
-      'OptionValue', OptionValue.values, result['value'] as String)
+  ..value = _$enumValueHelper(_$OptionValueEnumMap, result['value'] as String)
   ..count = int.tryParse(result['count'] as String) ??
       _$badNumberFormat(result['count'] as String, 'int', 'count');
+
+const _$OptionValueEnumMap = <OptionValue, String>{
+  OptionValue.a: 'a',
+  OptionValue.b: 'b',
+  OptionValue.c: 'c'
+};
 
 ArgParser _$populateFirstOptionsParser(ArgParser parser) =>
     parser..addOption('value', allowed: ['a', 'b', 'c'])..addOption('count');
@@ -35,8 +45,7 @@ FirstOptions parseFirstOptions(List<String> args) {
 }
 
 SecondOptions _$parseSecondOptionsResult(ArgResults result) => SecondOptions()
-  ..value = _$enumValueHelper(
-      'OptionValue', OptionValue.values, result['value'] as String)
+  ..value = _$enumValueHelper(_$OptionValueEnumMap, result['value'] as String)
   ..count = int.tryParse(result['count'] as String) ??
       _$badNumberFormat(result['count'] as String, 'int', 'count');
 

@@ -27,6 +27,8 @@ void main() {
       '--no-release',
       '--mode',
       'debug',
+      '--bazel-options',
+      'to-source',
       '-h',
       '--max-runtime',
       '42',
@@ -40,6 +42,7 @@ void main() {
     expect(options.modeWasParsed, isTrue);
     expect(options.buildConfig, isNull);
     expect(options.buildConfigWasParsed, isFalse);
+    expect(options.bazelOptions, BazelOptions.toSource);
     expect(options.message, 'Built <directory>');
     expect(options.buildTool, isNull);
     expect(options.help, isTrue);

@@ -6,32 +6,53 @@ part of 'peanut_example.dart';
 // CliGenerator
 // **************************************************************************
 
-T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
-    enumValue == null
-        ? null
-        : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
-            orElse: () => throw StateError(
-                'Could not find the value `$enumValue` in enum `$enumName`.'));
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) {
+  if (source == null) {
+    return null;
+  }
+  return enumValues.entries
+      .singleWhere((e) => e.value == source,
+          orElse: () => throw ArgumentError(
+              '`$source` is not one of the supported values: '
+              '${enumValues.values.join(', ')}'))
+      .key;
+}
 
 PeanutOptions _$parsePeanutOptionsResult(ArgResults result) => PeanutOptions(
     directory: result['directory'] as String,
     branch: result['branch'] as String,
-    mode: _$enumValueHelper(
-        'PubBuildMode', PubBuildMode.values, result['mode'] as String),
+    mode: _$enumValueHelper(_$PubBuildModeEnumMap, result['mode'] as String),
     modeWasParsed: result.wasParsed('mode'),
     buildConfig: result['build-config'] as String,
     buildConfigWasParsed: result.wasParsed('build-config'),
     message: result['message'] as String,
-    buildTool: _$enumValueHelper(
-        'BuildTool', BuildTool.values, result['build-tool'] as String),
+    buildTool:
+        _$enumValueHelper(_$BuildToolEnumMap, result['build-tool'] as String),
     help: result['help'] as bool,
     bazelOptions: _$enumValueHelper(
-        'BazelOptions', BazelOptions.values, result['bazel-options'] as String),
+        _$BazelOptionsEnumMap, result['bazel-options'] as String),
     release: result['release'] as bool,
     secret: result['secret'] as bool,
     rest: result.rest)
   ..maxRuntime = _convert(result['max-runtime'] as String)
   ..command = result.command;
+
+const _$PubBuildModeEnumMap = <PubBuildMode, String>{
+  PubBuildMode.release: 'release',
+  PubBuildMode.debug: 'debug'
+};
+
+const _$BuildToolEnumMap = <BuildTool, String>{
+  BuildTool.pub: 'pub',
+  BuildTool.build: 'build',
+  BuildTool.$loco: r'$loco'
+};
+
+const _$BazelOptionsEnumMap = <BazelOptions, String>{
+  BazelOptions.toSource: 'to-source',
+  BazelOptions.fromSource: 'from-source',
+  BazelOptions.viaAssets: 'via-assets'
+};
 
 ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
   ..addOption('directory', abbr: 'd', defaultsTo: 'web')

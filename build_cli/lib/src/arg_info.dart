@@ -4,6 +4,7 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
+import 'enum_helpers.dart';
 import 'to_share.dart';
 import 'util.dart';
 

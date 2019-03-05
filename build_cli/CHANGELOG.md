@@ -1,3 +1,8 @@
+## 1.3.0
+
+- Handle kebab-case enum value names correctly.
+- Handle allowed values that require escaping.
+
 ## 1.2.3
 
 - Require Dart `>=2.2.0 <3.0.0`.

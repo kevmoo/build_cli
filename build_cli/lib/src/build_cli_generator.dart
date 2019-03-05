@@ -7,6 +7,7 @@ import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'arg_info.dart';
+import 'enum_helpers.dart';
 import 'to_share.dart';
 import 'util.dart';
 
@@ -49,7 +50,7 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
     final resultParserName = '_\$parse${classElement.name}Result';
 
     if (fieldsList.any((fe) => isEnum(fe.type))) {
-      yield _enumValueHelper;
+      yield enumValueHelper;
     }
 
     if (fieldsList.any((fe) => numChecker.isAssignableFromType(fe.type))) {
@@ -89,6 +90,10 @@ ${classElement.name} $resultParserName(ArgResults result) =>''');
     buffer = StringBuffer();
     buffer.write('ArgParser $populateParserName(ArgParser parser) => parser');
     for (var f in fields.values) {
+      if (isEnum(f.type)) {
+        yield enumValueMapFromType(f.type);
+      }
+
       _parserOptionFor(buffer, f);
     }
     buffer.write(';');
@@ -104,15 +109,6 @@ ${classElement.name} parse${classElement.name}(List<String> args) {
 ''';
   }
 }
-
-const _enumValueHelper = r'''
-T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
-    enumValue == null
-        ? null
-        : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
-            orElse: () => throw StateError(
-                'Could not find the value `$enumValue` in enum `$enumName`.'));
-''';
 
 const _numCheckers = <TypeChecker, String>{
   numChecker: 'num',
@@ -164,8 +160,8 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
   }
 
   if (isEnum(targetType)) {
-    return '_\$enumValueHelper'
-        "('$targetType', $targetType.values, $argAccess as String)";
+    return '$enumValueHelperFunctionName'
+        '(${enumConstMapName(targetType)}, $argAccess as String)';
   }
 
   if (info.argType == ArgType.multiOption) {

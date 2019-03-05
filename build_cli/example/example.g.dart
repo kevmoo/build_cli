@@ -6,19 +6,29 @@ part of 'example.dart';
 // CliGenerator
 // **************************************************************************
 
-T _$enumValueHelper<T>(String enumName, List<T> values, String enumValue) =>
-    enumValue == null
-        ? null
-        : values.singleWhere((e) => e.toString() == '$enumName.$enumValue',
-            orElse: () => throw StateError(
-                'Could not find the value `$enumValue` in enum `$enumName`.'));
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) {
+  if (source == null) {
+    return null;
+  }
+  return enumValues.entries
+      .singleWhere((e) => e.value == source,
+          orElse: () => throw ArgumentError(
+              '`$source` is not one of the supported values: '
+              '${enumValues.values.join(', ')}'))
+      .key;
+}
 
 Options _$parseOptionsResult(ArgResults result) =>
     Options(result['name'] as String, nameWasParsed: result.wasParsed('name'))
       ..yell = result['yell'] as bool
       ..displayLanguage = _$enumValueHelper(
-          'Language', Language.values, result['display-language'] as String)
+          _$LanguageEnumMap, result['display-language'] as String)
       ..help = result['help'] as bool;
+
+const _$LanguageEnumMap = <Language, String>{
+  Language.en: 'en',
+  Language.es: 'es'
+};
 
 ArgParser _$populateOptionsParser(ArgParser parser) => parser
   ..addOption('name',

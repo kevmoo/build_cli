@@ -54,9 +54,6 @@ DartType _getImplementationType(DartType type, TypeChecker checker) {
   return null;
 }
 
-bool isEnum(DartType targetType) =>
-    targetType is InterfaceType && targetType.element.isEnum;
-
 /// Returns a quoted String literal for [value] that can be used in generated
 /// Dart code.
 String escapeDartString(String value) {

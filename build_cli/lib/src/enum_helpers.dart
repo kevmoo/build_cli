@@ -1,0 +1,50 @@
+import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/type.dart';
+
+import 'to_share.dart';
+import 'util.dart';
+
+bool isEnum(DartType targetType) =>
+    targetType is InterfaceType && targetType.element.isEnum;
+
+String enumValueMapFromType(DartType targetType) {
+  final enumMap = _enumFieldsMap(targetType);
+
+  if (enumMap == null) {
+    return null;
+  }
+
+  final items =
+      enumMap.entries.map((e) => '  ${targetType.name}.${e.key.name}: '
+          '${escapeDartString(kebab(e.value))}');
+
+  return 'const ${enumConstMapName(targetType)} = '
+      '<${targetType.name}, String>{\n${items.join(',\n')}\n};';
+}
+
+String enumConstMapName(DartType targetType) => '_\$${targetType.name}EnumMap';
+
+/// If [targetType] is not an enum, `null` is returned.
+Map<FieldElement, String> _enumFieldsMap(DartType targetType) {
+  if (targetType is InterfaceType && targetType.element.isEnum) {
+    return Map<FieldElement, String>.fromEntries(targetType.element.fields
+        .where((p) => !p.isSynthetic)
+        .map((p) => MapEntry(p, p.name)));
+  }
+  return null;
+}
+
+const enumValueHelperFunctionName = r'_$enumValueHelper';
+
+const enumValueHelper = '''
+T $enumValueHelperFunctionName<T>(Map<T, String> enumValues, String source) {
+  if (source == null) {
+    return null;
+  }
+  return enumValues.entries
+      .singleWhere((e) => e.value == source,
+          orElse: () => throw ArgumentError(
+              '`\$source` is not one of the supported values: '
+              '\${enumValues.values.join(', ')}'))
+      .key;
+}''';
