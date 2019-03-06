@@ -1,94 +1,114 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+// **************************************************************************
+// _NonNullableGenerator
+// **************************************************************************
+
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 
-part 'default_override_example.g.dart';
+part 'peanut_example.overrides.g.dart';
 
 const _defaultConfig = 'release';
 const _defaultConfigFile = 'build.$_defaultConfig.yaml';
 const _directoryFlag = 'directory';
 
 ArgParser get prettyParser =>
-    _$populateDefaultOverrideOptionsParser(ArgParser(usageLineLength: 80));
+    _$populatePeanutOptionsParser(ArgParser(usageLineLength: 80));
 
 @CliOptions()
-class DefaultOverrideOptions {
+class PeanutOptions {
   @CliOption(
+    provideDefaultToOverride: true,
     name: _directoryFlag,
     abbr: 'd',
     defaultsTo: 'web',
-    provideDefaultToOverride: true,
   )
   final String directory;
 
   @CliOption(
+    provideDefaultToOverride: true,
     abbr: 'b',
     defaultsTo: 'gh-pages',
-    provideDefaultToOverride: true,
   )
   final String branch;
 
   @CliOption(
+    provideDefaultToOverride: true,
     defaultsTo: PubBuildMode.release,
     help: 'The mode to run `pub build` in.',
-    provideDefaultToOverride: true,
   )
   final PubBuildMode mode;
+
   final bool modeWasParsed;
 
   @CliOption(
+    provideDefaultToOverride: true,
     abbr: 'c',
     help: 'The configuration to use when running `build_runner`. '
         'If this option is not set, `$_defaultConfig` is used if '
         '`$_defaultConfigFile` exists in the current directory.',
-    provideDefaultToOverride: true,
   )
   final String buildConfig;
 
   final bool buildConfigWasParsed;
 
   @CliOption(
+    provideDefaultToOverride: true,
     abbr: 'm',
     defaultsTo: 'Built <$_directoryFlag>',
-    provideDefaultToOverride: true,
   )
   final String message;
 
   @CliOption(
+    provideDefaultToOverride: true,
     abbr: 't',
     help: 'If `$_defaultConfigFile` exists in the current directory, defaults'
         ' to "build". Otherwise, "pub".',
-    provideDefaultToOverride: true,
   )
   final BuildTool buildTool;
 
   @CliOption(
     provideDefaultToOverride: true,
+    help: 'The build tool to use for debugging.',
+    defaultsTo: BuildTool.$loco,
+  )
+  final BuildTool debugBuildTool;
+
+  @CliOption(
+    provideDefaultToOverride: true,
+    defaultsTo: BazelOptions.toSource,
+    help: 'nice options',
   )
   final BazelOptions bazelOptions;
 
   @CliOption(
+    provideDefaultToOverride: true,
     abbr: 'h',
     negatable: false,
-    help: 'Prints usage information. Which is so "\$" you don\'t even know it!',
-    provideDefaultToOverride: true,
+    help: 'Prints usage information. '
+        'Which is so "\$" you don\'t even know it!',
   )
   final bool help;
 
   @CliOption(
-    hide: true,
     provideDefaultToOverride: true,
+    hide: true,
   )
   final bool secret;
 
   @CliOption(
+    provideDefaultToOverride: true,
     defaultsTo: true,
     negatable: true,
-    provideDefaultToOverride: true,
   )
   final bool release;
 
   final List<String> rest;
 
-  @CliOption(convert: _convert)
+  @CliOption(
+    provideDefaultToOverride: true,
+    convert: _convert,
+  )
   Duration maxRuntime;
 
   // Explicitly not used – to validate logging behavior
@@ -96,20 +116,21 @@ class DefaultOverrideOptions {
 
   ArgResults command;
 
-  DefaultOverrideOptions({
-    this.directory,
+  PeanutOptions({
+    this.bazelOptions,
     this.branch,
-    this.mode,
-    this.modeWasParsed,
     this.buildConfig,
     this.buildConfigWasParsed,
-    this.message,
     this.buildTool,
+    this.debugBuildTool,
+    this.directory,
     this.help,
-    this.bazelOptions,
+    this.message,
+    this.mode,
+    this.modeWasParsed,
     this.release,
-    this.secret,
     this.rest,
+    this.secret,
   });
 }
 
@@ -128,7 +149,7 @@ Duration _convert(String source) {
   return Duration(seconds: seconds);
 }
 
-enum BuildTool { pub, build }
+enum BuildTool { pub, build, $loco }
 
 enum PubBuildMode { release, debug }
 

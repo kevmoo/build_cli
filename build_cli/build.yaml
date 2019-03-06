@@ -9,6 +9,17 @@ targets:
           - test/src/*_example*
 
 builders:
+  checked:
+    import: 'tool/builder.dart'
+    builder_factories: ['defaultOverride']
+    build_extensions: {".dart": [".overrides.dart"]}
+    auto_apply: root_package
+    build_to: source
+    runs_before: ["build_cli"]
+    defaults:
+      generate_for:
+        - test/src/peanut_example.dart
+
   build_cli:
     import: "package:build_cli/builder.dart"
     builder_factories: ["buildCli"]

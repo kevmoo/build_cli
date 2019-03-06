@@ -81,6 +81,8 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
       defaultsTo: r'$loco',
       allowed: ['pub', 'build', r'$loco'])
   ..addOption('bazel-options',
+      help: 'nice options',
+      defaultsTo: 'to-source',
       allowed: ['to-source', 'from-source', 'via-assets'])
   ..addFlag('help',
       abbr: 'h',
