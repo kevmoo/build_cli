@@ -92,15 +92,36 @@ ${classElement.name} $resultParserName(ArgResults result) =>''');
           ..removeWhere(
               (k, v) => !(v?.optionData?.provideDefaultToOverride ?? false));
 
+    final fyis = <String>[];
+
+    /// If an override has a converter, then we don't support passing the override
+    /// in via the source type. You have to pass it in as a [String].
+    String typeForOverride(String fieldName, ArgInfo info) {
+      assert(info.optionData.provideDefaultToOverride);
+      String typeInfo;
+      if (getConvertName(info.optionData) == null) {
+        typeInfo = info.dartType.toString();
+      } else {
+        fyis.add(
+          'The value for [${_overrideParamName(fieldName)}] must be a '
+              '[String] that is convertible to [${info.dartType}].',
+        );
+        typeInfo = 'String';
+      }
+
+      return '$typeInfo ${_overrideParamName(fieldName)},';
+    }
+
     var overrideArgs = '';
     if (provideOverrides.isNotEmpty) {
       overrideArgs = provideOverrides.entries
-          .map((e) => '${e.value.dartType} ${_overrideParamName(e.key)},')
-          .join();
+          .map((e) => typeForOverride(e.key, e.value))
+          .join('\n');
       overrideArgs = ',{$overrideArgs}';
     }
 
     buffer = StringBuffer();
+    buffer.writeAll(fyis.map((e) => '/// $e\n'));
     buffer.write(
         'ArgParser $populateParserName(ArgParser parser$overrideArgs) => parser');
     for (var f in fields.values) {
