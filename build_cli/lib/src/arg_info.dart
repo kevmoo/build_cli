@@ -145,9 +145,9 @@ CliOption _getOptions(FieldElement element) {
   if (isEnum(element.type)) {
     final interfaceType = element.type as InterfaceType;
 
-    allowedValues = interfaceType.accessors
+    final enumNames = interfaceType.accessors
         .where((p) => p.returnType == element.type)
-        .map((p) => kebab(p.name))
+        .map((p) => p.name)
         .toList();
 
     if (defaultsToReader != null && !defaultsToReader.isNull) {
@@ -156,9 +156,12 @@ CliOption _getOptions(FieldElement element) {
         throwUnsupported(element, 'this is also wack');
       }
 
-      defaultsTo = _enumValueForDartObject<String>(
-          objectValue, allowedValues.cast<String>(), (v) => v);
+      defaultsTo =
+          _enumValueForDartObject<String>(objectValue, enumNames, (v) => v);
+      defaultsTo = kebab(defaultsTo as String);
     }
+
+    allowedValues = enumNames.map(kebab).toList();
   }
 
   if (annotation.isNull) {
