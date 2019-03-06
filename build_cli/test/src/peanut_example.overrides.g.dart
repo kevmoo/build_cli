@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'default_override_example.dart';
+part of 'peanut_example.overrides.dart';
 
 // **************************************************************************
 // CliGenerator
@@ -18,26 +18,26 @@ T _$enumValueHelper<T>(Map<T, String> enumValues, String source) {
       .key;
 }
 
-DefaultOverrideOptions _$parseDefaultOverrideOptionsResult(ArgResults result) =>
-    DefaultOverrideOptions(
-        directory: result['directory'] as String,
-        branch: result['branch'] as String,
-        mode:
-            _$enumValueHelper(_$PubBuildModeEnumMap, result['mode'] as String),
-        modeWasParsed: result.wasParsed('mode'),
-        buildConfig: result['build-config'] as String,
-        buildConfigWasParsed: result.wasParsed('build-config'),
-        message: result['message'] as String,
-        buildTool: _$enumValueHelper(
-            _$BuildToolEnumMap, result['build-tool'] as String),
-        help: result['help'] as bool,
-        bazelOptions: _$enumValueHelper(
-            _$BazelOptionsEnumMap, result['bazel-options'] as String),
-        release: result['release'] as bool,
-        secret: result['secret'] as bool,
-        rest: result.rest)
-      ..maxRuntime = _convert(result['max-runtime'] as String)
-      ..command = result.command;
+PeanutOptions _$parsePeanutOptionsResult(ArgResults result) => PeanutOptions(
+    bazelOptions: _$enumValueHelper(
+        _$BazelOptionsEnumMap, result['bazel-options'] as String),
+    branch: result['branch'] as String,
+    buildConfig: result['build-config'] as String,
+    buildConfigWasParsed: result.wasParsed('build-config'),
+    buildTool:
+        _$enumValueHelper(_$BuildToolEnumMap, result['build-tool'] as String),
+    debugBuildTool: _$enumValueHelper(
+        _$BuildToolEnumMap, result['debug-build-tool'] as String),
+    directory: result['directory'] as String,
+    help: result['help'] as bool,
+    message: result['message'] as String,
+    mode: _$enumValueHelper(_$PubBuildModeEnumMap, result['mode'] as String),
+    modeWasParsed: result.wasParsed('mode'),
+    release: result['release'] as bool,
+    rest: result.rest,
+    secret: result['secret'] as bool)
+  ..maxRuntime = _convert(result['max-runtime'] as String)
+  ..command = result.command;
 
 const _$PubBuildModeEnumMap = <PubBuildMode, String>{
   PubBuildMode.release: 'release',
@@ -46,7 +46,8 @@ const _$PubBuildModeEnumMap = <PubBuildMode, String>{
 
 const _$BuildToolEnumMap = <BuildTool, String>{
   BuildTool.pub: 'pub',
-  BuildTool.build: 'build'
+  BuildTool.build: 'build',
+  BuildTool.$loco: r'$loco'
 };
 
 const _$BazelOptionsEnumMap = <BazelOptions, String>{
@@ -55,7 +56,8 @@ const _$BazelOptionsEnumMap = <BazelOptions, String>{
   BazelOptions.viaAssets: 'via-assets'
 };
 
-ArgParser _$populateDefaultOverrideOptionsParser(
+/// The value for [maxRuntimeDefaultOverride] must be a [String] that is convertible to [Duration].
+ArgParser _$populatePeanutOptionsParser(
   ArgParser parser, {
   String directoryDefaultOverride,
   String branchDefaultOverride,
@@ -63,10 +65,12 @@ ArgParser _$populateDefaultOverrideOptionsParser(
   String buildConfigDefaultOverride,
   String messageDefaultOverride,
   BuildTool buildToolDefaultOverride,
+  BuildTool debugBuildToolDefaultOverride,
   BazelOptions bazelOptionsDefaultOverride,
   bool helpDefaultOverride,
   bool secretDefaultOverride,
   bool releaseDefaultOverride,
+  String maxRuntimeDefaultOverride,
 }) =>
     parser
       ..addOption('directory',
@@ -90,10 +94,18 @@ ArgParser _$populateDefaultOverrideOptionsParser(
           defaultsTo: _$BuildToolEnumMap[buildToolDefaultOverride],
           allowed: [
             'pub',
-            'build'
+            'build',
+            r'$loco'
           ])
+      ..addOption('debug-build-tool',
+          help: 'The build tool to use for debugging.',
+          defaultsTo:
+              _$BuildToolEnumMap[debugBuildToolDefaultOverride] ?? r'$loco',
+          allowed: ['pub', 'build', r'$loco'])
       ..addOption('bazel-options',
-          defaultsTo: _$BazelOptionsEnumMap[bazelOptionsDefaultOverride],
+          help: 'nice options',
+          defaultsTo:
+              _$BazelOptionsEnumMap[bazelOptionsDefaultOverride] ?? 'to-source',
           allowed: ['to-source', 'from-source', 'via-assets'])
       ..addFlag('help',
           abbr: 'h',
@@ -104,12 +116,11 @@ ArgParser _$populateDefaultOverrideOptionsParser(
       ..addFlag('secret', defaultsTo: secretDefaultOverride, hide: true)
       ..addFlag('release',
           defaultsTo: releaseDefaultOverride ?? true, negatable: true)
-      ..addOption('max-runtime');
+      ..addOption('max-runtime', defaultsTo: maxRuntimeDefaultOverride);
 
-final _$parserForDefaultOverrideOptions =
-    _$populateDefaultOverrideOptionsParser(ArgParser());
+final _$parserForPeanutOptions = _$populatePeanutOptionsParser(ArgParser());
 
-DefaultOverrideOptions parseDefaultOverrideOptions(List<String> args) {
-  final result = _$parserForDefaultOverrideOptions.parse(args);
-  return _$parseDefaultOverrideOptionsResult(result);
+PeanutOptions parsePeanutOptions(List<String> args) {
+  final result = _$parserForPeanutOptions.parse(args);
+  return _$parsePeanutOptionsResult(result);
 }

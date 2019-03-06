@@ -97,7 +97,9 @@ void main() {
     --debug-build-tool    The build tool to use for debugging.
                           [pub, build, $loco (default)]
 
-    --bazel-options       [to-source, from-source, via-assets]
+    --bazel-options       nice options
+                          [to-source (default), from-source, via-assets]
+
 -h, --help                Prints usage information. Which is so "$" you don't
                           even know it!
 
