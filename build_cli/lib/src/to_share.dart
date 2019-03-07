@@ -233,12 +233,17 @@ Set<String> writeConstructorInvocation(
         deserializeForField) {
   final className = classElement.displayName;
 
-  final ctor = classElement.unnamedConstructor;
+  var ctor = classElement.unnamedConstructor;
   if (ctor == null) {
-    // TODO(kevmoo): support using another constructor
-    throw InvalidGenerationSourceError(
-        'The class `$className` has no default constructor.',
-        element: classElement);
+    if (classElement.constructors.length == 1) {
+      ctor = classElement.constructors.single;
+    } else {
+      // TODO: allow specifying the target constructor
+      throw InvalidGenerationSourceError(
+        'Could not pick a constructor to use.',
+        element: classElement,
+      );
+    }
   }
 
   final usedCtorParamsAndFields = <String>{};
@@ -279,10 +284,12 @@ Set<String> writeConstructorInvocation(
   final remainingFieldsForInvocationBody =
       writeableFields.toSet().difference(usedCtorParamsAndFields);
 
+  final ctorName = ctor.name.isEmpty ? '' : '.${ctor.name}';
+
   //
   // Generate the static factory method
   //
-  buffer.write('$className(');
+  buffer.write('$className$ctorName(');
   buffer.writeAll(
       constructorArguments.map((paramElement) =>
           deserializeForField(paramElement.name, ctorParam: paramElement)),

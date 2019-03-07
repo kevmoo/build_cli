@@ -7,6 +7,7 @@
 - Handle kebab-case enum value names correctly, including when they are used as
   default values.
 - Handle allowed values that require escaping.
+- Support classes with one, non-default constructor.
 - Require Dart `>=2.2.0 <3.0.0`.
 
 ## 1.2.2
