@@ -303,3 +303,34 @@ class DefaultOverride {
 }
 
 enum TestEnum { alpha, beta, $gama }
+
+@ShouldGenerate(r'''
+PrivateCtor _$parsePrivateCtorResult(ArgResults result) =>
+    PrivateCtor._(flag: result['flag'] as bool);
+
+ArgParser _$populatePrivateCtorParser(ArgParser parser) =>
+    parser..addFlag('flag');
+
+final _$parserForPrivateCtor = _$populatePrivateCtorParser(ArgParser());
+
+PrivateCtor parsePrivateCtor(List<String> args) {
+  final result = _$parserForPrivateCtor.parse(args);
+  return _$parsePrivateCtorResult(result);
+}
+''')
+@CliOptions()
+class PrivateCtor {
+  final bool flag;
+
+  PrivateCtor._({this.flag});
+}
+
+@ShouldThrow('Could not pick a constructor to use.')
+@CliOptions()
+class TwoNonDefaultConstructors {
+  final bool flag;
+
+  TwoNonDefaultConstructors.values(this.flag);
+
+  TwoNonDefaultConstructors.defaults() : flag = false;
+}
