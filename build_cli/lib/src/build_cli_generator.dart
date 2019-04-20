@@ -104,7 +104,7 @@ ${classElement.name} $resultParserName(ArgResults result) =>''');
       } else {
         fyis.add(
           'The value for [${_overrideParamName(fieldName)}] must be a '
-              '[String] that is convertible to [${info.dartType}].',
+          '[String] that is convertible to [${info.dartType}].',
         );
         typeInfo = 'String';
       }
