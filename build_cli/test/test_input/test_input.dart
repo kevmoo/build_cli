@@ -96,7 +96,7 @@ class ConvertOnMulti {
 
 @ShouldThrow(
   'Could not handle field `option`. '
-      'The value for `defaultsTo` must be assignable to `bool`.',
+  'The value for `defaultsTo` must be assignable to `bool`.',
 )
 @CliOptions()
 class FlagWithStringDefault {
@@ -230,7 +230,7 @@ class AnnotatedCommandNoParser {
 
 @ShouldThrow(
   'Generator cannot target `theAnswer`. `@CliOptions` can only be applied to a '
-      'class.',
+  'class.',
   todo: 'Remove the `@CliOptions` annotation from `theAnswer`.',
 )
 @CliOptions()

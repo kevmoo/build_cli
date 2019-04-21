@@ -1,3 +1,7 @@
+## 1.3.1
+
+- Support the latest release of `package:analyzer`.
+
 ## 1.3.0
 
 - Added support for the new `provideDefaultToOverride` value on `CliOption` to
