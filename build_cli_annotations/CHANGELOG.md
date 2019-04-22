@@ -1,3 +1,7 @@
+## 1.1.1
+
+- Require Dart SDK `>=2.2.0 <3.0.0`.
+
 ## 1.1.0
 
 - Added `provideDefaultToOverride` to `CliOption` to allow users to provide an
