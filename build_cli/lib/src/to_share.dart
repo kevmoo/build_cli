@@ -2,12 +2,12 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// ignore_for_file: implementation_imports,deprecated_member_use
+// ignore_for_file: implementation_imports
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/src/dart/resolver/inheritance_manager.dart'
-    show InheritanceManager;
+    show InheritanceManager; // ignore: deprecated_member_use
 import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -159,13 +159,6 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
     }
   }
 
-  final undefinedField =
-      fieldsList.firstWhere((fe) => fe.type.isUndefined, orElse: () => null);
-  if (undefinedField != null) {
-    throwUnsupported(undefinedField, 'It has an undefined type.',
-        todo: 'Check names and imports.');
-  }
-
   // Sort these in the order in which they appear in the class
   // Sadly, `classElement.fields` puts properties after fields
   fieldsList.sort(_sortByLocation);
@@ -277,9 +270,6 @@ Set<String> writeConstructorInvocation(
     usedCtorParamsAndFields.add(arg.name);
   }
 
-  _validateConstructorArguments(
-      ctor, constructorArguments.followedBy(namedConstructorArguments));
-
   // fields that aren't already set by the constructor and that aren't final
   final remainingFieldsForInvocationBody =
       writeableFields.toSet().difference(usedCtorParamsAndFields);
@@ -318,19 +308,4 @@ Set<String> writeConstructorInvocation(
   buffer.writeln();
 
   return usedCtorParamsAndFields;
-}
-
-void _validateConstructorArguments(
-    ConstructorElement ctor, Iterable<ParameterElement> constructorArguments) {
-  final undefinedArgs =
-      constructorArguments.where((pe) => pe.type.isUndefined).toList();
-  if (undefinedArgs.isNotEmpty) {
-    final description =
-        undefinedArgs.map((fe) => '`${fe.displayName}`').join(', ');
-
-    throw InvalidGenerationSourceError(
-        'At least one constructor argument has an invalid type: $description.',
-        todo: 'Check names and imports.',
-        element: ctor);
-  }
 }

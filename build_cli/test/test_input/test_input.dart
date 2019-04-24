@@ -1,8 +1,9 @@
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen_test/annotations.dart';
 
-@ShouldThrow('At least one constructor argument has an invalid type: `number`.',
-    todo: 'Check names and imports.')
+@ShouldThrow(
+  'Could not handle field `number`. The type `dynamic` is not supported.',
+)
 @CliOptions()
 class UnknownCtorParamType {
   int number;
@@ -11,8 +12,9 @@ class UnknownCtorParamType {
   UnknownCtorParamType(Bob number) : number = number;
 }
 
-@ShouldThrow('Could not handle field `number`. It has an undefined type.',
-    todo: 'Check names and imports.')
+@ShouldThrow(
+  'Could not handle field `number`. `dynamic` is not a supported type.',
+)
 @CliOptions()
 class UnknownFieldType {
   // ignore: undefined_class

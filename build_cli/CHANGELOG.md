@@ -1,6 +1,8 @@
 ## 1.3.2
 
 - Support the latest release of `package:build_config`.
+- Removed special handling of undefined types due to changes in
+  `package:analyzer`. These types are now treated as `dynamic`.
 
 ## 1.3.1
 
