@@ -71,7 +71,7 @@ dev_dependencies:
 
 # Details
 
-Uses [package:args](https://pub.dartlang.org/packages/args) under the covers.
+Uses [package:args](https://pub.dev/packages/args) under the covers.
 
 # More examples:
 
@@ -86,4 +86,4 @@ Uses [package:args](https://pub.dartlang.org/packages/args) under the covers.
   as the interesting files.
 
 [Dart Build System]: https://github.com/dart-lang/build
-[package:build_cli_annotations]: https://pub.dartlang.org/packages/build_cli_annotations
+[package:build_cli_annotations]: https://pub.dev/packages/build_cli_annotations

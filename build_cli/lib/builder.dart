@@ -3,7 +3,7 @@
 /// This library is **not** intended to be imported by typical end-users unless
 /// you are creating a custom compilation pipeline.
 ///
-/// See [package:build_runner](https://pub.dartlang.org/packages/build_runner)
+/// See [package:build_runner](https://pub.dev/packages/build_runner)
 /// for more information.
 library builder;
 
