@@ -262,6 +262,8 @@ CliOption _getOptions(FieldElement element) {
         functionElement.parameters.first.isNamed ||
         functionElement.parameters.where((pe) => !pe.isOptional).length > 1 ||
         !element.context.typeProvider.stringType
+            //TODO: migrate to supported API when min pkg:analyzer is bumped
+            // ignore: deprecated_member_use
             .isAssignableTo(functionElement.parameters.first.type)) {
       throwUnsupported(
           element,
@@ -269,6 +271,8 @@ CliOption _getOptions(FieldElement element) {
           'positional paramater of type `String`.');
     }
 
+    //TODO: migrate to supported API when min pkg:analyzer is bumped
+    // ignore: deprecated_member_use
     if (!functionElement.returnType.isAssignableTo(element.type)) {
       throwUnsupported(
           element,
