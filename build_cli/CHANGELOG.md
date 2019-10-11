@@ -1,3 +1,7 @@
+## 1.3.5
+
+- Fix issue with behavior change in recent `package:analyzer` releases.
+
 ## 1.3.4
 
 - Support the latest release of `package:analyzer`.

@@ -246,17 +246,15 @@ CliOption _getOptions(FieldElement element) {
 
   final convertReader = annotation.read('convert');
   if (!convertReader.isNull) {
-    final objectValue = convertReader.objectValue;
-    final type = objectValue.type as FunctionType;
+    final functionElement = convertReader.objectValue.toFunctionValue();
 
-    if (type.element is MethodElement) {
+    if (functionElement is MethodElement) {
       throwUnsupported(
           element,
           'The function provided for `convert` must be top-level.'
-          ' Static class methods (like `${type.element.name}`) are not '
+          ' Static class methods (like `${functionElement.name}`) are not '
           'supported.');
     }
-    final functionElement = type.element as FunctionElement;
 
     if (functionElement.parameters.isEmpty ||
         functionElement.parameters.first.isNamed ||
