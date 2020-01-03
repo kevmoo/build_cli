@@ -6,8 +6,8 @@
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:analyzer/src/dart/resolver/inheritance_manager.dart'
-    show InheritanceManager; // ignore: deprecated_member_use
+import 'package:analyzer/src/dart/element/inheritance_manager3.dart'
+    show InheritanceManager3; // ignore: deprecated_member_use
 import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -144,11 +144,9 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
   // TODO: support overriding the field set with an annotation option
   final fieldsList = element.fields.where((e) => !e.isStatic).toList();
 
-  final manager =
-      InheritanceManager(element.library); // ignore: deprecated_member_use
+  final manager = InheritanceManager3(); // ignore: deprecated_member_use
 
-  // ignore: deprecated_member_use
-  for (var v in manager.getMembersInheritedFromClasses(element).values) {
+  for (var v in manager.getInheritedMap(element.thisType).values) {
     assert(v is! FieldElement);
     if (_dartCoreObjectChecker.isExactly(v.enclosingElement)) {
       continue;
@@ -167,10 +165,8 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
 }
 
 int _sortByLocation(FieldElement a, FieldElement b) {
-  final checkerA = TypeChecker.fromStatic(
-      // TODO: remove `ignore` when min pkg:analyzer >= 0.38.0
-      // ignore: unnecessary_cast
-      (a.enclosingElement as ClassElement).type);
+  final checkerA =
+      TypeChecker.fromStatic((a.enclosingElement as ClassElement).thisType);
 
   if (!checkerA.isExactly(b.enclosingElement)) {
     // in this case, you want to prioritize the enclosingElement that is more
@@ -180,10 +176,8 @@ int _sortByLocation(FieldElement a, FieldElement b) {
       return -1;
     }
 
-    final checkerB = TypeChecker.fromStatic(
-        // TODO: remove `ignore` when min pkg:analyzer >= 0.38.0
-        // ignore: unnecessary_cast
-        (b.enclosingElement as ClassElement).type);
+    final checkerB =
+        TypeChecker.fromStatic((b.enclosingElement as ClassElement).thisType);
 
     if (checkerB.isSuperOf(a.enclosingElement)) {
       return 1;
@@ -314,4 +308,11 @@ Set<String> writeConstructorInvocation(
   buffer.writeln();
 
   return usedCtorParamsAndFields;
+}
+
+extension DartTypeExtension on DartType {
+  bool isAssignableTo(DartType other) =>
+      // If the library is `null`, treat it like dynamic => `true`
+      element.library == null ||
+      element.library.typeSystem.isAssignableTo(this, other);
 }
