@@ -1,3 +1,7 @@
+## 1.3.7
+
+- `package:analyzer` `^0.39.0`.
+
 ## 1.3.6
 
 - Support the latest release of `package:analyzer`.
