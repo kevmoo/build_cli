@@ -4,7 +4,6 @@ description: >-
   Contains annotations for `package:build_cli`.
   See that package for more information.
 
-author: Kevin Moore <github@j832.com>
 homepage: https://github.com/kevmoo/build_cli
 
 environment:
