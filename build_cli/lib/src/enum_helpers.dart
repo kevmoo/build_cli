@@ -15,14 +15,15 @@ String enumValueMapFromType(DartType targetType) {
   }
 
   final items =
-      enumMap.entries.map((e) => '  ${targetType.name}.${e.key.name}: '
+      enumMap.entries.map((e) => '  ${targetType.element.name}.${e.key.name}: '
           '${escapeDartString(kebab(e.value))}');
 
   return 'const ${enumConstMapName(targetType)} = '
-      '<${targetType.name}, String>{\n${items.join(',\n')}\n};';
+      '<${targetType.element.name}, String>{\n${items.join(',\n')}\n};';
 }
 
-String enumConstMapName(DartType targetType) => '_\$${targetType.name}EnumMap';
+String enumConstMapName(DartType targetType) =>
+    '_\$${targetType.element.name}EnumMap';
 
 /// If [targetType] is not an enum, `null` is returned.
 Map<FieldElement, String> _enumFieldsMap(DartType targetType) {

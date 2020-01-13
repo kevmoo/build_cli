@@ -193,7 +193,7 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
 
   if (stringChecker.isExactlyType(targetType) ||
       boolChecker.isExactlyType(targetType)) {
-    return '$argAccess as ${targetType.name}';
+    return '$argAccess as ${targetType.element.name}';
   }
 
   if (isEnum(targetType)) {
