@@ -60,9 +60,11 @@ T _$badNumberFormat<T extends num>(String source, String type, String argName) =
 ''';
     }
 
-    var buffer = StringBuffer();
-    buffer.write('''
-${classElement.name} $resultParserName(ArgResults result) =>''');
+    var buffer = StringBuffer()
+      ..write(
+        '''
+${classElement.name} $resultParserName(ArgResults result) =>''',
+      );
 
     String deserializeForField(String fieldName,
             {ParameterElement ctorParam}) =>
@@ -94,8 +96,8 @@ ${classElement.name} $resultParserName(ArgResults result) =>''');
 
     final fyis = <String>[];
 
-    /// If an override has a converter, then we don't support passing the override
-    /// in via the source type. You have to pass it in as a [String].
+    /// If an override has a converter, then we don't support passing the
+    /// override in via the source type. You have to pass it in as a [String].
     String typeForOverride(String fieldName, ArgInfo info) {
       assert(info.optionData.provideDefaultToOverride);
       String typeInfo;
@@ -120,10 +122,10 @@ ${classElement.name} $resultParserName(ArgResults result) =>''');
       overrideArgs = ',{$overrideArgs}';
     }
 
-    buffer = StringBuffer();
-    buffer.writeAll(fyis.map((e) => '/// $e\n'));
-    buffer.write(
-        'ArgParser $populateParserName(ArgParser parser$overrideArgs) => parser');
+    buffer = StringBuffer()
+      ..writeAll(fyis.map((e) => '/// $e\n'))
+      ..write('ArgParser $populateParserName(ArgParser parser$overrideArgs) => '
+          'parser');
     for (var f in fields.values) {
       if (isEnum(f.type)) {
         yield enumValueMapFromType(f.type);

@@ -279,28 +279,30 @@ Set<String> writeConstructorInvocation(
   //
   // Generate the static factory method
   //
-  buffer.write('$className$ctorName(');
-  buffer.writeAll(
-      constructorArguments.map((paramElement) =>
-          deserializeForField(paramElement.name, ctorParam: paramElement)),
-      ', ');
+  buffer
+    ..write('$className$ctorName(')
+    ..writeAll(
+        constructorArguments.map((paramElement) =>
+            deserializeForField(paramElement.name, ctorParam: paramElement)),
+        ', ');
   if (constructorArguments.isNotEmpty && namedConstructorArguments.isNotEmpty) {
     buffer.write(', ');
   }
-  buffer.writeAll(namedConstructorArguments.map((paramElement) {
-    final value =
-        deserializeForField(paramElement.name, ctorParam: paramElement);
-    return '${paramElement.name}: $value';
-  }), ', ');
-
-  buffer.write(')');
+  buffer
+    ..writeAll(namedConstructorArguments.map((paramElement) {
+      final value =
+          deserializeForField(paramElement.name, ctorParam: paramElement);
+      return '${paramElement.name}: $value';
+    }), ', ')
+    ..write(')');
   if (remainingFieldsForInvocationBody.isEmpty) {
     buffer.writeln(';');
   } else {
     for (var field in remainingFieldsForInvocationBody) {
-      buffer.writeln();
-      buffer.write('      ..$field = ');
-      buffer.write(deserializeForField(field));
+      buffer
+        ..writeln()
+        ..write('      ..$field = ')
+        ..write(deserializeForField(field));
       usedCtorParamsAndFields.add(field);
     }
     buffer.writeln(';');
