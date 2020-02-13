@@ -55,7 +55,8 @@ class NegatableMultiOption {
 
 @ShouldThrow('Could not handle field `option`. '
     'The function provided for `convert` must be top-level. '
-    'Static class methods (like `_staticConvertStringToDuration`) are not supported.')
+    'Static class methods (like `_staticConvertStringToDuration`) are not '
+    'supported.')
 @CliOptions()
 class ConvertAsStatic {
   @CliOption(convert: _staticConvertStringToDuration)

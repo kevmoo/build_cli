@@ -72,8 +72,7 @@ void main(List<String> args) {
       break;
   }
 
-  buffer.write(options.name);
-  buffer.write('!');
+  buffer..write(options.name)..write('!');
 
   if (options.yell) {
     print(buffer.toString().toUpperCase());
