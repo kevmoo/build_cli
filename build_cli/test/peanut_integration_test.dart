@@ -84,25 +84,19 @@ void main() {
 -b, --branch              (defaults to "gh-pages")
     --mode                The mode to run `pub build` in.
                           [release (default), debug]
-
 -c, --build-config        The configuration to use when running `build_runner`.
                           If this option is not set, `release` is used if
                           `build.release.yaml` exists in the current directory.
-
 -m, --message             (defaults to "Built <directory>")
 -t, --build-tool          If `build.release.yaml` exists in the current
                           directory, defaults to "build". Otherwise, "pub".
                           [pub, build, $loco]
-
     --debug-build-tool    The build tool to use for debugging.
                           [pub, build, $loco (default)]
-
     --bazel-options       nice options
                           [to-source (default), from-source, via-assets]
-
 -h, --help                Prints usage information. Which is so "$" you don't
                           even know it!
-
     --[no-]release        (defaults to on)
     --max-runtime         ''');
   });

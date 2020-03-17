@@ -58,7 +58,6 @@ void main() {
 
 -i, --ignore-packages           A comma seperated list of packages to exclude in
                                 the output.
-
     --production-port=<PORT>    (defaults to "8080")
     --num-value                 (defaults to "3.14")
     --double-value              (defaults to "3000.0")
