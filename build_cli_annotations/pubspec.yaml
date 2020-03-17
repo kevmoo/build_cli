@@ -11,4 +11,4 @@ environment:
 
 dependencies:
   # Limit version range on args – it's exported
-  args: '>=1.5.0 <1.6.0'
+  args: '>=1.5.0 <1.7.0'
