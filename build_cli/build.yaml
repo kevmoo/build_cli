@@ -7,6 +7,10 @@ targets:
           include:
           - example/**
           - test/src/*_example*
+      source_gen|combining_builder:
+        options:
+          ignore_for_file:
+          - lines_longer_than_80_chars
 
 builders:
   checked:
