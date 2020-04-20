@@ -2,26 +2,6 @@ import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen_test/annotations.dart';
 
 @ShouldThrow(
-  'Could not handle field `number`. The type `dynamic` is not supported.',
-)
-@CliOptions()
-class UnknownCtorParamType {
-  int number;
-
-  // ignore: undefined_class, field_initializer_not_assignable, prefer_initializing_formals
-  UnknownCtorParamType(Bob number) : number = number;
-}
-
-@ShouldThrow(
-  'Could not handle field `number`. `dynamic` is not a supported type.',
-)
-@CliOptions()
-class UnknownFieldType {
-  // ignore: undefined_class
-  Bob number;
-}
-
-@ShouldThrow(
   'Could not handle field `number`. `Duration` is not a supported type.',
 )
 @CliOptions()
@@ -75,18 +55,6 @@ class BadConvertReturn {
 }
 
 Duration _convertStringToDuration(String source) => null;
-
-@ShouldThrow('Could not handle field `option`. '
-    'The convert function `_convertIntToString` must have one '
-    'positional paramater of type `String`.')
-@CliOptions()
-class BadConvertParam {
-  // ignore: argument_type_not_assignable
-  @CliOption(convert: _convertIntToString)
-  String option;
-}
-
-String _convertIntToString(int source) => null;
 
 @ShouldThrow('Could not handle field `option`. '
     'The convert function `_convertStringToDuration` return type '
