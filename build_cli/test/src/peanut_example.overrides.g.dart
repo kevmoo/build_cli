@@ -116,8 +116,7 @@ ArgParser _$populatePeanutOptionsParser(
           defaultsTo: helpDefaultOverride,
           negatable: false)
       ..addFlag('secret', defaultsTo: secretDefaultOverride, hide: true)
-      ..addFlag('release',
-          defaultsTo: releaseDefaultOverride ?? true, negatable: true)
+      ..addFlag('release', defaultsTo: releaseDefaultOverride ?? true)
       ..addOption('max-runtime', defaultsTo: maxRuntimeDefaultOverride);
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(ArgParser());
