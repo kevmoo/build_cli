@@ -36,7 +36,7 @@ Future validateSdkConstraint(BuildStep buildStep) async {
       final constraint = VersionConstraint.parse(sdk);
 
       if (constraint.allowsAny(
-          VersionRange(max: _lowestSdkSupported, includeMax: false))) {
+          VersionRange(max: _lowestSdkSupported))) {
         throw InvalidGenerationSourceError(
             'The SDK constraint on `package:${buildStep.inputId.package}` is '
             'not valid: `$constraint`. '

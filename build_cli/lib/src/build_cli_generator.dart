@@ -319,7 +319,7 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
     buffer.write(', allowedHelp: <String, String>{$allowedHelpItems}');
   }
 
-  if (options.negatable != null) {
+  if (options.negatable == false) {
     buffer.write(', negatable: ${options.negatable}');
   }
 

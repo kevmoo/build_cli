@@ -92,7 +92,7 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
           'Prints usage information. Which is so \"\$\" you don\'t even know it!',
       negatable: false)
   ..addFlag('secret', hide: true)
-  ..addFlag('release', defaultsTo: true, negatable: true)
+  ..addFlag('release', defaultsTo: true)
   ..addOption('max-runtime');
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(ArgParser());
