@@ -1,4 +1,4 @@
-## 1.3.8-dev
+## 1.3.8
 
 - Avoid `avoid_redundant_argument_values` lint.
 
