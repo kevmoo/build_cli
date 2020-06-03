@@ -1,3 +1,8 @@
+## 1.3.9
+
+- Avoid `avoid_redundant_argument_values` lint in generated code for
+  `defaultValue`.
+
 ## 1.3.8
 
 - Avoid `avoid_redundant_argument_values` lint.
