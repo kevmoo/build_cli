@@ -295,7 +295,10 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
         ? (options.defaultsTo as bool).toString()
         : escapeDartString(options.defaultsTo.toString());
 
-    defaultsToValues.add(defaultValueLiteral);
+    if (defaultValueLiteral != 'false') {
+      // Don't populate `defaultValue` if it's redundant (false)
+      defaultsToValues.add(defaultValueLiteral);
+    }
   }
 
   if (defaultsToValues.isNotEmpty) {
