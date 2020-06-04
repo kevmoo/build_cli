@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/kevmoo/build_cli.svg?branch=master)](https://travis-ci.org/kevmoo/build_cli)
-![Dart Packages](https://img.shields.io/pub/v/build_cli.svg)
+[![Pub package](https://img.shields.io/pub/v/build_cli.svg)](https://pub.dev/packages/build_cli)
 
 Parse command line arguments directly into an annotation class using the 
 [Dart Build System][].
