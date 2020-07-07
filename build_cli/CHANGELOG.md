@@ -1,3 +1,7 @@
+## 1.3.10-dev
+
+- Require Dart SDK `>=2.7.0 <3.0.0`.
+
 ## 1.3.9
 
 - Avoid `avoid_redundant_argument_values` lint in generated code for

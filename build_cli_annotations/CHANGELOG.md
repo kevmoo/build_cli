@@ -1,3 +1,7 @@
+## 1.2.1-dev
+
+- Require Dart SDK `>=2.7.0 <3.0.0`.
+
 ## 1.2.0
 
 - Update the constraint on `package:args` to `'>=1.5.0 <1.7.0'`.
