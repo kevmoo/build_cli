@@ -123,7 +123,11 @@ ArgType _getArgType(FieldElement element, CliOption option) {
     return ArgType.multiOption;
   }
 
-  throwUnsupported(element, '`$targetType` is not a supported type.');
+  throwUnsupported(
+    element,
+    '`${targetType.getDisplayString(withNullability: false)}`'
+    ' is not a supported type.',
+  );
 }
 
 CliOption _getOptions(FieldElement element) {
@@ -264,15 +268,18 @@ CliOption _getOptions(FieldElement element) {
       throwUnsupported(
           element,
           'The convert function `${functionElement.name}` must have one '
-          'positional paramater of type `String`.');
+          'positional parameter of type `String`.');
     }
 
     if (!functionElement.returnType.isAssignableTo(element.type)) {
+      final typeString =
+          functionElement.returnType.getDisplayString(withNullability: false);
       throwUnsupported(
-          element,
-          'The convert function `${functionElement.name}` return type '
-          '`${functionElement.returnType}` is not compatible with the field '
-          'type `${element.type}`.');
+        element,
+        'The convert function `${functionElement.name}` return type '
+        '`$typeString` is not compatible with the field '
+        'type `${element.type.getDisplayString(withNullability: false)}`.',
+      );
     }
     _convertName[option] = functionElement.name;
   }
