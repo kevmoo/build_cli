@@ -1,4 +1,9 @@
 # See with https://github.com/google/mono_repo.dart for details on this file
-self_validate: analyzer_and_format
+self_validate: true
+
+github:
+  # Setting just `cron` keeps the defaults for `push` and `pull_request`
+  cron: '0 0 * * 0' # “At 00:00 (UTC) on Sunday.”
+
 merge_stages:
 - analyzer_and_format
