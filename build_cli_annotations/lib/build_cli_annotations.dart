@@ -19,19 +19,19 @@ class CliOption {
 
   /// A top-level [Function] that converts an option value into the destination
   /// type.
-  final dynamic Function(String) convert;
+  final dynamic Function(String)? convert;
 
   const CliOption(
-      {this.name,
-      this.abbr,
-      this.defaultsTo,
-      this.help,
-      this.valueHelp,
-      this.allowed,
-      this.negatable,
-      this.allowedHelp,
-      this.hide,
-      this.convert,
-      this.nullable,
-      this.provideDefaultToOverride = false});
+      {required this.name,
+       required this.abbr,
+        required this.defaultsTo,
+        required this.help,
+        required this.valueHelp,
+        required this.allowed,
+        required this.negatable,
+        required this.allowedHelp,
+        required this.hide,
+        this.convert,
+        required this.nullable,
+        this.provideDefaultToOverride = false});
 }
