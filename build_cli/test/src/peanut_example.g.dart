@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// @dart=2.12
 
 // ignore_for_file: lines_longer_than_80_chars
 
@@ -8,26 +9,19 @@ part of 'peanut_example.dart';
 // CliGenerator
 // **************************************************************************
 
-T _$enumValueHelper<T>(Map<T, String> enumValues, String source) {
-  if (source == null) {
-    return null;
-  }
-  return enumValues.entries
-      .singleWhere((e) => e.value == source,
-          orElse: () => throw ArgumentError(
-              '`$source` is not one of the supported values: '
-              '${enumValues.values.join(', ')}'))
-      .key;
-}
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) => enumValues
+    .entries
+    .singleWhere((e) => e.value == source,
+        orElse: () =>
+            throw ArgumentError('`$source` is not one of the supported values: '
+                '${enumValues.values.join(', ')}'))
+    .key;
 
 PeanutOptions _$parsePeanutOptionsResult(ArgResults result) => PeanutOptions(
     bazelOptions: _$enumValueHelper(
         _$BazelOptionsEnumMap, result['bazel-options'] as String),
     branch: result['branch'] as String,
-    buildConfig: result['build-config'] as String,
     buildConfigWasParsed: result.wasParsed('build-config'),
-    buildTool:
-        _$enumValueHelper(_$BuildToolEnumMap, result['build-tool'] as String),
     debugBuildTool: _$enumValueHelper(
         _$BuildToolEnumMap, result['debug-build-tool'] as String),
     directory: result['directory'] as String,
@@ -37,7 +31,10 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) => PeanutOptions(
     modeWasParsed: result.wasParsed('mode'),
     release: result['release'] as bool,
     rest: result.rest,
-    secret: result['secret'] as bool)
+    secret: result['secret'] as bool,
+    buildConfig: result['build-config'] as String,
+    buildTool:
+        _$enumValueHelper(_$BuildToolEnumMap, result['build-tool'] as String))
   ..maxRuntime = _convert(result['max-runtime'] as String)
   ..command = result.command;
 

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:build/build.dart' show log, BuildStep;
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
@@ -112,6 +113,8 @@ ${classElement.name} $resultParserName(ArgResults result) =>''',
         typeInfo = 'String';
       }
 
+      typeInfo = '$typeInfo?';
+
       return '$typeInfo ${_overrideParamName(fieldName)},';
     }
 
@@ -212,6 +215,10 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
 
     assert(args.length == 1);
 
+    if (objectChecker.isExactlyType(args.single)) {
+      return '$argAccess as List<Object>';
+    }
+
     if (_dynamicChecker.isExactlyType(args.single) || args.single.isDynamic) {
       return '$argAccess as List';
     }
@@ -287,7 +294,8 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
     }
   }
 
-  if (info.argType == ArgType.flag && options.nullable == true) {
+  if (info.argType == ArgType.flag &&
+      element.type.nullabilitySuffix == NullabilitySuffix.question) {
     // If it's a flag (boolean) and the option is nullable, use the default
     // value – even if it's null.
     defaultsToValues.add((options.defaultsTo as bool).toString());

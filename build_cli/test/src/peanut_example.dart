@@ -1,3 +1,5 @@
+// @dart=2.12
+
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 
 part 'peanut_example.g.dart';
@@ -38,7 +40,7 @@ class PeanutOptions {
         'If this option is not set, `$_defaultConfig` is used if '
         '`$_defaultConfigFile` exists in the current directory.',
   )
-  final String buildConfig;
+  final String? buildConfig;
 
   final bool buildConfigWasParsed;
 
@@ -53,7 +55,7 @@ class PeanutOptions {
     help: 'If `$_defaultConfigFile` exists in the current directory, defaults'
         ' to "build". Otherwise, "pub".',
   )
-  final BuildTool buildTool;
+  final BuildTool? buildTool;
 
   @CliOption(
     help: 'The build tool to use for debugging.',
@@ -91,36 +93,32 @@ class PeanutOptions {
   @CliOption(
     convert: _convert,
   )
-  Duration maxRuntime;
+  Duration? maxRuntime;
 
   // Explicitly not used – to validate logging behavior
-  final String coolBean = null;
+  final String? coolBean = null;
 
-  ArgResults command;
+  ArgResults? command;
 
   PeanutOptions({
-    this.bazelOptions,
-    this.branch,
+    required this.bazelOptions,
+    required this.branch,
+    required this.buildConfigWasParsed,
+    required this.debugBuildTool,
+    required this.directory,
+    required this.help,
+    required this.message,
+    required this.mode,
+    required this.modeWasParsed,
+    required this.release,
+    required this.rest,
+    required this.secret,
     this.buildConfig,
-    this.buildConfigWasParsed,
     this.buildTool,
-    this.debugBuildTool,
-    this.directory,
-    this.help,
-    this.message,
-    this.mode,
-    this.modeWasParsed,
-    this.release,
-    this.rest,
-    this.secret,
   });
 }
 
-Duration _convert(String source) {
-  if (source == null) {
-    return null;
-  }
-
+Duration? _convert(String source) {
   final seconds = int.tryParse(source);
 
   if (seconds == null) {

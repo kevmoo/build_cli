@@ -1,3 +1,5 @@
+// @dart=2.12
+
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen_test/annotations.dart';
 
@@ -6,7 +8,7 @@ import 'package:source_gen_test/annotations.dart';
 )
 @CliOptions()
 class UnsupportedFieldType {
-  Duration number;
+  Duration? number;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -14,7 +16,7 @@ class UnsupportedFieldType {
 @CliOptions()
 class DefaultNotInAllowed {
   @CliOption(defaultsTo: 'a', allowed: ['b'])
-  String option;
+  String? option;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -22,7 +24,7 @@ class DefaultNotInAllowed {
 @CliOptions()
 class NegatableOption {
   @CliOption(negatable: true)
-  String option;
+  String? option;
 }
 
 @ShouldThrow('Could not handle field `options`. '
@@ -30,7 +32,7 @@ class NegatableOption {
 @CliOptions()
 class NegatableMultiOption {
   @CliOption(negatable: true)
-  List<String> options;
+  List<String>? options;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -40,9 +42,9 @@ class NegatableMultiOption {
 @CliOptions()
 class ConvertAsStatic {
   @CliOption(convert: _staticConvertStringToDuration)
-  String option;
+  String? option;
 
-  static Duration _staticConvertStringToDuration(String source) => null;
+  static Duration? _staticConvertStringToDuration(String source) => null;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -51,10 +53,10 @@ class ConvertAsStatic {
 @CliOptions()
 class BadConvertReturn {
   @CliOption(convert: _convertStringToDuration)
-  String option;
+  String? option;
 }
 
-Duration _convertStringToDuration(String source) => null;
+Duration? _convertStringToDuration(String source) => null;
 
 @ShouldThrow('Could not handle field `option`. '
     'The convert function `_convertStringToDuration` return type '
@@ -62,7 +64,7 @@ Duration _convertStringToDuration(String source) => null;
 @CliOptions()
 class ConvertOnMulti {
   @CliOption(convert: _convertStringToDuration)
-  List<Duration> option;
+  List<Duration>? option;
 }
 
 @ShouldThrow(
@@ -72,7 +74,7 @@ class ConvertOnMulti {
 @CliOptions()
 class FlagWithStringDefault {
   @CliOption(defaultsTo: 'string')
-  bool option;
+  bool? option;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -80,7 +82,7 @@ class FlagWithStringDefault {
 @CliOptions()
 class FlagWithAllowed {
   @CliOption(allowed: [])
-  bool option;
+  bool? option;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -88,7 +90,7 @@ class FlagWithAllowed {
 @CliOptions()
 class FlagWithAllowedHelp {
   @CliOption(allowedHelp: {})
-  bool option;
+  bool? option;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -96,7 +98,7 @@ class FlagWithAllowedHelp {
 @CliOptions()
 class FlagWithValueHelp {
   @CliOption(valueHelp: 'string')
-  bool option;
+  bool? option;
 }
 
 @ShouldGenerate(r'''
@@ -129,7 +131,7 @@ WithCommand parseWithCommand(List<String> args) {
 ''')
 @CliOptions()
 class WithCommand {
-  ArgResults command;
+  ArgResults? command;
 }
 
 @ShouldGenerate(r'''
@@ -153,10 +155,10 @@ SpecialNotAnnotated parseSpecialNotAnnotated(List<String> args) {
 ''')
 @CliOptions()
 class SpecialNotAnnotated {
-  String option;
-  bool rest;
-  ArgResults command;
-  bool optionWasParsed;
+  String? option;
+  bool? rest;
+  ArgResults? command;
+  bool? optionWasParsed;
 }
 
 @ShouldGenerate(r'''
@@ -179,16 +181,16 @@ AnnotatedCommandWithParser parseAnnotatedCommandWithParser(List<String> args) {
 @CliOptions()
 class AnnotatedCommandWithParser {
   @CliOption(convert: _stringToArgsResults)
-  ArgResults command;
+  ArgResults? command;
 }
 
-ArgResults _stringToArgsResults(String value) => null;
+ArgResults? _stringToArgsResults(String value) => null;
 
 @ShouldThrow('Could not handle field `nothingWasParsed`. Could not find '
     'expected source field `nothing`.')
 @CliOptions()
 class LonelyWasParsed {
-  bool nothingWasParsed;
+  bool? nothingWasParsed;
 }
 
 @ShouldThrow(
@@ -196,7 +198,7 @@ class LonelyWasParsed {
 @CliOptions()
 class AnnotatedCommandNoParser {
   @CliOption()
-  ArgResults command;
+  ArgResults? command;
 }
 
 @ShouldThrow(
@@ -212,7 +214,7 @@ const theAnswer = 42;
     ' `@CliOptions` can only be applied to a class.',
     todo: 'Remove the `@CliOptions` annotation from `annotatedMethod`.')
 @CliOptions()
-Object annotatedMethod() => null;
+Object? annotatedMethod() => null;
 
 @ShouldGenerate(r'''
 T _$enumValueHelper<T>(Map<T, String> enumValues, String source) {
@@ -264,13 +266,13 @@ DefaultOverride parseDefaultOverride(List<String> args) {
 @CliOptions()
 class DefaultOverride {
   @CliOption(provideDefaultToOverride: true)
-  bool shouldDoThing;
+  bool? shouldDoThing;
 
   @CliOption(provideDefaultToOverride: true, defaultsTo: 'default value')
-  String otherSetting;
+  String? otherSetting;
 
   @CliOption(provideDefaultToOverride: true)
-  TestEnum enumValue;
+  TestEnum? enumValue;
 }
 
 enum TestEnum { alpha, beta, $gama }
@@ -291,7 +293,7 @@ PrivateCtor parsePrivateCtor(List<String> args) {
 ''')
 @CliOptions()
 class PrivateCtor {
-  final bool flag;
+  final bool? flag;
 
   PrivateCtor._({this.flag});
 }
