@@ -2,8 +2,6 @@
 
 import 'dart:io';
 
-import 'package:io/ansi.dart';
-import 'package:io/io.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 
 part 'example.g.dart';
@@ -29,13 +27,13 @@ class Options {
   ///
   /// This becomes `--display-language`.
   @CliOption(defaultsTo: Language.en, abbr: 'l')
-  Language? displayLanguage;
+  late Language displayLanguage;
 
   @CliOption(negatable: false, help: 'Prints usage information.')
   late bool help;
 
-  /// Populates final fields as long as there are matching constructor
-  /// parameters.
+  /// Populates final and non-null fields as long as there are matching
+  /// constructor parameters.
   Options(this.name, {this.nameWasParsed = false});
 }
 
@@ -51,10 +49,10 @@ void main(List<String> args) {
       throw const FormatException('You must provide a name.');
     }
   } on FormatException catch (e) {
-    print(red.wrap(e.message));
+    print(e.message);
     print('');
     _printUsage();
-    exitCode = ExitCode.usage.code;
+    exitCode = 64;
     return;
   }
 

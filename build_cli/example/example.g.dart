@@ -25,7 +25,7 @@ Options _$parseOptionsResult(ArgResults result) =>
     Options(result['name'] as String, nameWasParsed: result.wasParsed('name'))
       ..yell = result['yell'] as bool
       ..displayLanguage = _$enumValueHelper(
-          _$LanguageEnumMap, result['display-language'] as String)
+          _$LanguageEnumMap, result['display-language'] as String)!
       ..help = result['help'] as bool;
 
 const _$LanguageEnumMap = <Language, String>{
