@@ -217,7 +217,7 @@ const theAnswer = 42;
 Object? annotatedMethod() => null;
 
 @ShouldGenerate(r'''
-T _$enumValueHelper<T>(Map<T, String> enumValues, String source) {
+T? _$enumValueHelper<T>(Map<T, String> enumValues, String? source) {
   if (source == null) {
     return null;
   }
@@ -244,12 +244,13 @@ const _$TestEnumEnumMap = <TestEnum, String>{
 
 ArgParser _$populateDefaultOverrideParser(
   ArgParser parser, {
-  bool shouldDoThingDefaultOverride,
-  String otherSettingDefaultOverride,
-  TestEnum enumValueDefaultOverride,
+  bool? shouldDoThingDefaultOverride,
+  String? otherSettingDefaultOverride,
+  TestEnum? enumValueDefaultOverride,
 }) =>
     parser
-      ..addFlag('should-do-thing', defaultsTo: shouldDoThingDefaultOverride)
+      ..addFlag('should-do-thing',
+          defaultsTo: shouldDoThingDefaultOverride ?? null)
       ..addOption('other-setting',
           defaultsTo: otherSettingDefaultOverride ?? 'default value')
       ..addOption('enum-value',
@@ -282,7 +283,7 @@ PrivateCtor _$parsePrivateCtorResult(ArgResults result) =>
     PrivateCtor._(flag: result['flag'] as bool);
 
 ArgParser _$populatePrivateCtorParser(ArgParser parser) =>
-    parser..addFlag('flag');
+    parser..addFlag('flag', defaultsTo: null);
 
 final _$parserForPrivateCtor = _$populatePrivateCtorParser(ArgParser());
 

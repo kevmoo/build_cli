@@ -9,7 +9,7 @@ part of 'peanut_example.overrides.dart';
 // CliGenerator
 // **************************************************************************
 
-T? _$enumValueHelper<T>(Map<T, String> enumValues, String source) {
+T? _$enumValueHelper<T>(Map<T, String> enumValues, String? source) {
   if (source == null) {
     return null;
   }

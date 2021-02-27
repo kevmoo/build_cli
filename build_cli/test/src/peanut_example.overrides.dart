@@ -136,7 +136,11 @@ class PeanutOptions {
   });
 }
 
-Duration? _convert(String source) {
+Duration? _convert(String? source) {
+  if (source == null) {
+    return null;
+  }
+
   final seconds = int.tryParse(source);
 
   if (seconds == null) {

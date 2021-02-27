@@ -1,3 +1,5 @@
+// @dart=2.12
+
 import 'dart:io';
 
 import 'package:io/ansi.dart';
@@ -21,20 +23,20 @@ class Options {
   ///
   /// Fields without the [CliOption] annotation are picked up with simple
   /// defaults.
-  bool yell;
+  late bool yell;
 
   /// Field names are also "kebab cased" automatically.
   ///
   /// This becomes `--display-language`.
   @CliOption(defaultsTo: Language.en, abbr: 'l')
-  Language displayLanguage;
+  Language? displayLanguage;
 
   @CliOption(negatable: false, help: 'Prints usage information.')
-  bool help;
+  late bool help;
 
   /// Populates final fields as long as there are matching constructor
   /// parameters.
-  Options(this.name, {this.nameWasParsed});
+  Options(this.name, {this.nameWasParsed = false});
 }
 
 /// Enums are a great way to specify options with a fixed set of allowed
