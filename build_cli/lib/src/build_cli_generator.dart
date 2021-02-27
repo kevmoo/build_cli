@@ -203,8 +203,13 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
   }
 
   if (isEnum(targetType)) {
+    var nonNullableCast = "";
+    if (targetType.nullabilitySuffix == NullabilitySuffix.none) {
+      nonNullableCast = "!";
+    }
     return '$enumValueHelperFunctionName'
-        '(${enumConstMapName(targetType)}, $argAccess as String)';
+        '(${enumConstMapName(targetType)}, $argAccess as String)'
+        '$nonNullableCast';
   }
 
   if (info.argType == ArgType.multiOption) {
