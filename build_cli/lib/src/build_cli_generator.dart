@@ -199,13 +199,15 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
 
   if (stringChecker.isExactlyType(targetType) ||
       boolChecker.isExactlyType(targetType)) {
-    return '$argAccess as ${targetType.element.name}';
+    final suffix =
+        targetType.nullabilitySuffix == NullabilitySuffix.question ? '?' : '';
+    return '$argAccess as ${targetType.element.name}$suffix';
   }
 
   if (isEnum(targetType)) {
-    var nonNullableCast = "";
+    var nonNullableCast = '';
     if (targetType.nullabilitySuffix == NullabilitySuffix.none) {
-      nonNullableCast = "!";
+      nonNullableCast = '!';
     }
     return '$enumValueHelperFunctionName'
         '(${enumConstMapName(targetType)}, $argAccess as String)'
