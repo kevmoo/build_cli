@@ -1,3 +1,8 @@
+## 2.0.0
+
+- This package now generates null safe code. Use with build_cli_annotations
+  ^2.0.0 and SDK ^2.12 to get started.
+
 ## 1.2.1-dev
 
 - Require Dart SDK `>=2.7.0 <3.0.0`.
