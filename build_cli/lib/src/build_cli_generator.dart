@@ -210,6 +210,7 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
       nonNullableCast = '!';
     }
     return '$enumValueHelperFunctionName'
+        // ignore: missing_whitespace_between_adjacent_strings
         '(${enumConstMapName(targetType)}, $argAccess as String)'
         '$nonNullableCast';
   }
