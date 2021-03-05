@@ -1,4 +1,4 @@
-# Created with package:mono_repo v3.1.0-beta.3
+# Created with package:mono_repo v3.4.6
 name: Dart CI
 on:
   push:
@@ -19,65 +19,244 @@ jobs:
     name: mono_repo self validate
     runs-on: ubuntu-latest
     steps:
-      - uses: cedx/setup-dart@v2
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2
         with:
-          release-channel: stable
-          version: latest
-      - run: dart --version
-      - uses: actions/checkout@v2
-      - run: pub global activate mono_repo 3.1.0-beta.3
-      - run: pub global run mono_repo generate --validate
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:stable"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v0.3
+        with:
+          sdk: stable
+      - id: checkout
+        uses: actions/checkout@v2
+      - name: mono_repo self validate
+        run: pub global activate mono_repo 3.4.6
+      - name: mono_repo self validate
+        run: pub global run mono_repo generate --validate
   job_002:
-    name: "OS: linux; SDK: dev; PKGS: build_cli, build_cli_annotations; TASKS: [`dartfmt -n --set-exit-if-changed .`, `dartanalyzer --fatal-infos --fatal-warnings .`]"
+    name: "analyzer_and_format; Dart stable; PKGS: build_cli, build_cli_annotations; `dartanalyzer .`"
     runs-on: ubuntu-latest
     steps:
-      - uses: cedx/setup-dart@v2
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2
         with:
-          release-channel: dev
-      - run: dart --version
-      - uses: actions/checkout@v2
-      - env:
-          PKGS: build_cli build_cli_annotations
-          TRAVIS_OS_NAME: linux
-        run: tool/ci.sh dartfmt dartanalyzer_0
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:stable;packages:build_cli-build_cli_annotations;commands:dartanalyzer"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;dart:stable;packages:build_cli-build_cli_annotations
+            os:ubuntu-latest;pub-cache-hosted;dart:stable
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v0.3
+        with:
+          sdk: stable
+      - id: checkout
+        uses: actions/checkout@v2
+      - id: build_cli_pub_upgrade
+        name: "build_cli; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli
+        run: pub upgrade --no-precompile
+      - name: build_cli; dartanalyzer .
+        if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli
+        run: dartanalyzer .
+      - id: build_cli_annotations_pub_upgrade
+        name: "build_cli_annotations; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli_annotations
+        run: pub upgrade --no-precompile
+      - name: build_cli_annotations; dartanalyzer .
+        if: "always() && steps.build_cli_annotations_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli_annotations
+        run: dartanalyzer .
+    needs:
+      - job_001
   job_003:
-    name: "OS: linux; SDK: 2.7.0; PKGS: build_cli, build_cli_annotations; TASKS: `dartanalyzer --fatal-warnings .`"
+    name: "analyzer_and_format; Dart dev; PKGS: build_cli, build_cli_annotations; `dartanalyzer .`"
     runs-on: ubuntu-latest
     steps:
-      - uses: cedx/setup-dart@v2
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2
         with:
-          release-channel: stable
-          version: "2.7.0"
-      - run: dart --version
-      - uses: actions/checkout@v2
-      - env:
-          PKGS: build_cli build_cli_annotations
-          TRAVIS_OS_NAME: linux
-        run: tool/ci.sh dartanalyzer_1
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli-build_cli_annotations;commands:dartanalyzer"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli-build_cli_annotations
+            os:ubuntu-latest;pub-cache-hosted;dart:dev
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v0.3
+        with:
+          sdk: dev
+      - id: checkout
+        uses: actions/checkout@v2
+      - id: build_cli_pub_upgrade
+        name: "build_cli; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli
+        run: pub upgrade --no-precompile
+      - name: build_cli; dartanalyzer .
+        if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli
+        run: dartanalyzer .
+      - id: build_cli_annotations_pub_upgrade
+        name: "build_cli_annotations; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli_annotations
+        run: pub upgrade --no-precompile
+      - name: build_cli_annotations; dartanalyzer .
+        if: "always() && steps.build_cli_annotations_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli_annotations
+        run: dartanalyzer .
+    needs:
+      - job_001
   job_004:
-    name: "OS: linux; SDK: 2.7.0; PKG: build_cli; TASKS: `pub run test --run-skipped`"
+    name: "analyzer_and_format; Dart stable; PKGS: build_cli, build_cli_annotations; `dartfmt -n --set-exit-if-changed .`"
     runs-on: ubuntu-latest
     steps:
-      - uses: cedx/setup-dart@v2
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2
         with:
-          release-channel: stable
-          version: "2.7.0"
-      - run: dart --version
-      - uses: actions/checkout@v2
-      - env:
-          PKGS: build_cli
-          TRAVIS_OS_NAME: linux
-        run: tool/ci.sh test
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:stable;packages:build_cli-build_cli_annotations;commands:dartfmt"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;dart:stable;packages:build_cli-build_cli_annotations
+            os:ubuntu-latest;pub-cache-hosted;dart:stable
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v0.3
+        with:
+          sdk: stable
+      - id: checkout
+        uses: actions/checkout@v2
+      - id: build_cli_pub_upgrade
+        name: "build_cli; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli
+        run: pub upgrade --no-precompile
+      - name: "build_cli; dartfmt -n --set-exit-if-changed ."
+        if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli
+        run: dartfmt -n --set-exit-if-changed .
+      - id: build_cli_annotations_pub_upgrade
+        name: "build_cli_annotations; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli_annotations
+        run: pub upgrade --no-precompile
+      - name: "build_cli_annotations; dartfmt -n --set-exit-if-changed ."
+        if: "always() && steps.build_cli_annotations_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli_annotations
+        run: dartfmt -n --set-exit-if-changed .
+    needs:
+      - job_001
   job_005:
-    name: "OS: linux; SDK: dev; PKG: build_cli; TASKS: `pub run test --run-skipped`"
+    name: "analyzer_and_format; Dart dev; PKGS: build_cli, build_cli_annotations; `dartfmt -n --set-exit-if-changed .`"
     runs-on: ubuntu-latest
     steps:
-      - uses: cedx/setup-dart@v2
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2
         with:
-          release-channel: dev
-      - run: dart --version
-      - uses: actions/checkout@v2
-      - env:
-          PKGS: build_cli
-          TRAVIS_OS_NAME: linux
-        run: tool/ci.sh test
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli-build_cli_annotations;commands:dartfmt"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli-build_cli_annotations
+            os:ubuntu-latest;pub-cache-hosted;dart:dev
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v0.3
+        with:
+          sdk: dev
+      - id: checkout
+        uses: actions/checkout@v2
+      - id: build_cli_pub_upgrade
+        name: "build_cli; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli
+        run: pub upgrade --no-precompile
+      - name: "build_cli; dartfmt -n --set-exit-if-changed ."
+        if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli
+        run: dartfmt -n --set-exit-if-changed .
+      - id: build_cli_annotations_pub_upgrade
+        name: "build_cli_annotations; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli_annotations
+        run: pub upgrade --no-precompile
+      - name: "build_cli_annotations; dartfmt -n --set-exit-if-changed ."
+        if: "always() && steps.build_cli_annotations_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli_annotations
+        run: dartfmt -n --set-exit-if-changed .
+    needs:
+      - job_001
+  job_006:
+    name: "unit_test; Dart stable; PKG: build_cli; `pub run test --run-skipped`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:stable;packages:build_cli;commands:test"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;dart:stable;packages:build_cli
+            os:ubuntu-latest;pub-cache-hosted;dart:stable
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v0.3
+        with:
+          sdk: stable
+      - id: checkout
+        uses: actions/checkout@v2
+      - id: build_cli_pub_upgrade
+        name: "build_cli; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli
+        run: pub upgrade --no-precompile
+      - name: "build_cli; pub run test --run-skipped"
+        if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli
+        run: pub run test --run-skipped
+    needs:
+      - job_001
+      - job_002
+      - job_003
+      - job_004
+      - job_005
+  job_007:
+    name: "unit_test; Dart dev; PKG: build_cli; `pub run test --run-skipped`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli;commands:test"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli
+            os:ubuntu-latest;pub-cache-hosted;dart:dev
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v0.3
+        with:
+          sdk: dev
+      - id: checkout
+        uses: actions/checkout@v2
+      - id: build_cli_pub_upgrade
+        name: "build_cli; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli
+        run: pub upgrade --no-precompile
+      - name: "build_cli; pub run test --run-skipped"
+        if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli
+        run: pub run test --run-skipped
+    needs:
+      - job_001
+      - job_002
+      - job_003
+      - job_004
+      - job_005

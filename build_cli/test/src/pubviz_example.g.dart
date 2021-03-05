@@ -39,7 +39,7 @@ PubvizOptions _$parsePubvizOptionsResult(ArgResults result) => PubvizOptions(
             result['double-value'] as String, 'double', 'double-value'),
     numValue: num.tryParse(result['num-value'] as String) ??
         _$badNumberFormat(result['num-value'] as String, 'num', 'num-value'),
-    secret: result['secret'] as String,
+    secret: result['secret'] as String?,
     ignorePackages: result['ignore-packages'] as List<String>)
   ..listOfNothing = result['list-of-nothing'] as List
   ..listOfDynamic = result['list-of-dynamic'] as List

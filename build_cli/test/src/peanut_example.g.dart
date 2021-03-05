@@ -36,7 +36,7 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) => PeanutOptions(
     release: result['release'] as bool,
     rest: result.rest,
     secret: result['secret'] as bool,
-    buildConfig: result['build-config'] as String,
+    buildConfig: result['build-config'] as String?,
     buildTool:
         _$enumValueHelper(_$BuildToolEnumMap, result['build-tool'] as String))
   ..maxRuntime = _convert(result['max-runtime'] as String)
