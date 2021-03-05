@@ -37,7 +37,7 @@ jobs:
       - name: mono_repo self validate
         run: pub global run mono_repo generate --validate
   job_002:
-    name: "analyzer_and_format; Dart stable; PKGS: build_cli, build_cli_annotations; `dartanalyzer .`"
+    name: "analyzer_and_format; Dart stable; PKGS: build_cli, build_cli_annotations; `dartanalyzer --fatal-infos --fatal-warnings .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -60,23 +60,23 @@ jobs:
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli
         run: pub upgrade --no-precompile
-      - name: build_cli; dartanalyzer .
+      - name: "build_cli; dartanalyzer --fatal-infos --fatal-warnings ."
         if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli
-        run: dartanalyzer .
+        run: dartanalyzer --fatal-infos --fatal-warnings .
       - id: build_cli_annotations_pub_upgrade
         name: "build_cli_annotations; pub upgrade --no-precompile"
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli_annotations
         run: pub upgrade --no-precompile
-      - name: build_cli_annotations; dartanalyzer .
+      - name: "build_cli_annotations; dartanalyzer --fatal-infos --fatal-warnings ."
         if: "always() && steps.build_cli_annotations_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli_annotations
-        run: dartanalyzer .
+        run: dartanalyzer --fatal-infos --fatal-warnings .
     needs:
       - job_001
   job_003:
-    name: "analyzer_and_format; Dart dev; PKGS: build_cli, build_cli_annotations; `dartanalyzer .`"
+    name: "analyzer_and_format; Dart dev; PKGS: build_cli, build_cli_annotations; `dartanalyzer --fatal-infos --fatal-warnings .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -99,19 +99,19 @@ jobs:
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli
         run: pub upgrade --no-precompile
-      - name: build_cli; dartanalyzer .
+      - name: "build_cli; dartanalyzer --fatal-infos --fatal-warnings ."
         if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli
-        run: dartanalyzer .
+        run: dartanalyzer --fatal-infos --fatal-warnings .
       - id: build_cli_annotations_pub_upgrade
         name: "build_cli_annotations; pub upgrade --no-precompile"
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli_annotations
         run: pub upgrade --no-precompile
-      - name: build_cli_annotations; dartanalyzer .
+      - name: "build_cli_annotations; dartanalyzer --fatal-infos --fatal-warnings ."
         if: "always() && steps.build_cli_annotations_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli_annotations
-        run: dartanalyzer .
+        run: dartanalyzer --fatal-infos --fatal-warnings .
     needs:
       - job_001
   job_004:
