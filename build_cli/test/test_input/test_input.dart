@@ -138,7 +138,7 @@ class WithCommand {
 @ShouldGenerate(r'''
 SpecialNotAnnotated _$parseSpecialNotAnnotatedResult(ArgResults result) =>
     SpecialNotAnnotated()
-      ..option = result['option'] as String
+      ..option = result['option'] as String?
       ..rest = result.rest
       ..command = result.command
       ..optionWasParsed = result.wasParsed('option');
@@ -232,8 +232,8 @@ T? _$enumValueHelper<T>(Map<T, String> enumValues, String? source) {
 
 DefaultOverride _$parseDefaultOverrideResult(ArgResults result) =>
     DefaultOverride()
-      ..shouldDoThing = result['should-do-thing'] as bool
-      ..otherSetting = result['other-setting'] as String
+      ..shouldDoThing = result['should-do-thing'] as bool?
+      ..otherSetting = result['other-setting'] as String?
       ..enumValue =
           _$enumValueHelper(_$TestEnumEnumMap, result['enum-value'] as String);
 
@@ -281,7 +281,7 @@ enum TestEnum { alpha, beta, $gama }
 
 @ShouldGenerate(r'''
 PrivateCtor _$parsePrivateCtorResult(ArgResults result) =>
-    PrivateCtor._(flag: result['flag'] as bool);
+    PrivateCtor._(flag: result['flag'] as bool?);
 
 ArgParser _$populatePrivateCtorParser(ArgParser parser) =>
     parser..addFlag('flag', defaultsTo: null);

@@ -14,7 +14,7 @@ class CliOption {
   final Map<Object, String>? allowedHelp;
   final bool? negatable;
   final bool? hide;
-  final bool? provideDefaultToOverride;
+  final bool provideDefaultToOverride;
 
   /// A top-level [Function] that converts an option value into the destination
   /// type.

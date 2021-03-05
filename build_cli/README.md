@@ -20,15 +20,15 @@ class Options {
 
   final bool nameWasParsed;
 
-  bool yell;
+  late bool yell;
 
   @CliOption(defaultsTo: Language.en, abbr: 'l')
-  Language displayLanguage;
+  late Language displayLanguage;
 
   @CliOption(negatable: false, help: 'Prints usage information.')
-  bool help;
+  late bool help;
 
-  Options(this.name, {this.nameWasParsed});
+  Options(this.name, {this.nameWasParsed = false});
 }
 
 enum Language { en, es }
