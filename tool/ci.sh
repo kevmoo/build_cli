@@ -67,8 +67,8 @@ for PKG in ${PKGS}; do
         dartfmt -n --set-exit-if-changed . || EXIT_CODE=$?
         ;;
       test)
-        echo 'pub run test --run-skipped'
-        pub run test --run-skipped || EXIT_CODE=$?
+        echo 'pub run test --run-skipped --reporter expanded'
+        pub run test --run-skipped --reporter expanded || EXIT_CODE=$?
         ;;
       *)
         echo -e "\033[31mUnknown TASK '${TASK}' - TERMINATING JOB\033[0m"

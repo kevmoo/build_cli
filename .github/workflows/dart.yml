@@ -193,7 +193,7 @@ jobs:
     needs:
       - job_001
   job_006:
-    name: "unit_test; Dart stable; PKG: build_cli; `pub run test --run-skipped`"
+    name: "unit_test; Dart stable; PKG: build_cli; `pub run test --run-skipped --reporter expanded`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -216,10 +216,10 @@ jobs:
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli
         run: pub upgrade --no-precompile
-      - name: "build_cli; pub run test --run-skipped"
+      - name: "build_cli; pub run test --run-skipped --reporter expanded"
         if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli
-        run: pub run test --run-skipped
+        run: pub run test --run-skipped --reporter expanded
     needs:
       - job_001
       - job_002
@@ -227,7 +227,7 @@ jobs:
       - job_004
       - job_005
   job_007:
-    name: "unit_test; Dart dev; PKG: build_cli; `pub run test --run-skipped`"
+    name: "unit_test; Dart dev; PKG: build_cli; `pub run test --run-skipped --reporter expanded`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -250,10 +250,10 @@ jobs:
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli
         run: pub upgrade --no-precompile
-      - name: "build_cli; pub run test --run-skipped"
+      - name: "build_cli; pub run test --run-skipped --reporter expanded"
         if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli
-        run: pub run test --run-skipped
+        run: pub run test --run-skipped --reporter expanded
     needs:
       - job_001
       - job_002
