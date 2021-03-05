@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/kevmoo/build_cli.svg?branch=master)](https://travis-ci.org/kevmoo/build_cli)
+[![Dart CI](https://github.com/kevmoo/build_cli/actions/workflows/dart.yml/badge.svg?branch=master)](https://github.com/kevmoo/build_cli/actions/workflows/dart.yml?query=workflow%3Adart+branch%3Amaster)
 [![Pub package](https://img.shields.io/pub/v/build_cli.svg)](https://pub.dev/packages/build_cli)
 
 Parse command line arguments directly into an annotation class using the 
