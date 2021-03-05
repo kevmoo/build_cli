@@ -1,6 +1,7 @@
 // @dart=2.12
 
 import 'package:build_cli_annotations/build_cli_annotations.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:source_gen_test/annotations.dart';
 
 @ShouldThrow(
