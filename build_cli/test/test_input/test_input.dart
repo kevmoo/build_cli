@@ -309,3 +309,61 @@ class TwoNonDefaultConstructors {
 
   TwoNonDefaultConstructors.defaults() : flag = false;
 }
+
+@ShouldGenerate(r'''
+T? _$enumValueHelper<T>(Map<T, String> enumValues, String? source) {
+  if (source == null) {
+    return null;
+  }
+  return enumValues.entries
+      .singleWhere((e) => e.value == source,
+          orElse: () => throw ArgumentError(
+              '`$source` is not one of the supported values: '
+              '${enumValues.values.join(', ')}'))
+      .key;
+}
+
+T _$badNumberFormat<T extends num>(
+        String source, String type, String argName) =>
+    throw FormatException(
+        'Cannot parse "$source" into `$type` for option "$argName".');
+
+NonNullableTypes _$parseNonNullableTypesResult(ArgResults result) =>
+    NonNullableTypes(
+        name: result['name'] as String,
+        enumValue: _$enumValueHelper(
+            _$TestEnumEnumMap, result['enum-value'] as String)!,
+        number: int.tryParse(result['number'] as String) ??
+            _$badNumberFormat(result['number'] as String, 'int', 'number'));
+
+const _$TestEnumEnumMap = <TestEnum, String>{
+  TestEnum.alpha: 'alpha',
+  TestEnum.beta: 'beta',
+  TestEnum.$gama: r'$gama'
+};
+
+ArgParser _$populateNonNullableTypesParser(ArgParser parser) => parser
+  ..addOption('name')
+  ..addOption('enum-value', allowed: ['alpha', 'beta', r'$gama'])
+  ..addOption('number');
+
+final _$parserForNonNullableTypes =
+    _$populateNonNullableTypesParser(ArgParser());
+
+NonNullableTypes parseNonNullableTypes(List<String> args) {
+  final result = _$parserForNonNullableTypes.parse(args);
+  return _$parseNonNullableTypesResult(result);
+}
+''')
+@CliOptions()
+class NonNullableTypes {
+  final String name;
+  final TestEnum enumValue;
+  final int number;
+
+  NonNullableTypes({
+    required this.name,
+    required this.enumValue,
+    required this.number,
+  });
+}
