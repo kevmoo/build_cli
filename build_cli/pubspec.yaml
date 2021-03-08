@@ -13,10 +13,7 @@ dependencies:
   build: ^1.6.0
   # Limit version range on build_cli_annotations
   # new features need to stay in sync
-
-#  build_cli_annotations: ^2.0.0
-  build_cli_annotations:
-    path: ../build_cli_annotations
+  build_cli_annotations: '>=2.0.0 <2.1.0'
   build_config: '>=0.3.0 <0.5.0'
   meta: ^1.1.0
   pub_semver: ^2.0.0
@@ -33,3 +30,8 @@ dev_dependencies:
   path: ^1.0.0
   source_gen_test: ^0.1.0
   test: ^1.0.0
+
+# Remove when build_cli_annotations 2.0.0 is published
+dependency_overrides:
+  build_cli_annotations:
+    path: ../build_cli_annotations
