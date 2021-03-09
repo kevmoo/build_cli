@@ -52,6 +52,12 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
 
     if (fieldsList.any((fe) => isEnum(fe.type))) {
       yield enumValueHelper;
+
+      if (fieldsList.any((fe) =>
+          isEnum(fe.type) &&
+          fe.type.nullabilitySuffix != NullabilitySuffix.none)) {
+        yield nullableEnumValueHelper;
+      }
     }
 
     if (fieldsList.any((fe) => numChecker.isAssignableFromType(fe.type))) {
@@ -205,14 +211,11 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
   }
 
   if (isEnum(targetType)) {
-    var nonNullableCast = '';
-    if (targetType.nullabilitySuffix == NullabilitySuffix.none) {
-      nonNullableCast = '!';
-    }
-    return '$enumValueHelperFunctionName'
-        // ignore: missing_whitespace_between_adjacent_strings
-        '(${enumConstMapName(targetType)}, $argAccess as String)'
-        '$nonNullableCast';
+    final helperName = targetType.nullabilitySuffix == NullabilitySuffix.none
+        ? enumValueHelperFunctionName
+        : nullableEnumValueHelperFunctionName;
+
+    return '$helperName(${enumConstMapName(targetType)}, $argAccess as String)';
   }
 
   if (info.argType == ArgType.multiOption) {

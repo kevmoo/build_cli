@@ -9,36 +9,36 @@ part of 'peanut_example.dart';
 // CliGenerator
 // **************************************************************************
 
-T? _$enumValueHelper<T>(Map<T, String> enumValues, String? source) {
-  if (source == null) {
-    return null;
-  }
-  return enumValues.entries
-      .singleWhere((e) => e.value == source,
-          orElse: () => throw ArgumentError(
-              '`$source` is not one of the supported values: '
-              '${enumValues.values.join(', ')}'))
-      .key;
-}
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) => enumValues
+    .entries
+    .singleWhere((e) => e.value == source,
+        orElse: () =>
+            throw ArgumentError('`$source` is not one of the supported values: '
+                '${enumValues.values.join(', ')}'))
+    .key;
+
+T? _$nullableEnumValueHelperNullable<T>(
+        Map<T, String> enumValues, String? source) =>
+    source == null ? null : _$enumValueHelper(enumValues, source);
 
 PeanutOptions _$parsePeanutOptionsResult(ArgResults result) => PeanutOptions(
     bazelOptions: _$enumValueHelper(
-        _$BazelOptionsEnumMap, result['bazel-options'] as String)!,
+        _$BazelOptionsEnumMap, result['bazel-options'] as String),
     branch: result['branch'] as String,
     buildConfigWasParsed: result.wasParsed('build-config'),
     debugBuildTool: _$enumValueHelper(
-        _$BuildToolEnumMap, result['debug-build-tool'] as String)!,
+        _$BuildToolEnumMap, result['debug-build-tool'] as String),
     directory: result['directory'] as String,
     help: result['help'] as bool,
     message: result['message'] as String,
-    mode: _$enumValueHelper(_$PubBuildModeEnumMap, result['mode'] as String)!,
+    mode: _$enumValueHelper(_$PubBuildModeEnumMap, result['mode'] as String),
     modeWasParsed: result.wasParsed('mode'),
     release: result['release'] as bool,
     rest: result.rest,
     secret: result['secret'] as bool,
     buildConfig: result['build-config'] as String?,
-    buildTool:
-        _$enumValueHelper(_$BuildToolEnumMap, result['build-tool'] as String))
+    buildTool: _$nullableEnumValueHelperNullable(
+        _$BuildToolEnumMap, result['build-tool'] as String))
   ..maxRuntime = _convert(result['max-runtime'] as String)
   ..command = result.command;
 

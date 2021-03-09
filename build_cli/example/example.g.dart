@@ -9,23 +9,19 @@ part of 'example.dart';
 // CliGenerator
 // **************************************************************************
 
-T? _$enumValueHelper<T>(Map<T, String> enumValues, String? source) {
-  if (source == null) {
-    return null;
-  }
-  return enumValues.entries
-      .singleWhere((e) => e.value == source,
-          orElse: () => throw ArgumentError(
-              '`$source` is not one of the supported values: '
-              '${enumValues.values.join(', ')}'))
-      .key;
-}
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) => enumValues
+    .entries
+    .singleWhere((e) => e.value == source,
+        orElse: () =>
+            throw ArgumentError('`$source` is not one of the supported values: '
+                '${enumValues.values.join(', ')}'))
+    .key;
 
 Options _$parseOptionsResult(ArgResults result) =>
     Options(result['name'] as String, nameWasParsed: result.wasParsed('name'))
       ..yell = result['yell'] as bool
       ..displayLanguage = _$enumValueHelper(
-          _$LanguageEnumMap, result['display-language'] as String)!
+          _$LanguageEnumMap, result['display-language'] as String)
       ..help = result['help'] as bool;
 
 const _$LanguageEnumMap = <Language, String>{
