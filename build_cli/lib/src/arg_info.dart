@@ -163,12 +163,12 @@ CliOption _getOptions(FieldElement element) {
 
     if (defaultsToReader != null && !defaultsToReader.isNull) {
       final objectValue = defaultsToReader.objectValue;
-      // TODO: find a better way to compare the underlying type
-      if (objectValue.type.getDisplayString(withNullability: false) !=
-          element.type.getDisplayString(withNullability: false)) {
+      if (objectValue.type != element.type) {
         throwUnsupported(
             element,
-            'this is also wack');
+            'The type provided to defaultsTo is '
+            'different than the field type. Check that the num types are the '
+            'same, or try making the field type non-nullable.');
       }
 
       defaultsTo =
