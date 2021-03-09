@@ -155,6 +155,7 @@ CliOption _getOptions(FieldElement element) {
             // An enum's values are non-nullable. For example, If the enum
             // field's type is `BuildTool?` it's accessors will be the
             // non-nullable type, `BuildTool`.
+            // TODO: find a better way to compare the underlying type
             p.returnType.getDisplayString(withNullability: false) ==
             element.type.getDisplayString(withNullability: false))
         .map((p) => p.name)
@@ -162,8 +163,12 @@ CliOption _getOptions(FieldElement element) {
 
     if (defaultsToReader != null && !defaultsToReader.isNull) {
       final objectValue = defaultsToReader.objectValue;
-      if (objectValue.type != element.type) {
-        throwUnsupported(element, 'this is also wack');
+      // TODO: find a better way to compare the underlying type
+      if (objectValue.type.getDisplayString(withNullability: false) !=
+          element.type.getDisplayString(withNullability: false)) {
+        throwUnsupported(
+            element,
+            'this is also wack');
       }
 
       defaultsTo =
