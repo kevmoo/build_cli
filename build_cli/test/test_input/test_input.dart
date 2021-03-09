@@ -1,6 +1,7 @@
 // @dart=2.12
 
 import 'package:build_cli_annotations/build_cli_annotations.dart';
+
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:source_gen_test/annotations.dart';
 
@@ -218,24 +219,24 @@ const theAnswer = 42;
 Object? annotatedMethod() => null;
 
 @ShouldGenerate(r'''
-T? _$enumValueHelper<T>(Map<T, String> enumValues, String? source) {
-  if (source == null) {
-    return null;
-  }
-  return enumValues.entries
-      .singleWhere((e) => e.value == source,
-          orElse: () => throw ArgumentError(
-              '`$source` is not one of the supported values: '
-              '${enumValues.values.join(', ')}'))
-      .key;
-}
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) => enumValues
+    .entries
+    .singleWhere((e) => e.value == source,
+        orElse: () =>
+            throw ArgumentError('`$source` is not one of the supported values: '
+                '${enumValues.values.join(', ')}'))
+    .key;
+
+T? _$nullableEnumValueHelperNullable<T>(
+        Map<T, String> enumValues, String? source) =>
+    source == null ? null : _$enumValueHelper(enumValues, source);
 
 DefaultOverride _$parseDefaultOverrideResult(ArgResults result) =>
     DefaultOverride()
       ..shouldDoThing = result['should-do-thing'] as bool?
       ..otherSetting = result['other-setting'] as String?
-      ..enumValue =
-          _$enumValueHelper(_$TestEnumEnumMap, result['enum-value'] as String);
+      ..enumValue = _$nullableEnumValueHelperNullable(
+          _$TestEnumEnumMap, result['enum-value'] as String);
 
 const _$TestEnumEnumMap = <TestEnum, String>{
   TestEnum.alpha: 'alpha',
@@ -311,17 +312,13 @@ class TwoNonDefaultConstructors {
 }
 
 @ShouldGenerate(r'''
-T? _$enumValueHelper<T>(Map<T, String> enumValues, String? source) {
-  if (source == null) {
-    return null;
-  }
-  return enumValues.entries
-      .singleWhere((e) => e.value == source,
-          orElse: () => throw ArgumentError(
-              '`$source` is not one of the supported values: '
-              '${enumValues.values.join(', ')}'))
-      .key;
-}
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) => enumValues
+    .entries
+    .singleWhere((e) => e.value == source,
+        orElse: () =>
+            throw ArgumentError('`$source` is not one of the supported values: '
+                '${enumValues.values.join(', ')}'))
+    .key;
 
 T _$badNumberFormat<T extends num>(
         String source, String type, String argName) =>
@@ -332,7 +329,7 @@ NonNullableTypes _$parseNonNullableTypesResult(ArgResults result) =>
     NonNullableTypes(
         name: result['name'] as String,
         enumValue: _$enumValueHelper(
-            _$TestEnumEnumMap, result['enum-value'] as String)!,
+            _$TestEnumEnumMap, result['enum-value'] as String),
         number: int.tryParse(result['number'] as String) ??
             _$badNumberFormat(result['number'] as String, 'int', 'number'));
 

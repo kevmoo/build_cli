@@ -38,14 +38,20 @@ Map<FieldElement, String> _enumFieldsMap(DartType targetType) {
 const enumValueHelperFunctionName = r'_$enumValueHelper';
 
 const enumValueHelper = '''
-T? $enumValueHelperFunctionName<T>(Map<T, String> enumValues, String? source) {
-  if (source == null) {
-    return null;
-  }
-  return enumValues.entries
-      .singleWhere((e) => e.value == source,
-          orElse: () => throw ArgumentError(
-              '`\$source` is not one of the supported values: '
-              '\${enumValues.values.join(', ')}'))
-      .key;
-}''';
+T $enumValueHelperFunctionName<T>(Map<T, String> enumValues, String source) =>
+ enumValues
+    .entries
+    .singleWhere((e) => e.value == source,
+        orElse: () => throw ArgumentError(
+            '`\$source` is not one of the supported values: '
+            '\${enumValues.values.join(', ')}'))
+    .key;
+''';
+
+const nullableEnumValueHelperFunctionName =
+    r'_$nullableEnumValueHelperNullable';
+
+const nullableEnumValueHelper = '''
+T? $nullableEnumValueHelperFunctionName<T>(Map<T, String> enumValues, String? source) =>
+  source == null ? null : $enumValueHelperFunctionName(enumValues, source);
+''';
