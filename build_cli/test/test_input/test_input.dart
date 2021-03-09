@@ -1,4 +1,7 @@
+// @dart=2.12
+
 import 'package:build_cli_annotations/build_cli_annotations.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:source_gen_test/annotations.dart';
 
 @ShouldThrow(
@@ -6,7 +9,7 @@ import 'package:source_gen_test/annotations.dart';
 )
 @CliOptions()
 class UnsupportedFieldType {
-  Duration number;
+  Duration? number;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -14,7 +17,7 @@ class UnsupportedFieldType {
 @CliOptions()
 class DefaultNotInAllowed {
   @CliOption(defaultsTo: 'a', allowed: ['b'])
-  String option;
+  String? option;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -22,7 +25,7 @@ class DefaultNotInAllowed {
 @CliOptions()
 class NegatableOption {
   @CliOption(negatable: true)
-  String option;
+  String? option;
 }
 
 @ShouldThrow('Could not handle field `options`. '
@@ -30,7 +33,7 @@ class NegatableOption {
 @CliOptions()
 class NegatableMultiOption {
   @CliOption(negatable: true)
-  List<String> options;
+  List<String>? options;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -40,9 +43,9 @@ class NegatableMultiOption {
 @CliOptions()
 class ConvertAsStatic {
   @CliOption(convert: _staticConvertStringToDuration)
-  String option;
+  String? option;
 
-  static Duration _staticConvertStringToDuration(String source) => null;
+  static Duration? _staticConvertStringToDuration(String source) => null;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -51,10 +54,10 @@ class ConvertAsStatic {
 @CliOptions()
 class BadConvertReturn {
   @CliOption(convert: _convertStringToDuration)
-  String option;
+  String? option;
 }
 
-Duration _convertStringToDuration(String source) => null;
+Duration? _convertStringToDuration(String source) => null;
 
 @ShouldThrow('Could not handle field `option`. '
     'The convert function `_convertStringToDuration` return type '
@@ -62,7 +65,7 @@ Duration _convertStringToDuration(String source) => null;
 @CliOptions()
 class ConvertOnMulti {
   @CliOption(convert: _convertStringToDuration)
-  List<Duration> option;
+  List<Duration>? option;
 }
 
 @ShouldThrow(
@@ -72,7 +75,7 @@ class ConvertOnMulti {
 @CliOptions()
 class FlagWithStringDefault {
   @CliOption(defaultsTo: 'string')
-  bool option;
+  bool? option;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -80,7 +83,7 @@ class FlagWithStringDefault {
 @CliOptions()
 class FlagWithAllowed {
   @CliOption(allowed: [])
-  bool option;
+  bool? option;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -88,7 +91,7 @@ class FlagWithAllowed {
 @CliOptions()
 class FlagWithAllowedHelp {
   @CliOption(allowedHelp: {})
-  bool option;
+  bool? option;
 }
 
 @ShouldThrow('Could not handle field `option`. '
@@ -96,7 +99,7 @@ class FlagWithAllowedHelp {
 @CliOptions()
 class FlagWithValueHelp {
   @CliOption(valueHelp: 'string')
-  bool option;
+  bool? option;
 }
 
 @ShouldGenerate(r'''
@@ -129,13 +132,13 @@ WithCommand parseWithCommand(List<String> args) {
 ''')
 @CliOptions()
 class WithCommand {
-  ArgResults command;
+  ArgResults? command;
 }
 
 @ShouldGenerate(r'''
 SpecialNotAnnotated _$parseSpecialNotAnnotatedResult(ArgResults result) =>
     SpecialNotAnnotated()
-      ..option = result['option'] as String
+      ..option = result['option'] as String?
       ..rest = result.rest
       ..command = result.command
       ..optionWasParsed = result.wasParsed('option');
@@ -153,10 +156,10 @@ SpecialNotAnnotated parseSpecialNotAnnotated(List<String> args) {
 ''')
 @CliOptions()
 class SpecialNotAnnotated {
-  String option;
-  bool rest;
-  ArgResults command;
-  bool optionWasParsed;
+  String? option;
+  bool? rest;
+  ArgResults? command;
+  bool? optionWasParsed;
 }
 
 @ShouldGenerate(r'''
@@ -179,16 +182,16 @@ AnnotatedCommandWithParser parseAnnotatedCommandWithParser(List<String> args) {
 @CliOptions()
 class AnnotatedCommandWithParser {
   @CliOption(convert: _stringToArgsResults)
-  ArgResults command;
+  ArgResults? command;
 }
 
-ArgResults _stringToArgsResults(String value) => null;
+ArgResults? _stringToArgsResults(String value) => null;
 
 @ShouldThrow('Could not handle field `nothingWasParsed`. Could not find '
     'expected source field `nothing`.')
 @CliOptions()
 class LonelyWasParsed {
-  bool nothingWasParsed;
+  bool? nothingWasParsed;
 }
 
 @ShouldThrow(
@@ -196,7 +199,7 @@ class LonelyWasParsed {
 @CliOptions()
 class AnnotatedCommandNoParser {
   @CliOption()
-  ArgResults command;
+  ArgResults? command;
 }
 
 @ShouldThrow(
@@ -212,10 +215,10 @@ const theAnswer = 42;
     ' `@CliOptions` can only be applied to a class.',
     todo: 'Remove the `@CliOptions` annotation from `annotatedMethod`.')
 @CliOptions()
-Object annotatedMethod() => null;
+Object? annotatedMethod() => null;
 
 @ShouldGenerate(r'''
-T _$enumValueHelper<T>(Map<T, String> enumValues, String source) {
+T? _$enumValueHelper<T>(Map<T, String> enumValues, String? source) {
   if (source == null) {
     return null;
   }
@@ -229,8 +232,8 @@ T _$enumValueHelper<T>(Map<T, String> enumValues, String source) {
 
 DefaultOverride _$parseDefaultOverrideResult(ArgResults result) =>
     DefaultOverride()
-      ..shouldDoThing = result['should-do-thing'] as bool
-      ..otherSetting = result['other-setting'] as String
+      ..shouldDoThing = result['should-do-thing'] as bool?
+      ..otherSetting = result['other-setting'] as String?
       ..enumValue =
           _$enumValueHelper(_$TestEnumEnumMap, result['enum-value'] as String);
 
@@ -242,12 +245,13 @@ const _$TestEnumEnumMap = <TestEnum, String>{
 
 ArgParser _$populateDefaultOverrideParser(
   ArgParser parser, {
-  bool shouldDoThingDefaultOverride,
-  String otherSettingDefaultOverride,
-  TestEnum enumValueDefaultOverride,
+  bool? shouldDoThingDefaultOverride,
+  String? otherSettingDefaultOverride,
+  TestEnum? enumValueDefaultOverride,
 }) =>
     parser
-      ..addFlag('should-do-thing', defaultsTo: shouldDoThingDefaultOverride)
+      ..addFlag('should-do-thing',
+          defaultsTo: shouldDoThingDefaultOverride ?? null)
       ..addOption('other-setting',
           defaultsTo: otherSettingDefaultOverride ?? 'default value')
       ..addOption('enum-value',
@@ -264,23 +268,23 @@ DefaultOverride parseDefaultOverride(List<String> args) {
 @CliOptions()
 class DefaultOverride {
   @CliOption(provideDefaultToOverride: true)
-  bool shouldDoThing;
+  bool? shouldDoThing;
 
   @CliOption(provideDefaultToOverride: true, defaultsTo: 'default value')
-  String otherSetting;
+  String? otherSetting;
 
   @CliOption(provideDefaultToOverride: true)
-  TestEnum enumValue;
+  TestEnum? enumValue;
 }
 
 enum TestEnum { alpha, beta, $gama }
 
 @ShouldGenerate(r'''
 PrivateCtor _$parsePrivateCtorResult(ArgResults result) =>
-    PrivateCtor._(flag: result['flag'] as bool);
+    PrivateCtor._(flag: result['flag'] as bool?);
 
 ArgParser _$populatePrivateCtorParser(ArgParser parser) =>
-    parser..addFlag('flag');
+    parser..addFlag('flag', defaultsTo: null);
 
 final _$parserForPrivateCtor = _$populatePrivateCtorParser(ArgParser());
 
@@ -291,7 +295,7 @@ PrivateCtor parsePrivateCtor(List<String> args) {
 ''')
 @CliOptions()
 class PrivateCtor {
-  final bool flag;
+  final bool? flag;
 
   PrivateCtor._({this.flag});
 }
@@ -304,4 +308,62 @@ class TwoNonDefaultConstructors {
   TwoNonDefaultConstructors.values(this.flag);
 
   TwoNonDefaultConstructors.defaults() : flag = false;
+}
+
+@ShouldGenerate(r'''
+T? _$enumValueHelper<T>(Map<T, String> enumValues, String? source) {
+  if (source == null) {
+    return null;
+  }
+  return enumValues.entries
+      .singleWhere((e) => e.value == source,
+          orElse: () => throw ArgumentError(
+              '`$source` is not one of the supported values: '
+              '${enumValues.values.join(', ')}'))
+      .key;
+}
+
+T _$badNumberFormat<T extends num>(
+        String source, String type, String argName) =>
+    throw FormatException(
+        'Cannot parse "$source" into `$type` for option "$argName".');
+
+NonNullableTypes _$parseNonNullableTypesResult(ArgResults result) =>
+    NonNullableTypes(
+        name: result['name'] as String,
+        enumValue: _$enumValueHelper(
+            _$TestEnumEnumMap, result['enum-value'] as String)!,
+        number: int.tryParse(result['number'] as String) ??
+            _$badNumberFormat(result['number'] as String, 'int', 'number'));
+
+const _$TestEnumEnumMap = <TestEnum, String>{
+  TestEnum.alpha: 'alpha',
+  TestEnum.beta: 'beta',
+  TestEnum.$gama: r'$gama'
+};
+
+ArgParser _$populateNonNullableTypesParser(ArgParser parser) => parser
+  ..addOption('name')
+  ..addOption('enum-value', allowed: ['alpha', 'beta', r'$gama'])
+  ..addOption('number');
+
+final _$parserForNonNullableTypes =
+    _$populateNonNullableTypesParser(ArgParser());
+
+NonNullableTypes parseNonNullableTypes(List<String> args) {
+  final result = _$parserForNonNullableTypes.parse(args);
+  return _$parseNonNullableTypesResult(result);
+}
+''')
+@CliOptions()
+class NonNullableTypes {
+  final String name;
+  final TestEnum enumValue;
+  final int number;
+
+  NonNullableTypes({
+    required this.name,
+    required this.enumValue,
+    required this.number,
+  });
 }

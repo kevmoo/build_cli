@@ -43,6 +43,7 @@ Future<void> main() async {
         'TwoNonDefaultConstructors',
         'UnsupportedFieldType',
         'WithCommand',
+        'NonNullableTypes',
       ],
     );
   });

@@ -12,6 +12,7 @@ const boolChecker = TypeChecker.fromRuntime(bool);
 const listChecker = TypeChecker.fromRuntime(List);
 const numChecker = TypeChecker.fromRuntime(num);
 const stringChecker = TypeChecker.fromRuntime(String);
+const objectChecker = TypeChecker.fromRuntime(Object);
 const _argResultsChecker = TypeChecker.fromRuntime(ArgResults);
 const _cliOptionChecker = TypeChecker.fromRuntime(CliOption);
 const _iterableChecker = TypeChecker.fromRuntime(Iterable);
@@ -150,7 +151,12 @@ CliOption _getOptions(FieldElement element) {
     final interfaceType = element.type as InterfaceType;
 
     final enumNames = interfaceType.accessors
-        .where((p) => p.returnType == element.type)
+        .where((p) =>
+            // An enum's values are non-nullable. For example, If the enum
+            // field's type is `BuildTool?` it's accessors will be the
+            // non-nullable type, `BuildTool`.
+            p.returnType.getDisplayString(withNullability: false) ==
+            element.type.getDisplayString(withNullability: false))
         .map((p) => p.name)
         .toList();
 
@@ -241,7 +247,6 @@ CliOption _getOptions(FieldElement element) {
     hide: annotation.read('hide').literalValue as bool,
     name: annotation.read('name').literalValue as String,
     negatable: annotation.read('negatable').literalValue as bool,
-    nullable: (annotation.read('nullable')?.literalValue ?? false) as bool,
     provideDefaultToOverride:
         annotation.read('provideDefaultToOverride').literalValue as bool ??
             false,

@@ -1,3 +1,5 @@
+// @dart=2.12
+
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 
 part 'pubviz_example.g.dart';
@@ -14,12 +16,12 @@ class PubvizOptions {
   final FormatOptions format;
 
   @CliOption(hide: true)
-  final String secret;
+  final String? secret;
 
   @CliOption(
       abbr: 'i',
       help: 'A comma seperated list of packages to exclude in the output.')
-  final List<String> ignorePackages;
+  final List<String>? ignorePackages;
 
   @CliOption(defaultsTo: 8080, valueHelp: 'PORT')
   final int productionPort;
@@ -41,14 +43,22 @@ class PubvizOptions {
   })
   int devPort;
 
-  List listOfNothing;
-  List<dynamic> listOfDynamic;
-  List<Object> listOfObject;
+  List? listOfNothing;
+  List<dynamic>? listOfDynamic;
+  List<Object>? listOfObject;
+
   //TODO: support List<num>
   //List<int> listenPorts;
 
-  PubvizOptions(
-      {this.format, this.secret, this.ignorePackages, this.productionPort});
+  PubvizOptions({
+    required this.format,
+    required this.productionPort,
+    required this.devPort,
+    required this.doubleValue,
+    required this.numValue,
+    this.secret,
+    this.ignorePackages,
+  });
 }
 
 enum FormatOptions { dot, html }

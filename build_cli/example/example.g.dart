@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// @dart=2.12
 
 // ignore_for_file: lines_longer_than_80_chars
 
@@ -8,7 +9,7 @@ part of 'example.dart';
 // CliGenerator
 // **************************************************************************
 
-T _$enumValueHelper<T>(Map<T, String> enumValues, String source) {
+T? _$enumValueHelper<T>(Map<T, String> enumValues, String? source) {
   if (source == null) {
     return null;
   }
@@ -24,7 +25,7 @@ Options _$parseOptionsResult(ArgResults result) =>
     Options(result['name'] as String, nameWasParsed: result.wasParsed('name'))
       ..yell = result['yell'] as bool
       ..displayLanguage = _$enumValueHelper(
-          _$LanguageEnumMap, result['display-language'] as String)
+          _$LanguageEnumMap, result['display-language'] as String)!
       ..help = result['help'] as bool;
 
 const _$LanguageEnumMap = <Language, String>{

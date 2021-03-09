@@ -1,7 +1,7 @@
+// @dart=2.12
+
 import 'dart:io';
 
-import 'package:io/ansi.dart';
-import 'package:io/io.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 
 part 'example.g.dart';
@@ -21,20 +21,20 @@ class Options {
   ///
   /// Fields without the [CliOption] annotation are picked up with simple
   /// defaults.
-  bool yell;
+  late bool yell;
 
   /// Field names are also "kebab cased" automatically.
   ///
   /// This becomes `--display-language`.
   @CliOption(defaultsTo: Language.en, abbr: 'l')
-  Language displayLanguage;
+  late Language displayLanguage;
 
   @CliOption(negatable: false, help: 'Prints usage information.')
-  bool help;
+  late bool help;
 
-  /// Populates final fields as long as there are matching constructor
-  /// parameters.
-  Options(this.name, {this.nameWasParsed});
+  /// Populates final and non-null fields as long as there are matching
+  /// constructor parameters.
+  Options(this.name, {this.nameWasParsed = false});
 }
 
 /// Enums are a great way to specify options with a fixed set of allowed
@@ -49,10 +49,10 @@ void main(List<String> args) {
       throw const FormatException('You must provide a name.');
     }
   } on FormatException catch (e) {
-    print(red.wrap(e.message));
+    print(e.message);
     print('');
     _printUsage();
-    exitCode = ExitCode.usage.code;
+    exitCode = 64;
     return;
   }
 

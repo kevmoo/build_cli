@@ -26,7 +26,7 @@ Future validateSdkConstraint(BuildStep buildStep) async {
   final uri = 'asset:${buildStep.inputId.package}/pubspec.yaml';
   final thing = await buildStep.readAsString(AssetId.resolve(uri));
 
-  final pubSpecYaml = loadYaml(thing, sourceUrl: uri) as YamlMap;
+  final pubSpecYaml = loadYaml(thing, sourceUrl: Uri.parse(uri)) as YamlMap;
 
   final environment = pubSpecYaml['environment'];
 

@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// @dart=2.12
 
 // ignore_for_file: lines_longer_than_80_chars
 
@@ -9,7 +10,7 @@ part of 'undefined_boolean_example.dart';
 // **************************************************************************
 
 NullableOptions _$parseNullableOptionsResult(ArgResults result) =>
-    NullableOptions(result['nullable-option'] as bool);
+    NullableOptions(result['nullable-option'] as bool?);
 
 ArgParser _$populateNullableOptionsParser(ArgParser parser) =>
     parser..addFlag('nullable-option', defaultsTo: null);
