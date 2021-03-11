@@ -1,3 +1,8 @@
+## 2.0.0
+
+- Support generating null-safe code.
+- Require Dart SDK `>=2.12.0 <3.0.0`.
+
 ## 1.3.10
 
 - Require Dart SDK `>=2.7.0 <3.0.0`.
