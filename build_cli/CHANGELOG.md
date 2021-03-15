@@ -1,3 +1,7 @@
+## 2.0.1
+
+- Require `package:build` `^2.0.0`.
+
 ## 2.0.0
 
 - Support generating null-safe code.
