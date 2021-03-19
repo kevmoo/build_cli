@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.12
 
 // ignore_for_file: lines_longer_than_80_chars
 
@@ -36,10 +35,11 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) => PeanutOptions(
     release: result['release'] as bool,
     rest: result.rest,
     secret: result['secret'] as bool,
+    minRuntime: _convertNotNull(result['min-runtime'] as String),
     buildConfig: result['build-config'] as String?,
     buildTool: _$nullableEnumValueHelperNullable(
-        _$BuildToolEnumMap, result['build-tool'] as String))
-  ..maxRuntime = _convert(result['max-runtime'] as String)
+        _$BuildToolEnumMap, result['build-tool'] as String?))
+  ..maxRuntime = _convert(result['max-runtime'] as String?)
   ..command = result.command;
 
 const _$PubBuildModeEnumMap = <PubBuildMode, String>{
@@ -60,6 +60,7 @@ const _$BazelOptionsEnumMap = <BazelOptions, String>{
 };
 
 /// The value for [maxRuntimeDefaultOverride] must be a [String] that is convertible to [Duration].
+/// The value for [minRuntimeDefaultOverride] must be a [String] that is convertible to [Duration].
 ArgParser _$populatePeanutOptionsParser(
   ArgParser parser, {
   String? directoryDefaultOverride,
@@ -74,6 +75,7 @@ ArgParser _$populatePeanutOptionsParser(
   bool? secretDefaultOverride,
   bool? releaseDefaultOverride,
   String? maxRuntimeDefaultOverride,
+  String? minRuntimeDefaultOverride,
 }) =>
     parser
       ..addOption('directory',
@@ -118,7 +120,8 @@ ArgParser _$populatePeanutOptionsParser(
           negatable: false)
       ..addFlag('secret', defaultsTo: secretDefaultOverride, hide: true)
       ..addFlag('release', defaultsTo: releaseDefaultOverride ?? true)
-      ..addOption('max-runtime', defaultsTo: maxRuntimeDefaultOverride);
+      ..addOption('max-runtime', defaultsTo: maxRuntimeDefaultOverride)
+      ..addOption('min-runtime', defaultsTo: minRuntimeDefaultOverride ?? '0');
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(ArgParser());
 

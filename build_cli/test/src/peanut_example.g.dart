@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.12
 
 // ignore_for_file: lines_longer_than_80_chars
 
@@ -36,10 +35,11 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) => PeanutOptions(
     release: result['release'] as bool,
     rest: result.rest,
     secret: result['secret'] as bool,
+    minRuntime: _convertNotNull(result['min-runtime'] as String),
     buildConfig: result['build-config'] as String?,
     buildTool: _$nullableEnumValueHelperNullable(
-        _$BuildToolEnumMap, result['build-tool'] as String))
-  ..maxRuntime = _convert(result['max-runtime'] as String)
+        _$BuildToolEnumMap, result['build-tool'] as String?))
+  ..maxRuntime = _convert(result['max-runtime'] as String?)
   ..command = result.command;
 
 const _$PubBuildModeEnumMap = <PubBuildMode, String>{
@@ -94,7 +94,8 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
       negatable: false)
   ..addFlag('secret', hide: true)
   ..addFlag('release', defaultsTo: true)
-  ..addOption('max-runtime');
+  ..addOption('max-runtime')
+  ..addOption('min-runtime', defaultsTo: '0');
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(ArgParser());
 

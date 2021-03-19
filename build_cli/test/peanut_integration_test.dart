@@ -98,6 +98,7 @@ void main() {
 -h, --help                Prints usage information. Which is so "$" you don't
                           even know it!
     --[no-]release        (defaults to on)
-    --max-runtime         ''');
+    --max-runtime         
+    --min-runtime         (defaults to "0")''');
   });
 }

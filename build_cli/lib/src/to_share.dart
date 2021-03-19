@@ -18,23 +18,29 @@ T throwBugFound<T>(FieldElement element) =>
             'with the stace trace.');
 
 @alwaysThrows
-T throwUnsupported<T>(FieldElement element, String message, {String todo}) =>
+Never throwUnsupported<T>(
+  FieldElement element,
+  String message, {
+  String? todo,
+}) =>
     throw InvalidGenerationSourceError(
-        'Could not handle field `${element.displayName}`. $message',
-        element: element,
-        todo: todo);
+      'Could not handle field `${element.displayName}`. $message',
+      element: element,
+      todo: todo ?? '',
+    );
 
 /// If [type] is the [Type] or implements the [Type] represented by [checker],
 /// returns the generic arguments to the [checker] [Type] if there are any.
 ///
 /// If the [checker] [Type] doesn't have generic arguments, `null` is returned.
-List<DartType> typeArgumentsOf(DartType type, TypeChecker checker) {
-  final implementation = _getImplementationType(type, checker) as InterfaceType;
+List<DartType>? typeArgumentsOf(DartType type, TypeChecker checker) {
+  final implementation =
+      _getImplementationType(type, checker) as InterfaceType?;
 
   return implementation?.typeArguments;
 }
 
-DartType _getImplementationType(DartType type, TypeChecker checker) {
+DartType? _getImplementationType(DartType type, TypeChecker checker) {
   if (checker.isExactlyType(type)) return type;
 
   if (type is InterfaceType) {
@@ -48,7 +54,7 @@ DartType _getImplementationType(DartType type, TypeChecker checker) {
     }
 
     if (type.superclass != null) {
-      return _getImplementationType(type.superclass, checker);
+      return _getImplementationType(type.superclass!, checker);
     }
   }
   return null;
@@ -63,7 +69,7 @@ String escapeDartString(String value) {
   var canBeRaw = true;
 
   value = value.replaceAllMapped(_escapeRegExp, (match) {
-    final value = match[0];
+    final value = match[0]!;
     if (value == "'") {
       hasSingleQuote = true;
       return value;
@@ -188,9 +194,9 @@ int _sortByLocation(FieldElement a, FieldElement b) {
   /// Returns the offset of given field/property in its source file – with a
   /// preference for the getter if it's defined.
   int _offsetFor(FieldElement e) {
-    if (e.getter != null && e.getter.nameOffset != e.nameOffset) {
+    if (e.getter != null && e.getter!.nameOffset != e.nameOffset) {
       assert(e.nameOffset == -1);
-      return e.getter.nameOffset;
+      return e.getter!.nameOffset;
     }
     return e.nameOffset;
   }
@@ -316,6 +322,6 @@ Set<String> writeConstructorInvocation(
 extension DartTypeExtension on DartType {
   bool isAssignableTo(DartType other) =>
       // If the library is `null`, treat it like dynamic => `true`
-      element.library == null ||
-      element.library.typeSystem.isAssignableTo(this, other);
+      element!.library == null ||
+      element!.library!.typeSystem.isAssignableTo(this, other);
 }
