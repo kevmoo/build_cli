@@ -17,8 +17,16 @@ const _argResultsChecker = TypeChecker.fromRuntime(ArgResults);
 const _cliOptionChecker = TypeChecker.fromRuntime(CliOption);
 const _iterableChecker = TypeChecker.fromRuntime(Iterable);
 
-String getConvertName(CliOption option) => _convertName[option];
-final _convertName = Expando<String>('convert name');
+class ConverterData {
+  final String name;
+  final bool nullable;
+
+  ConverterData(this.name, this.nullable);
+}
+
+ConverterData? converterDataFromOptions(CliOption option) =>
+    _convertName[option];
+final _convertName = Expando<ConverterData>('ConverterData');
 
 bool isMulti(DartType targetType) =>
     _iterableChecker.isExactlyType(targetType) ||
@@ -48,7 +56,7 @@ bool _couldBeCommand(FieldElement element) =>
     _argResultsChecker.isAssignableFromType(element.type);
 
 class ArgInfo {
-  final CliOption optionData;
+  final CliOption? optionData;
   final ArgType argType;
   final DartType dartType;
 
@@ -106,7 +114,7 @@ class ArgInfo {
 ArgType _getArgType(FieldElement element, CliOption option) {
   final targetType = element.type;
 
-  if (getConvertName(option) != null) {
+  if (converterDataFromOptions(option) != null) {
     return ArgType.option;
   }
 
@@ -131,12 +139,12 @@ ArgType _getArgType(FieldElement element, CliOption option) {
   );
 }
 
-CliOption _getOptions(FieldElement element) {
+CliOption? _getOptions(FieldElement element) {
   final obj = _cliOptionChecker.firstAnnotationOfExact(element) ??
-      _cliOptionChecker.firstAnnotationOfExact(element.getter);
+      _cliOptionChecker.firstAnnotationOfExact(element.getter!);
 
-  List<Object> allowedValues;
-  Object defaultsTo;
+  List<Object>? allowedValues;
+  Object? defaultsTo;
 
   final annotation = ConstantReader(obj);
 
@@ -145,7 +153,7 @@ CliOption _getOptions(FieldElement element) {
   }
 
   final defaultsToReader =
-      annotation.isNull ? null : annotation?.read('defaultsTo');
+      annotation.isNull ? null : annotation.read('defaultsTo');
 
   if (isEnum(element.type)) {
     final interfaceType = element.type as InterfaceType;
@@ -183,7 +191,7 @@ CliOption _getOptions(FieldElement element) {
     return CliOption(allowed: allowedValues);
   }
 
-  Map<Object, String> allowedHelp;
+  Map<Object, String>? allowedHelp;
   final allowedHelpReader = annotation.read('allowedHelp');
   if (!allowedHelpReader.isNull) {
     if (!allowedHelpReader.isMap) {
@@ -196,30 +204,30 @@ CliOption _getOptions(FieldElement element) {
       if (mapKeyReader.isString ||
           mapKeyReader.isInt ||
           mapKeyReader.isDouble) {
-        allowedHelp[mapKeyReader.literalValue] = entry.value.toStringValue();
+        allowedHelp[mapKeyReader.literalValue!] = entry.value!.toStringValue()!;
         continue;
       }
 
-      if (isEnum(entry.key.type)) {
+      if (isEnum(entry.key!.type!)) {
         assert(allowedValues != null);
         final stringValue = _enumValueForDartObject<String>(
-            entry.key, allowedValues.cast<String>(), (v) => v);
-        allowedHelp[stringValue] = entry.value.toStringValue();
+            entry.key!, allowedValues!.cast<String>(), (v) => v);
+        allowedHelp[stringValue] = entry.value!.toStringValue()!;
         continue;
       }
 
-      throwUnsupported(element, 'I do not get it! - ${entry.key.type}');
+      throwUnsupported(element, 'I do not get it! - ${entry.key!.type}');
     }
   }
 
   final allowedReader = annotation.read('allowed');
   if (!allowedReader.isNull) {
     allowedValues = allowedReader.listValue
-        .map((o) => ConstantReader(o).literalValue)
+        .map((o) => ConstantReader(o).literalValue!)
         .toList();
   }
 
-  if (!defaultsToReader.isNull) {
+  if (!defaultsToReader!.isNull) {
     if (isEnum(element.type)) {
       // Already taken care of above, right?
       assert(defaultsTo != null);
@@ -244,23 +252,23 @@ CliOption _getOptions(FieldElement element) {
   }
 
   final option = CliOption(
-    abbr: annotation.read('abbr').literalValue as String,
+    abbr: annotation.read('abbr').literalValue as String?,
     allowed: allowedValues,
     allowedHelp: allowedHelp,
     defaultsTo: defaultsTo,
-    help: annotation.read('help').literalValue as String,
-    hide: annotation.read('hide').literalValue as bool,
-    name: annotation.read('name').literalValue as String,
-    negatable: annotation.read('negatable').literalValue as bool,
+    help: annotation.read('help').literalValue as String?,
+    hide: annotation.read('hide').literalValue as bool?,
+    name: annotation.read('name').literalValue as String?,
+    negatable: annotation.read('negatable').literalValue as bool?,
     provideDefaultToOverride:
-        annotation.read('provideDefaultToOverride').literalValue as bool ??
+        annotation.read('provideDefaultToOverride').literalValue as bool? ??
             false,
-    valueHelp: annotation.read('valueHelp').literalValue as String,
+    valueHelp: annotation.read('valueHelp').literalValue as String?,
   );
 
   final convertReader = annotation.read('convert');
   if (!convertReader.isNull) {
-    final functionElement = convertReader.objectValue.toFunctionValue();
+    final functionElement = convertReader.objectValue.toFunctionValue()!;
 
     if (functionElement is MethodElement) {
       throwUnsupported(
@@ -291,16 +299,18 @@ CliOption _getOptions(FieldElement element) {
         'type `${element.type.getDisplayString(withNullability: false)}`.',
       );
     }
-    _convertName[option] = functionElement.name;
+    _convertName[option] = ConverterData(
+      functionElement.name,
+      functionElement.parameters.first.type.isNullableType,
+    );
   }
 
   return option;
 }
 
 T _enumValueForDartObject<T>(
-        DartObject source, List<T> items, String Function(T) name) =>
-    items.singleWhere(
-      (v) => source.getField(name(v)) != null,
-      // TODO: remove once pkg:analyzer < 0.35.0 is no longer supported
-      orElse: () => items[source.getField('index').toIntValue()],
-    );
+  DartObject source,
+  List<T> items,
+  String Function(T) name,
+) =>
+    items.singleWhere((v) => source.getField(name(v)) != null);

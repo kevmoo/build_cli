@@ -22,7 +22,10 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
 
   @override
   Stream<String> generateForAnnotatedElement(
-      Element element, ConstantReader annotation, BuildStep buildStep) async* {
+    Element element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  ) async* {
     await validateSdkConstraint(buildStep);
 
     if (element is! ClassElement) {
@@ -34,11 +37,9 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
           element: element);
     }
 
-    final classElement = element as ClassElement;
-
     // Get all of the fields that need to be assigned
     // TODO: We only care about constructor things + writable fields, right?
-    final fieldsList = createSortedFieldSet(classElement);
+    final fieldsList = createSortedFieldSet(element);
 
     // Explicitly using `LinkedHashMap` – we want these ordered.
     final fields = LinkedHashMap<String, FieldElement>.fromIterable(fieldsList,
@@ -46,9 +47,9 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
 
     // Get the constructor to use for the factory
 
-    final populateParserName = '_\$populate${classElement.name}Parser';
-    final parserFieldName = '_\$parserFor${classElement.name}';
-    final resultParserName = '_\$parse${classElement.name}Result';
+    final populateParserName = '_\$populate${element.name}Parser';
+    final parserFieldName = '_\$parserFor${element.name}';
+    final resultParserName = '_\$parse${element.name}Result';
 
     if (fieldsList.any((fe) => isEnum(fe.type))) {
       yield enumValueHelper;
@@ -70,16 +71,16 @@ T _$badNumberFormat<T extends num>(String source, String type, String argName) =
     var buffer = StringBuffer()
       ..write(
         '''
-${classElement.name} $resultParserName(ArgResults result) =>''',
+${element.name} $resultParserName(ArgResults result) =>''',
       );
 
     String deserializeForField(String fieldName,
-            {ParameterElement ctorParam}) =>
-        _deserializeForField(fields[fieldName], ctorParam, fields);
+            {ParameterElement? ctorParam}) =>
+        _deserializeForField(fields[fieldName]!, ctorParam, fields);
 
     final usedFields = writeConstructorInvocation(
         buffer,
-        classElement,
+        element,
         fields.keys,
         fields.values.where((fe) => !fe.isFinal).map((fe) => fe.name),
         {},
@@ -89,8 +90,7 @@ ${classElement.name} $resultParserName(ArgResults result) =>''',
 
     if (unusedFields.isNotEmpty) {
       final fieldsString = unusedFields.map((f) => '`$f`').join(', ');
-      log.warning(
-          'Skipping unassignable fields on `$classElement`: $fieldsString');
+      log.warning('Skipping unassignable fields on `$element`: $fieldsString');
 
       unusedFields.forEach(fields.remove);
     }
@@ -99,16 +99,16 @@ ${classElement.name} $resultParserName(ArgResults result) =>''',
     final provideOverrides = fields
         .map((k, v) => MapEntry(k, ArgInfo.fromField(v)))
           ..removeWhere(
-              (k, v) => !(v?.optionData?.provideDefaultToOverride ?? false));
+              (k, v) => !(v.optionData?.provideDefaultToOverride ?? false));
 
     final fyis = <String>[];
 
     /// If an override has a converter, then we don't support passing the
     /// override in via the source type. You have to pass it in as a [String].
     String typeForOverride(String fieldName, ArgInfo info) {
-      assert(info.optionData.provideDefaultToOverride);
+      assert(info.optionData!.provideDefaultToOverride);
       String typeInfo;
-      if (getConvertName(info.optionData) == null) {
+      if (converterDataFromOptions(info.optionData!) == null) {
         typeInfo = info.dartType.getDisplayString(withNullability: false);
       } else {
         fyis.add(
@@ -138,7 +138,7 @@ ${classElement.name} $resultParserName(ArgResults result) =>''',
           'parser');
     for (var f in fields.values) {
       if (isEnum(f.type)) {
-        yield enumValueMapFromType(f.type);
+        yield enumValueMapFromType(f.type)!;
       }
 
       _parserOptionFor(buffer, f);
@@ -149,7 +149,7 @@ ${classElement.name} $resultParserName(ArgResults result) =>''',
     yield 'final $parserFieldName = $populateParserName(ArgParser());';
 
     yield '''
-${classElement.name} parse${classElement.name}(List<String> args) {
+${element.name} parse${element.name}(List<String> args) {
   final result = $parserFieldName.parse(args);
   return $resultParserName(result);
 }
@@ -165,7 +165,7 @@ const _numCheckers = <TypeChecker, String>{
   TypeChecker.fromRuntime(double): 'double'
 };
 
-String _deserializeForField(FieldElement field, ParameterElement ctorParam,
+String _deserializeForField(FieldElement field, ParameterElement? ctorParam,
     Map<String, FieldElement> allFields) {
   final info = ArgInfo.fromField(field);
 
@@ -197,32 +197,37 @@ String _deserializeForField(FieldElement field, ParameterElement ctorParam,
 
   final argAccess = 'result[$argName]';
 
-  final convertName = getConvertName(info.optionData);
+  final convertName = converterDataFromOptions(info.optionData!);
   if (convertName != null) {
+    //info.optionData!.
     assert(info.argType == ArgType.option);
-    return '$convertName($argAccess as String)';
+    final nullableBit = convertName.nullable ? '?' : '';
+    return '${convertName.name}($argAccess as String$nullableBit)';
   }
 
   if (stringChecker.isExactlyType(targetType) ||
       boolChecker.isExactlyType(targetType)) {
     final suffix =
         targetType.nullabilitySuffix == NullabilitySuffix.question ? '?' : '';
-    return '$argAccess as ${targetType.element.name}$suffix';
+    return '$argAccess as ${targetType.element!.name}$suffix';
   }
 
   if (isEnum(targetType)) {
-    final helperName = targetType.nullabilitySuffix == NullabilitySuffix.none
-        ? enumValueHelperFunctionName
-        : nullableEnumValueHelperFunctionName;
+    final helperName = targetType.isNullableType
+        ? nullableEnumValueHelperFunctionName
+        : enumValueHelperFunctionName;
 
-    return '$helperName(${enumConstMapName(targetType)}, $argAccess as String)';
+    final nullableBit = targetType.isNullableType ? '?' : '';
+
+    return '$helperName('
+        '${enumConstMapName(targetType)}, $argAccess as String$nullableBit)';
   }
 
   if (info.argType == ArgType.multiOption) {
     assert(isMulti(targetType));
     // if the target type is dynamic, Object, or String – just send it in as-is
 
-    final args = typeArgumentsOf(targetType, listChecker);
+    final args = typeArgumentsOf(targetType, listChecker)!;
 
     assert(args.length == 1);
 
@@ -280,23 +285,23 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   }
   buffer.write('(${_getArgNameStringLiteral(element)}');
 
-  final options = info.optionData;
+  final options = info.optionData!;
 
   if (options.abbr != null) {
-    buffer.write(', abbr: ${escapeDartString(options.abbr)}');
+    buffer.write(', abbr: ${escapeDartString(options.abbr!)}');
   }
 
   if (options.help != null) {
-    buffer.write(', help: ${escapeDartString(options.help)}');
+    buffer.write(', help: ${escapeDartString(options.help!)}');
   }
 
   if (options.valueHelp != null) {
-    buffer.write(', valueHelp: ${escapeDartString(options.valueHelp)}');
+    buffer.write(', valueHelp: ${escapeDartString(options.valueHelp!)}');
   }
 
   final defaultsToValues = <String>[];
 
-  if (info.optionData.provideDefaultToOverride) {
+  if (options.provideDefaultToOverride) {
     if (isEnum(info.dartType)) {
       defaultsToValues.add('${enumConstMapName(element.type)}'
           '[${_overrideParamName(element.name)}]');
@@ -309,7 +314,7 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
       element.type.nullabilitySuffix == NullabilitySuffix.question) {
     // If it's a flag (boolean) and the option is nullable, use the default
     // value – even if it's null.
-    defaultsToValues.add((options.defaultsTo as bool).toString());
+    defaultsToValues.add((options.defaultsTo as bool?).toString());
   } else if (options.defaultsTo != null) {
     final defaultValueLiteral = (info.argType == ArgType.flag)
         ? (options.defaultsTo as bool).toString()
@@ -328,13 +333,13 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
 
   if (options.allowed != null) {
     final allowedItems =
-        options.allowed.map((e) => escapeDartString(e.toString())).join(', ');
+        options.allowed!.map((e) => escapeDartString(e.toString())).join(', ');
     buffer.write(', allowed: [$allowedItems]');
   }
 
   if (options.allowedHelp != null) {
     // TODO: throw/warn if `allowed` is null or doesn't match these?
-    final allowedHelpItems = options.allowedHelp.entries.map((e) {
+    final allowedHelpItems = options.allowedHelp!.entries.map((e) {
       final escapedKey = escapeDartString(e.key.toString());
       final escapedValue = escapeDartString(e.value);
       return '$escapedKey: $escapedValue';

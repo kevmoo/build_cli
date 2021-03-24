@@ -14,11 +14,9 @@ import 'src/build_cli_generator.dart';
 
 Builder buildCli(BuilderOptions options) {
   if (options.config.isNotEmpty) {
-    if (log == null) {
-      throw StateError('Requires build_runner >=0.8.2 – please upgrade.');
-    }
     log.warning(
-        'These options were ignored: `${options.config.keys.join(', ')}`.');
+      'These options were ignored: `${options.config.keys.join(', ')}`.',
+    );
   }
 
   return SharedPartBuilder(const [

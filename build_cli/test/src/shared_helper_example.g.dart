@@ -1,5 +1,4 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// @dart=2.12
 
 // ignore_for_file: lines_longer_than_80_chars
 
@@ -28,7 +27,7 @@ T _$badNumberFormat<T extends num>(
 
 FirstOptions _$parseFirstOptionsResult(ArgResults result) => FirstOptions()
   ..value = _$nullableEnumValueHelperNullable(
-      _$OptionValueEnumMap, result['value'] as String)
+      _$OptionValueEnumMap, result['value'] as String?)
   ..count = int.tryParse(result['count'] as String) ??
       _$badNumberFormat(result['count'] as String, 'int', 'count');
 
@@ -50,7 +49,7 @@ FirstOptions parseFirstOptions(List<String> args) {
 
 SecondOptions _$parseSecondOptionsResult(ArgResults result) => SecondOptions()
   ..value = _$nullableEnumValueHelperNullable(
-      _$OptionValueEnumMap, result['value'] as String)
+      _$OptionValueEnumMap, result['value'] as String?)
   ..count = int.tryParse(result['count'] as String) ??
       _$badNumberFormat(result['count'] as String, 'int', 'count');
 

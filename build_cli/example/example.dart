@@ -1,5 +1,3 @@
-// @dart=2.12
-
 import 'dart:io';
 
 import 'package:build_cli_annotations/build_cli_annotations.dart';

@@ -1,5 +1,3 @@
-// @dart=2.12
-
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 
 part 'peanut_example.g.dart';
@@ -95,6 +93,12 @@ class PeanutOptions {
   )
   Duration? maxRuntime;
 
+  @CliOption(
+    convert: _convertNotNull,
+    defaultsTo: 0,
+  )
+  final Duration minRuntime;
+
   // Explicitly not used – to validate logging behavior
   final String? coolBean = null;
 
@@ -113,6 +117,7 @@ class PeanutOptions {
     required this.release,
     required this.rest,
     required this.secret,
+    required this.minRuntime,
     this.buildConfig,
     this.buildTool,
   });
@@ -123,6 +128,17 @@ Duration? _convert(String? source) {
     return null;
   }
 
+  final seconds = int.tryParse(source);
+
+  if (seconds == null) {
+    throw FormatException(
+        'The value provided for "max-runtime" – "$source" – was not a number.');
+  }
+
+  return Duration(seconds: seconds);
+}
+
+Duration _convertNotNull(String source) {
   final seconds = int.tryParse(source);
 
   if (seconds == null) {

@@ -1,5 +1,3 @@
-// @dart=2.12
-
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
@@ -236,7 +234,7 @@ DefaultOverride _$parseDefaultOverrideResult(ArgResults result) =>
       ..shouldDoThing = result['should-do-thing'] as bool?
       ..otherSetting = result['other-setting'] as String?
       ..enumValue = _$nullableEnumValueHelperNullable(
-          _$TestEnumEnumMap, result['enum-value'] as String);
+          _$TestEnumEnumMap, result['enum-value'] as String?);
 
 const _$TestEnumEnumMap = <TestEnum, String>{
   TestEnum.alpha: 'alpha',

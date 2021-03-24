@@ -7,7 +7,7 @@ import 'util.dart';
 bool isEnum(DartType targetType) =>
     targetType is InterfaceType && targetType.element.isEnum;
 
-String enumValueMapFromType(DartType targetType) {
+String? enumValueMapFromType(DartType targetType) {
   final enumMap = _enumFieldsMap(targetType);
 
   if (enumMap == null) {
@@ -15,18 +15,18 @@ String enumValueMapFromType(DartType targetType) {
   }
 
   final items =
-      enumMap.entries.map((e) => '  ${targetType.element.name}.${e.key.name}: '
+      enumMap.entries.map((e) => '  ${targetType.element!.name}.${e.key.name}: '
           '${escapeDartString(kebab(e.value))}');
 
   return 'const ${enumConstMapName(targetType)} = '
-      '<${targetType.element.name}, String>{\n${items.join(',\n')}\n};';
+      '<${targetType.element!.name}, String>{\n${items.join(',\n')}\n};';
 }
 
 String enumConstMapName(DartType targetType) =>
-    '_\$${targetType.element.name}EnumMap';
+    '_\$${targetType.element!.name}EnumMap';
 
 /// If [targetType] is not an enum, `null` is returned.
-Map<FieldElement, String> _enumFieldsMap(DartType targetType) {
+Map<FieldElement, String>? _enumFieldsMap(DartType targetType) {
   if (targetType is InterfaceType && targetType.element.isEnum) {
     return Map<FieldElement, String>.fromEntries(targetType.element.fields
         .where((p) => !p.isSynthetic)
