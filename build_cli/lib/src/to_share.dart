@@ -8,16 +8,13 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/src/dart/element/inheritance_manager3.dart'
     show InheritanceManager3; // ignore: deprecated_member_use
-import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
-@alwaysThrows
-T throwBugFound<T>(FieldElement element) =>
+Never throwBugFound<T>(FieldElement element) =>
     throwUnsupported(element, "You've hit a bug in build_cli!",
         todo: 'Please rerun your build with --verbose and file as issue '
             'with the stace trace.');
 
-@alwaysThrows
 Never throwUnsupported<T>(
   FieldElement element,
   String message, {
