@@ -234,9 +234,9 @@ DefaultOverride _$parseDefaultOverrideResult(ArgResults result) =>
       ..shouldDoThing = result['should-do-thing'] as bool?
       ..otherSetting = result['other-setting'] as String?
       ..enumValue = _$nullableEnumValueHelperNullable(
-          _$TestEnumEnumMap, result['enum-value'] as String?);
+          _$TestEnumEnumMapBuildCli, result['enum-value'] as String?);
 
-const _$TestEnumEnumMap = <TestEnum, String>{
+const _$TestEnumEnumMapBuildCli = <TestEnum, String>{
   TestEnum.alpha: 'alpha',
   TestEnum.beta: 'beta',
   TestEnum.$gama: r'$gama'
@@ -254,7 +254,7 @@ ArgParser _$populateDefaultOverrideParser(
       ..addOption('other-setting',
           defaultsTo: otherSettingDefaultOverride ?? 'default value')
       ..addOption('enum-value',
-          defaultsTo: _$TestEnumEnumMap[enumValueDefaultOverride],
+          defaultsTo: _$TestEnumEnumMapBuildCli[enumValueDefaultOverride],
           allowed: ['alpha', 'beta', r'$gama']);
 
 final _$parserForDefaultOverride = _$populateDefaultOverrideParser(ArgParser());
@@ -327,11 +327,11 @@ NonNullableTypes _$parseNonNullableTypesResult(ArgResults result) =>
     NonNullableTypes(
         name: result['name'] as String,
         enumValue: _$enumValueHelper(
-            _$TestEnumEnumMap, result['enum-value'] as String),
+            _$TestEnumEnumMapBuildCli, result['enum-value'] as String),
         number: int.tryParse(result['number'] as String) ??
             _$badNumberFormat(result['number'] as String, 'int', 'number'));
 
-const _$TestEnumEnumMap = <TestEnum, String>{
+const _$TestEnumEnumMapBuildCli = <TestEnum, String>{
   TestEnum.alpha: 'alpha',
   TestEnum.beta: 'beta',
   TestEnum.$gama: r'$gama'
