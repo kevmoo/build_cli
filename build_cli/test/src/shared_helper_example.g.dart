@@ -27,11 +27,11 @@ T _$badNumberFormat<T extends num>(
 
 FirstOptions _$parseFirstOptionsResult(ArgResults result) => FirstOptions()
   ..value = _$nullableEnumValueHelperNullable(
-      _$OptionValueEnumMap, result['value'] as String?)
+      _$OptionValueEnumMapBuildCli, result['value'] as String?)
   ..count = int.tryParse(result['count'] as String) ??
       _$badNumberFormat(result['count'] as String, 'int', 'count');
 
-const _$OptionValueEnumMap = <OptionValue, String>{
+const _$OptionValueEnumMapBuildCli = <OptionValue, String>{
   OptionValue.a: 'a',
   OptionValue.b: 'b',
   OptionValue.c: 'c'
@@ -49,7 +49,7 @@ FirstOptions parseFirstOptions(List<String> args) {
 
 SecondOptions _$parseSecondOptionsResult(ArgResults result) => SecondOptions()
   ..value = _$nullableEnumValueHelperNullable(
-      _$OptionValueEnumMap, result['value'] as String?)
+      _$OptionValueEnumMapBuildCli, result['value'] as String?)
   ..count = int.tryParse(result['count'] as String) ??
       _$badNumberFormat(result['count'] as String, 'int', 'count');
 

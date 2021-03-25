@@ -22,8 +22,8 @@ T _$badNumberFormat<T extends num>(
         'Cannot parse "$source" into `$type` for option "$argName".');
 
 PubvizOptions _$parsePubvizOptionsResult(ArgResults result) => PubvizOptions(
-    format:
-        _$enumValueHelper(_$FormatOptionsEnumMap, result['format'] as String),
+    format: _$enumValueHelper(
+        _$FormatOptionsEnumMapBuildCli, result['format'] as String),
     productionPort: int.tryParse(result['production-port'] as String) ??
         _$badNumberFormat(
             result['production-port'] as String, 'int', 'production-port'),
@@ -40,7 +40,7 @@ PubvizOptions _$parsePubvizOptionsResult(ArgResults result) => PubvizOptions(
   ..listOfDynamic = result['list-of-dynamic'] as List
   ..listOfObject = result['list-of-object'] as List<Object>;
 
-const _$FormatOptionsEnumMap = <FormatOptions, String>{
+const _$FormatOptionsEnumMapBuildCli = <FormatOptions, String>{
   FormatOptions.dot: 'dot',
   FormatOptions.html: 'html'
 };

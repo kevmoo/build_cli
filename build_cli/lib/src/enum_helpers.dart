@@ -23,7 +23,7 @@ String? enumValueMapFromType(DartType targetType) {
 }
 
 String enumConstMapName(DartType targetType) =>
-    '_\$${targetType.element!.name}EnumMap';
+    '_\$${targetType.element!.name}EnumMapBuildCli';
 
 /// If [targetType] is not an enum, `null` is returned.
 Map<FieldElement, String>? _enumFieldsMap(DartType targetType) {

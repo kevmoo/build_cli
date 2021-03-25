@@ -22,15 +22,16 @@ T? _$nullableEnumValueHelperNullable<T>(
 
 PeanutOptions _$parsePeanutOptionsResult(ArgResults result) => PeanutOptions(
     bazelOptions: _$enumValueHelper(
-        _$BazelOptionsEnumMap, result['bazel-options'] as String),
+        _$BazelOptionsEnumMapBuildCli, result['bazel-options'] as String),
     branch: result['branch'] as String,
     buildConfigWasParsed: result.wasParsed('build-config'),
     debugBuildTool: _$enumValueHelper(
-        _$BuildToolEnumMap, result['debug-build-tool'] as String),
+        _$BuildToolEnumMapBuildCli, result['debug-build-tool'] as String),
     directory: result['directory'] as String,
     help: result['help'] as bool,
     message: result['message'] as String,
-    mode: _$enumValueHelper(_$PubBuildModeEnumMap, result['mode'] as String),
+    mode: _$enumValueHelper(
+        _$PubBuildModeEnumMapBuildCli, result['mode'] as String),
     modeWasParsed: result.wasParsed('mode'),
     release: result['release'] as bool,
     rest: result.rest,
@@ -38,22 +39,22 @@ PeanutOptions _$parsePeanutOptionsResult(ArgResults result) => PeanutOptions(
     minRuntime: _convertNotNull(result['min-runtime'] as String),
     buildConfig: result['build-config'] as String?,
     buildTool: _$nullableEnumValueHelperNullable(
-        _$BuildToolEnumMap, result['build-tool'] as String?))
+        _$BuildToolEnumMapBuildCli, result['build-tool'] as String?))
   ..maxRuntime = _convert(result['max-runtime'] as String?)
   ..command = result.command;
 
-const _$PubBuildModeEnumMap = <PubBuildMode, String>{
+const _$PubBuildModeEnumMapBuildCli = <PubBuildMode, String>{
   PubBuildMode.release: 'release',
   PubBuildMode.debug: 'debug'
 };
 
-const _$BuildToolEnumMap = <BuildTool, String>{
+const _$BuildToolEnumMapBuildCli = <BuildTool, String>{
   BuildTool.pub: 'pub',
   BuildTool.build: 'build',
   BuildTool.$loco: r'$loco'
 };
 
-const _$BazelOptionsEnumMap = <BazelOptions, String>{
+const _$BazelOptionsEnumMapBuildCli = <BazelOptions, String>{
   BazelOptions.toSource: 'to-source',
   BazelOptions.fromSource: 'from-source',
   BazelOptions.viaAssets: 'via-assets'
@@ -84,7 +85,8 @@ ArgParser _$populatePeanutOptionsParser(
           abbr: 'b', defaultsTo: branchDefaultOverride ?? 'gh-pages')
       ..addOption('mode',
           help: 'The mode to run `pub build` in.',
-          defaultsTo: _$PubBuildModeEnumMap[modeDefaultOverride] ?? 'release',
+          defaultsTo:
+              _$PubBuildModeEnumMapBuildCli[modeDefaultOverride] ?? 'release',
           allowed: ['release', 'debug'])
       ..addOption('build-config',
           abbr: 'c',
@@ -96,7 +98,7 @@ ArgParser _$populatePeanutOptionsParser(
       ..addOption('build-tool',
           abbr: 't',
           help: 'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
-          defaultsTo: _$BuildToolEnumMap[buildToolDefaultOverride],
+          defaultsTo: _$BuildToolEnumMapBuildCli[buildToolDefaultOverride],
           allowed: [
             'pub',
             'build',
@@ -105,12 +107,14 @@ ArgParser _$populatePeanutOptionsParser(
       ..addOption('debug-build-tool',
           help: 'The build tool to use for debugging.',
           defaultsTo:
-              _$BuildToolEnumMap[debugBuildToolDefaultOverride] ?? r'$loco',
+              _$BuildToolEnumMapBuildCli[debugBuildToolDefaultOverride] ??
+                  r'$loco',
           allowed: ['pub', 'build', r'$loco'])
       ..addOption('bazel-options',
           help: 'nice options',
           defaultsTo:
-              _$BazelOptionsEnumMap[bazelOptionsDefaultOverride] ?? 'to-source',
+              _$BazelOptionsEnumMapBuildCli[bazelOptionsDefaultOverride] ??
+                  'to-source',
           allowed: ['to-source', 'from-source', 'via-assets'])
       ..addFlag('help',
           abbr: 'h',
