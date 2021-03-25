@@ -1,3 +1,8 @@
+## 2.1.0
+
+- Improve generation of null-safe code.
+- Migrate implementation to null-safe.
+
 ## 2.0.1
 
 - Require `package:build` `^2.0.0`.
