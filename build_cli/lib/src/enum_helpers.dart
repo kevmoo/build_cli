@@ -4,9 +4,6 @@ import 'package:source_helper/source_helper.dart';
 
 import 'util.dart';
 
-bool isEnum(DartType targetType) =>
-    targetType is InterfaceType && targetType.element.isEnum;
-
 String? enumValueMapFromType(DartType targetType) {
   final enumMap = _enumFieldsMap(targetType);
 
