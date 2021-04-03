@@ -228,7 +228,7 @@ String _deserializeForField(FieldElement field, ParameterElement? ctorParam,
     assert(isMulti(targetType));
     // if the target type is dynamic, Object, or String – just send it in as-is
 
-    final args = typeArgumentsOf(targetType, listChecker)!;
+    final args = targetType.typeArgumentsOf(listChecker)!;
 
     assert(args.length == 1);
 

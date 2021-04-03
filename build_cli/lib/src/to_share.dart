@@ -5,9 +5,8 @@
 // ignore_for_file: implementation_imports
 
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/src/dart/element/inheritance_manager3.dart'
-    show InheritanceManager3; // ignore: deprecated_member_use
+    show InheritanceManager3;
 import 'package:source_gen/source_gen.dart';
 
 Never throwBugFound<T>(FieldElement element) =>
@@ -15,7 +14,7 @@ Never throwBugFound<T>(FieldElement element) =>
         todo: 'Please rerun your build with --verbose and file as issue '
             'with the stace trace.');
 
-Never throwUnsupported<T>(
+Never throwUnsupported(
   FieldElement element,
   String message, {
   String? todo,
@@ -26,37 +25,6 @@ Never throwUnsupported<T>(
       todo: todo ?? '',
     );
 
-/// If [type] is the [Type] or implements the [Type] represented by [checker],
-/// returns the generic arguments to the [checker] [Type] if there are any.
-///
-/// If the [checker] [Type] doesn't have generic arguments, `null` is returned.
-List<DartType>? typeArgumentsOf(DartType type, TypeChecker checker) {
-  final implementation =
-      _getImplementationType(type, checker) as InterfaceType?;
-
-  return implementation?.typeArguments;
-}
-
-DartType? _getImplementationType(DartType type, TypeChecker checker) {
-  if (checker.isExactlyType(type)) return type;
-
-  if (type is InterfaceType) {
-    final match = [type.interfaces, type.mixins]
-        .expand((e) => e)
-        .map((type) => _getImplementationType(type, checker))
-        .firstWhere((value) => value != null, orElse: () => null);
-
-    if (match != null) {
-      return match;
-    }
-
-    if (type.superclass != null) {
-      return _getImplementationType(type.superclass!, checker);
-    }
-  }
-  return null;
-}
-
 /// Returns a [Set] of all instance [FieldElement] items for [element] and
 /// super classes, sorted first by their location in the inheritance hierarchy
 /// (super first) and then by their location in the source file.
@@ -65,10 +33,9 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
   // TODO: support overriding the field set with an annotation option
   final fieldsList = element.fields.where((e) => !e.isStatic).toList();
 
-  final manager = InheritanceManager3(); // ignore: deprecated_member_use
+  final manager = InheritanceManager3();
 
-  // ignore: deprecated_member_use
-  for (var v in manager.getInheritedMap(element.thisType).values) {
+  for (var v in manager.getInheritedMap2(element).values) {
     assert(v is! FieldElement);
     if (_dartCoreObjectChecker.isExactly(v.enclosingElement)) {
       continue;
