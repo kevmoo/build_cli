@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:analyzer/dart/element/nullability_suffix.dart';
-import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart' show BuildStep, AssetId;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:source_gen/source_gen.dart';
@@ -48,9 +46,4 @@ Future validateSdkConstraint(BuildStep buildStep) async {
       }
     }
   }
-}
-
-extension TypeExtension on DartType {
-  bool get isNullableType =>
-      isDynamic || nullabilitySuffix == NullabilitySuffix.question;
 }

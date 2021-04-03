@@ -1,7 +1,7 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
+import 'package:source_helper/source_helper.dart';
 
-import 'to_share.dart';
 import 'util.dart';
 
 bool isEnum(DartType targetType) =>

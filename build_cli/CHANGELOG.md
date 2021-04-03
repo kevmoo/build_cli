@@ -1,3 +1,5 @@
+## 2.1.2-dev
+
 ## 2.1.1
 
 - Change the name of the private `Map` used to support enums so that it does

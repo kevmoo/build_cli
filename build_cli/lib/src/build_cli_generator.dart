@@ -6,6 +6,7 @@ import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:build/build.dart' show log, BuildStep;
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
+import 'package:source_helper/source_helper.dart';
 
 import 'arg_info.dart';
 import 'enum_helpers.dart';
