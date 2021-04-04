@@ -52,11 +52,11 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
     final parserFieldName = '_\$parserFor${element.name}';
     final resultParserName = '_\$parse${element.name}Result';
 
-    if (fieldsList.any((fe) => isEnum(fe.type))) {
+    if (fieldsList.any((fe) => fe.type.isEnum)) {
       yield enumValueHelper;
 
       if (fieldsList.any((fe) =>
-          isEnum(fe.type) &&
+          fe.type.isEnum &&
           fe.type.nullabilitySuffix != NullabilitySuffix.none)) {
         yield nullableEnumValueHelper;
       }
@@ -138,7 +138,7 @@ ${element.name} $resultParserName(ArgResults result) =>''',
       ..write('ArgParser $populateParserName(ArgParser parser$overrideArgs) => '
           'parser');
     for (var f in fields.values) {
-      if (isEnum(f.type)) {
+      if (f.type.isEnum) {
         yield enumValueMapFromType(f.type)!;
       }
 
@@ -213,7 +213,7 @@ String _deserializeForField(FieldElement field, ParameterElement? ctorParam,
     return '$argAccess as ${targetType.element!.name}$suffix';
   }
 
-  if (isEnum(targetType)) {
+  if (targetType.isEnum) {
     final helperName = targetType.isNullableType
         ? nullableEnumValueHelperFunctionName
         : enumValueHelperFunctionName;
@@ -228,7 +228,7 @@ String _deserializeForField(FieldElement field, ParameterElement? ctorParam,
     assert(isMulti(targetType));
     // if the target type is dynamic, Object, or String – just send it in as-is
 
-    final args = typeArgumentsOf(targetType, listChecker)!;
+    final args = targetType.typeArgumentsOf(listChecker)!;
 
     assert(args.length == 1);
 
@@ -303,7 +303,7 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   final defaultsToValues = <String>[];
 
   if (options.provideDefaultToOverride) {
-    if (isEnum(info.dartType)) {
+    if (info.dartType.isEnum) {
       defaultsToValues.add('${enumConstMapName(element.type)}'
           '[${_overrideParamName(element.name)}]');
     } else {

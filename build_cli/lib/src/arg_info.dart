@@ -5,7 +5,6 @@ import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:source_helper/source_helper.dart';
 
-import 'enum_helpers.dart';
 import 'to_share.dart';
 import 'util.dart';
 
@@ -124,7 +123,7 @@ ArgType _getArgType(FieldElement element, CliOption option) {
   }
 
   if (stringChecker.isExactlyType(targetType) ||
-      isEnum(targetType) ||
+      targetType.isEnum ||
       numChecker.isAssignableFromType(targetType)) {
     return ArgType.option;
   }
@@ -156,7 +155,7 @@ CliOption? _getOptions(FieldElement element) {
   final defaultsToReader =
       annotation.isNull ? null : annotation.read('defaultsTo');
 
-  if (isEnum(element.type)) {
+  if (element.type.isEnum) {
     final interfaceType = element.type as InterfaceType;
 
     final enumNames = interfaceType.accessors
@@ -209,7 +208,7 @@ CliOption? _getOptions(FieldElement element) {
         continue;
       }
 
-      if (isEnum(entry.key!.type!)) {
+      if (entry.key!.type!.isEnum) {
         assert(allowedValues != null);
         final stringValue = _enumValueForDartObject<String>(
             entry.key!, allowedValues!.cast<String>(), (v) => v);
@@ -229,7 +228,7 @@ CliOption? _getOptions(FieldElement element) {
   }
 
   if (!defaultsToReader!.isNull) {
-    if (isEnum(element.type)) {
+    if (element.type.isEnum) {
       // Already taken care of above, right?
       assert(defaultsTo != null);
     } else if (defaultsToReader.isString ||
