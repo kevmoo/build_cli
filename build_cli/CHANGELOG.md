@@ -1,4 +1,6 @@
-## 2.1.2-dev
+## 2.1.2
+
+- Require the latest `package:build_config`.
 
 ## 2.1.1
 
