@@ -1,6 +1,5 @@
-import 'package:test/test.dart';
-
 import 'package:build_cli/src/util.dart';
+import 'package:test/test.dart';
 
 const _items = {
   'simple': 'simple',
