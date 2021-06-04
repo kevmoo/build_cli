@@ -1,4 +1,4 @@
-# Created with package:mono_repo v4.0.0
+# Created with package:mono_repo v4.1.0
 name: Dart CI
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v2.1.6
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;dart:stable"
@@ -33,15 +33,15 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - name: mono_repo self validate
-        run: pub global activate mono_repo 4.0.0
+        run: dart pub global activate mono_repo 4.1.0
       - name: mono_repo self validate
-        run: pub global run mono_repo generate --validate
+        run: dart pub global run mono_repo generate --validate
   job_002:
-    name: "analyzer_and_format; Dart 2.12.0; PKGS: build_cli, build_cli_annotations; `dartanalyzer --fatal-infos --fatal-warnings .`"
+    name: "analyzer_and_format; Dart 2.12.0; PKGS: build_cli, build_cli_annotations; `dart analyze --fatal-infos --fatal-warnings .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v2.1.6
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:build_cli-build_cli_annotations;commands:dartanalyzer"
@@ -56,70 +56,31 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: build_cli_pub_upgrade
-        name: "build_cli; pub upgrade --no-precompile"
+        name: build_cli; pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli
-        run: pub upgrade --no-precompile
-      - name: "build_cli; dartanalyzer --fatal-infos --fatal-warnings ."
+        run: pub upgrade
+      - name: "build_cli; dart analyze --fatal-infos --fatal-warnings ."
         if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli
-        run: dartanalyzer --fatal-infos --fatal-warnings .
+        run: dart analyze --fatal-infos --fatal-warnings .
       - id: build_cli_annotations_pub_upgrade
-        name: "build_cli_annotations; pub upgrade --no-precompile"
+        name: build_cli_annotations; pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli_annotations
-        run: pub upgrade --no-precompile
-      - name: "build_cli_annotations; dartanalyzer --fatal-infos --fatal-warnings ."
+        run: pub upgrade
+      - name: "build_cli_annotations; dart analyze --fatal-infos --fatal-warnings ."
         if: "always() && steps.build_cli_annotations_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli_annotations
-        run: dartanalyzer --fatal-infos --fatal-warnings .
+        run: dart analyze --fatal-infos --fatal-warnings .
     needs:
       - job_001
   job_003:
-    name: "analyzer_and_format; Dart dev; PKGS: build_cli, build_cli_annotations; `dartanalyzer --fatal-infos --fatal-warnings .`"
+    name: "analyzer_and_format; Dart 2.12.0; PKGS: build_cli, build_cli_annotations; `dart format --output=none --set-exit-if-changed .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.5
-        with:
-          path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli-build_cli_annotations;commands:dartanalyzer"
-          restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli-build_cli_annotations
-            os:ubuntu-latest;pub-cache-hosted;dart:dev
-            os:ubuntu-latest;pub-cache-hosted
-            os:ubuntu-latest
-      - uses: dart-lang/setup-dart@v1.0
-        with:
-          sdk: dev
-      - id: checkout
-        uses: actions/checkout@v2.3.4
-      - id: build_cli_pub_upgrade
-        name: "build_cli; pub upgrade --no-precompile"
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: build_cli
-        run: pub upgrade --no-precompile
-      - name: "build_cli; dartanalyzer --fatal-infos --fatal-warnings ."
-        if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
-        working-directory: build_cli
-        run: dartanalyzer --fatal-infos --fatal-warnings .
-      - id: build_cli_annotations_pub_upgrade
-        name: "build_cli_annotations; pub upgrade --no-precompile"
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: build_cli_annotations
-        run: pub upgrade --no-precompile
-      - name: "build_cli_annotations; dartanalyzer --fatal-infos --fatal-warnings ."
-        if: "always() && steps.build_cli_annotations_pub_upgrade.conclusion == 'success'"
-        working-directory: build_cli_annotations
-        run: dartanalyzer --fatal-infos --fatal-warnings .
-    needs:
-      - job_001
-  job_004:
-    name: "analyzer_and_format; Dart 2.12.0; PKGS: build_cli, build_cli_annotations; `dartfmt -n --set-exit-if-changed .`"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v2.1.6
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:build_cli-build_cli_annotations;commands:dartfmt"
@@ -134,31 +95,70 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: build_cli_pub_upgrade
-        name: "build_cli; pub upgrade --no-precompile"
+        name: build_cli; pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli
-        run: pub upgrade --no-precompile
-      - name: "build_cli; dartfmt -n --set-exit-if-changed ."
+        run: pub upgrade
+      - name: "build_cli; dart format --output=none --set-exit-if-changed ."
         if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli
-        run: dartfmt -n --set-exit-if-changed .
+        run: "dart format --output=none --set-exit-if-changed ."
       - id: build_cli_annotations_pub_upgrade
-        name: "build_cli_annotations; pub upgrade --no-precompile"
+        name: build_cli_annotations; pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli_annotations
-        run: pub upgrade --no-precompile
-      - name: "build_cli_annotations; dartfmt -n --set-exit-if-changed ."
+        run: pub upgrade
+      - name: "build_cli_annotations; dart format --output=none --set-exit-if-changed ."
         if: "always() && steps.build_cli_annotations_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli_annotations
-        run: dartfmt -n --set-exit-if-changed .
+        run: "dart format --output=none --set-exit-if-changed ."
     needs:
       - job_001
-  job_005:
-    name: "analyzer_and_format; Dart dev; PKGS: build_cli, build_cli_annotations; `dartfmt -n --set-exit-if-changed .`"
+  job_004:
+    name: "analyzer_and_format; Dart dev; PKGS: build_cli, build_cli_annotations; `dart analyze --fatal-infos --fatal-warnings .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v2.1.6
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli-build_cli_annotations;commands:dartanalyzer"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli-build_cli_annotations
+            os:ubuntu-latest;pub-cache-hosted;dart:dev
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@v1.0
+        with:
+          sdk: dev
+      - id: checkout
+        uses: actions/checkout@v2.3.4
+      - id: build_cli_pub_upgrade
+        name: build_cli; pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli
+        run: pub upgrade
+      - name: "build_cli; dart analyze --fatal-infos --fatal-warnings ."
+        if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli
+        run: dart analyze --fatal-infos --fatal-warnings .
+      - id: build_cli_annotations_pub_upgrade
+        name: build_cli_annotations; pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli_annotations
+        run: pub upgrade
+      - name: "build_cli_annotations; dart analyze --fatal-infos --fatal-warnings ."
+        if: "always() && steps.build_cli_annotations_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli_annotations
+        run: dart analyze --fatal-infos --fatal-warnings .
+    needs:
+      - job_001
+  job_005:
+    name: "analyzer_and_format; Dart dev; PKGS: build_cli, build_cli_annotations; `dart format --output=none --set-exit-if-changed .`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2.1.6
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli-build_cli_annotations;commands:dartfmt"
@@ -173,31 +173,31 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: build_cli_pub_upgrade
-        name: "build_cli; pub upgrade --no-precompile"
+        name: build_cli; pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli
-        run: pub upgrade --no-precompile
-      - name: "build_cli; dartfmt -n --set-exit-if-changed ."
+        run: pub upgrade
+      - name: "build_cli; dart format --output=none --set-exit-if-changed ."
         if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli
-        run: dartfmt -n --set-exit-if-changed .
+        run: "dart format --output=none --set-exit-if-changed ."
       - id: build_cli_annotations_pub_upgrade
-        name: "build_cli_annotations; pub upgrade --no-precompile"
+        name: build_cli_annotations; pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli_annotations
-        run: pub upgrade --no-precompile
-      - name: "build_cli_annotations; dartfmt -n --set-exit-if-changed ."
+        run: pub upgrade
+      - name: "build_cli_annotations; dart format --output=none --set-exit-if-changed ."
         if: "always() && steps.build_cli_annotations_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli_annotations
-        run: dartfmt -n --set-exit-if-changed .
+        run: "dart format --output=none --set-exit-if-changed ."
     needs:
       - job_001
   job_006:
-    name: "unit_test; Dart 2.12.0; PKG: build_cli; `pub run test --run-skipped --reporter expanded`"
+    name: "unit_test; Dart 2.12.0; PKG: build_cli; `dart test --run-skipped --reporter expanded`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v2.1.6
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:build_cli;commands:test"
@@ -212,14 +212,14 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: build_cli_pub_upgrade
-        name: "build_cli; pub upgrade --no-precompile"
+        name: build_cli; pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli
-        run: pub upgrade --no-precompile
-      - name: "build_cli; pub run test --run-skipped --reporter expanded"
+        run: pub upgrade
+      - name: "build_cli; dart test --run-skipped --reporter expanded"
         if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli
-        run: pub run test --run-skipped --reporter expanded
+        run: dart test --run-skipped --reporter expanded
     needs:
       - job_001
       - job_002
@@ -227,11 +227,11 @@ jobs:
       - job_004
       - job_005
   job_007:
-    name: "unit_test; Dart dev; PKG: build_cli; `pub run test --run-skipped --reporter expanded`"
+    name: "unit_test; Dart dev; PKG: build_cli; `dart test --run-skipped --reporter expanded`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v2.1.6
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli;commands:test"
@@ -246,14 +246,14 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: build_cli_pub_upgrade
-        name: "build_cli; pub upgrade --no-precompile"
+        name: build_cli; pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli
-        run: pub upgrade --no-precompile
-      - name: "build_cli; pub run test --run-skipped --reporter expanded"
+        run: pub upgrade
+      - name: "build_cli; dart test --run-skipped --reporter expanded"
         if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli
-        run: pub run test --run-skipped --reporter expanded
+        run: dart test --run-skipped --reporter expanded
     needs:
       - job_001
       - job_002
