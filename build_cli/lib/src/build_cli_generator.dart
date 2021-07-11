@@ -99,8 +99,8 @@ ${element.name} $resultParserName(ArgResults result) =>''',
 
     final provideOverrides = fields
         .map((k, v) => MapEntry(k, ArgInfo.fromField(v)))
-          ..removeWhere(
-              (k, v) => !(v.optionData?.provideDefaultToOverride ?? false));
+      ..removeWhere(
+          (k, v) => !(v.optionData?.provideDefaultToOverride ?? false));
 
     final fyis = <String>[];
 

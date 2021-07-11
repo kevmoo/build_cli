@@ -74,12 +74,9 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
   ..addOption('message', abbr: 'm', defaultsTo: 'Built <directory>')
   ..addOption('build-tool',
       abbr: 't',
-      help: 'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
-      allowed: [
-        'pub',
-        'build',
-        r'$loco'
-      ])
+      help:
+          'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
+      allowed: ['pub', 'build', r'$loco'])
   ..addOption('debug-build-tool',
       help: 'The build tool to use for debugging.',
       defaultsTo: r'$loco',
