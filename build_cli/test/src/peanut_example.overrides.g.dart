@@ -97,13 +97,10 @@ ArgParser _$populatePeanutOptionsParser(
           abbr: 'm', defaultsTo: messageDefaultOverride ?? 'Built <directory>')
       ..addOption('build-tool',
           abbr: 't',
-          help: 'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
+          help:
+              'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
           defaultsTo: _$BuildToolEnumMapBuildCli[buildToolDefaultOverride],
-          allowed: [
-            'pub',
-            'build',
-            r'$loco'
-          ])
+          allowed: ['pub', 'build', r'$loco'])
       ..addOption('debug-build-tool',
           help: 'The build tool to use for debugging.',
           defaultsTo:

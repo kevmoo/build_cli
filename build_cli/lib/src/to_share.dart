@@ -76,8 +76,7 @@ int _sortByLocation(FieldElement a, FieldElement b) {
   /// Returns the offset of given field/property in its source file – with a
   /// preference for the getter if it's defined.
   int _offsetFor(FieldElement e) {
-    if (e.getter != null && e.getter!.nameOffset != e.nameOffset) {
-      assert(e.nameOffset == -1);
+    if (e.getter != null && e.getter!.nameOffset != -1) {
       return e.getter!.nameOffset;
     }
     return e.nameOffset;
