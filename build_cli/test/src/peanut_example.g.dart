@@ -88,7 +88,7 @@ ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
   ..addFlag('help',
       abbr: 'h',
       help:
-          'Prints usage information. Which is so \"\$\" you don\'t even know it!',
+          'Prints usage information. Which is so "\$" you don\'t even know it!',
       negatable: false)
   ..addFlag('secret', hide: true)
   ..addFlag('release', defaultsTo: true)

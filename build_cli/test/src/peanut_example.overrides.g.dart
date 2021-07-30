@@ -116,7 +116,7 @@ ArgParser _$populatePeanutOptionsParser(
       ..addFlag('help',
           abbr: 'h',
           help:
-              'Prints usage information. Which is so \"\$\" you don\'t even know it!',
+              'Prints usage information. Which is so "\$" you don\'t even know it!',
           defaultsTo: helpDefaultOverride,
           negatable: false)
       ..addFlag('secret', defaultsTo: secretDefaultOverride, hide: true)
