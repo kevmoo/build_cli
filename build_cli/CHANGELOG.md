@@ -1,3 +1,7 @@
+## 2.1.4-dev
+
+- Require the latest `package:source_helper`.
+
 ## 2.1.3
 
 - Support the latest `package:analyzer`.
