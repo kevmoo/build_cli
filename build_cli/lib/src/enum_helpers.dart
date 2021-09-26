@@ -2,8 +2,6 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:source_helper/source_helper.dart';
 
-import 'util.dart';
-
 String? enumValueMapFromType(DartType targetType) {
   final enumMap = _enumFieldsMap(targetType);
 
@@ -13,7 +11,7 @@ String? enumValueMapFromType(DartType targetType) {
 
   final items =
       enumMap.entries.map((e) => '  ${targetType.element!.name}.${e.key.name}: '
-          '${escapeDartString(kebab(e.value))}');
+          '${escapeDartString(e.value.kebab)}');
 
   return 'const ${enumConstMapName(targetType)} = '
       '<${targetType.element!.name}, String>{\n${items.join(',\n')}\n};';
