@@ -6,7 +6,6 @@ import 'package:source_gen/source_gen.dart';
 import 'package:source_helper/source_helper.dart';
 
 import 'to_share.dart';
-import 'util.dart';
 
 const boolChecker = TypeChecker.fromRuntime(bool);
 const listChecker = TypeChecker.fromRuntime(List);
@@ -181,10 +180,10 @@ CliOption? _getOptions(FieldElement element) {
 
       defaultsTo =
           _enumValueForDartObject<String>(objectValue, enumNames, (v) => v);
-      defaultsTo = kebab(defaultsTo as String);
+      defaultsTo = (defaultsTo as String).kebab;
     }
 
-    allowedValues = enumNames.map(kebab).toList();
+    allowedValues = enumNames.map((e) => e.kebab).toList();
   }
 
   if (annotation.isNull) {
