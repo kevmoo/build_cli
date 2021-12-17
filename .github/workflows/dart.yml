@@ -1,4 +1,4 @@
-# Created with package:mono_repo v5.0.4
+# Created with package:mono_repo v6.0.0
 name: Dart CI
 on:
   push:
@@ -20,10 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:stable"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable"
           restore-keys: |
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
@@ -33,7 +33,7 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.4.0
       - name: mono_repo self validate
-        run: dart pub global activate mono_repo 5.0.4
+        run: dart pub global activate mono_repo 6.0.0
       - name: mono_repo self validate
         run: dart pub global run mono_repo generate --validate
   job_002:
@@ -41,13 +41,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:build_cli-build_cli_annotations;commands:analyze"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0;packages:build_cli-build_cli_annotations;commands:analyze"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:build_cli-build_cli_annotations
-            os:ubuntu-latest;pub-cache-hosted;dart:2.12.0
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0;packages:build_cli-build_cli_annotations
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v1.3
@@ -80,13 +80,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:build_cli-build_cli_annotations;commands:format"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0;packages:build_cli-build_cli_annotations;commands:format"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:build_cli-build_cli_annotations
-            os:ubuntu-latest;pub-cache-hosted;dart:2.12.0
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0;packages:build_cli-build_cli_annotations
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v1.3
@@ -119,13 +119,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli-build_cli_annotations;commands:analyze"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:build_cli-build_cli_annotations;commands:analyze"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli-build_cli_annotations
-            os:ubuntu-latest;pub-cache-hosted;dart:dev
+            os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:build_cli-build_cli_annotations
+            os:ubuntu-latest;pub-cache-hosted;sdk:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v1.3
@@ -158,13 +158,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli-build_cli_annotations;commands:format"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:build_cli-build_cli_annotations;commands:format"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli-build_cli_annotations
-            os:ubuntu-latest;pub-cache-hosted;dart:dev
+            os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:build_cli-build_cli_annotations
+            os:ubuntu-latest;pub-cache-hosted;sdk:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v1.3
@@ -197,13 +197,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:build_cli;commands:test"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0;packages:build_cli;commands:test"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:build_cli
-            os:ubuntu-latest;pub-cache-hosted;dart:2.12.0
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0;packages:build_cli
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v1.3
@@ -231,13 +231,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli;commands:test"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:build_cli;commands:test"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:build_cli
-            os:ubuntu-latest;pub-cache-hosted;dart:dev
+            os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:build_cli
+            os:ubuntu-latest;pub-cache-hosted;sdk:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v1.3

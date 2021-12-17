@@ -1,5 +1,5 @@
 # See with https://github.com/google/mono_repo.dart for details on this file
-dart:
+sdk:
 - 2.12.0
 - dev
 
