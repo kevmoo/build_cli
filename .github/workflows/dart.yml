@@ -37,22 +37,22 @@ jobs:
       - name: mono_repo self validate
         run: dart pub global run mono_repo generate --validate
   job_002:
-    name: "analyzer_and_format; Dart 2.12.0; PKGS: build_cli, build_cli_annotations; `dart analyze --fatal-infos .`"
+    name: "analyzer_and_format; Dart 2.12.3; PKGS: build_cli, build_cli_annotations; `dart analyze --fatal-infos .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@v2.1.7
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0;packages:build_cli-build_cli_annotations;commands:analyze"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.12.3;packages:build_cli-build_cli_annotations;commands:analyze"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0;packages:build_cli-build_cli_annotations
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.3;packages:build_cli-build_cli_annotations
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.3
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v1.3
         with:
-          sdk: "2.12.0"
+          sdk: "2.12.3"
       - id: checkout
         uses: actions/checkout@v2.4.0
       - id: build_cli_pub_upgrade
@@ -76,22 +76,22 @@ jobs:
     needs:
       - job_001
   job_003:
-    name: "analyzer_and_format; Dart 2.12.0; PKGS: build_cli, build_cli_annotations; `dart format --output=none --set-exit-if-changed .`"
+    name: "analyzer_and_format; Dart 2.12.3; PKGS: build_cli, build_cli_annotations; `dart format --output=none --set-exit-if-changed .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@v2.1.7
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0;packages:build_cli-build_cli_annotations;commands:format"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.12.3;packages:build_cli-build_cli_annotations;commands:format"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0;packages:build_cli-build_cli_annotations
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.3;packages:build_cli-build_cli_annotations
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.3
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v1.3
         with:
-          sdk: "2.12.0"
+          sdk: "2.12.3"
       - id: checkout
         uses: actions/checkout@v2.4.0
       - id: build_cli_pub_upgrade
@@ -193,22 +193,22 @@ jobs:
     needs:
       - job_001
   job_006:
-    name: "unit_test; Dart 2.12.0; PKG: build_cli; `dart test --run-skipped --reporter expanded`"
+    name: "unit_test; Dart 2.12.3; PKG: build_cli; `dart test --run-skipped --reporter expanded`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@v2.1.7
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0;packages:build_cli;commands:test"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.12.3;packages:build_cli;commands:test"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0;packages:build_cli
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.0
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.3;packages:build_cli
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.12.3
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v1.3
         with:
-          sdk: "2.12.0"
+          sdk: "2.12.3"
       - id: checkout
         uses: actions/checkout@v2.4.0
       - id: build_cli_pub_upgrade
