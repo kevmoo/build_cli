@@ -46,8 +46,11 @@ class _NonNullableGenerator extends _ReplaceGenerator {
   Iterable<_Replacement> createReplacements(String baseName) sync* {
     yield* super.createReplacements(baseName);
 
+    // ignore: require_trailing_commas
     yield _Replacement(
-        '@CliOption(', '@CliOption(\n    provideDefaultToOverride: true,');
+      '@CliOption(',
+      '@CliOption(\n    provideDefaultToOverride: true,',
+    );
   }
 }
 
@@ -58,13 +61,16 @@ class _Replacement {
   _Replacement(this.existing, this.replacement);
 
   static String generate(
-      String inputContent, Iterable<_Replacement> replacements) {
+    String inputContent,
+    Iterable<_Replacement> replacements,
+  ) {
     var outputContent = inputContent;
 
     for (final r in replacements) {
       if (!outputContent.contains(r.existing)) {
         throw StateError(
-            'Input string did not contain `${r.existing}` as expected.');
+          'Input string did not contain `${r.existing}` as expected.',
+        );
       }
       outputContent = outputContent.replaceAll(r.existing, r.replacement);
     }

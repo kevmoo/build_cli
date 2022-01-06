@@ -1,3 +1,7 @@
+## 2.1.5-dev
+
+- Add trailing commas to many places in output.
+
 ## 2.1.4
 
 - Require the latest `package:source_helper`.

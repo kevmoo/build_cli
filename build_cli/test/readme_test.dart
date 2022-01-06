@@ -9,7 +9,8 @@ void main() {
     final exampleContent = File('example/example.dart')
         .readAsLinesSync()
         .skipWhile(
-            (line) => !line.startsWith("import 'package:build_cli_annotations"))
+          (line) => !line.startsWith("import 'package:build_cli_annotations"),
+        )
         .where((line) => !line.trim().startsWith('///'))
         .takeWhile((line) => !line.startsWith('void main'))
         .join('\n')

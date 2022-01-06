@@ -73,8 +73,10 @@ class ArgInfo {
     ArgType type;
     if (option == null) {
       type = specialTypes.entries
-          .singleWhere((e) => e.value(element),
-              orElse: () => throwBugFound(element))
+          .singleWhere(
+            (e) => e.value(element),
+            orElse: () => throwBugFound(element),
+          )
           .key;
     } else {
       type = _getArgType(element, option);
@@ -85,15 +87,19 @@ class ArgInfo {
     } else {
       if (type == ArgType.flag) {
         if (option.defaultsTo != null && option.defaultsTo is! bool) {
-          throwUnsupported(element,
-              'The value for `defaultsTo` must be assignable to `bool`.');
+          throwUnsupported(
+            element,
+            'The value for `defaultsTo` must be assignable to `bool`.',
+          );
         }
         if (option.allowed != null) {
           throwUnsupported(element, '`allowed` is not supported for flags.');
         }
         if (option.allowedHelp != null) {
           throwUnsupported(
-              element, '`allowedHelp` is not supported for flags.');
+            element,
+            '`allowedHelp` is not supported for flags.',
+          );
         }
         if (option.valueHelp != null) {
           throwUnsupported(element, '`valueHelp` is not supported for flags.');
@@ -101,7 +107,9 @@ class ArgInfo {
       } else {
         if (option.negatable != null) {
           throwUnsupported(
-              element, '`negatable` is only valid for flags – type `bool`.');
+            element,
+            '`negatable` is only valid for flags – type `bool`.',
+          );
         }
       }
     }
@@ -158,13 +166,15 @@ CliOption? _getOptions(FieldElement element) {
     final interfaceType = element.type as InterfaceType;
 
     final enumNames = interfaceType.accessors
-        .where((p) =>
-            // An enum's values are non-nullable. For example, If the enum
-            // field's type is `BuildTool?` it's accessors will be the
-            // non-nullable type, `BuildTool`.
-            // TODO: find a better way to compare the underlying type
-            p.returnType.getDisplayString(withNullability: false) ==
-            element.type.getDisplayString(withNullability: false))
+        .where(
+          (p) =>
+              // An enum's values are non-nullable. For example, If the enum
+              // field's type is `BuildTool?` it's accessors will be the
+              // non-nullable type, `BuildTool`.
+              // TODO: find a better way to compare the underlying type
+              p.returnType.getDisplayString(withNullability: false) ==
+              element.type.getDisplayString(withNullability: false),
+        )
         .map((p) => p.name)
         .toList();
 
@@ -172,10 +182,11 @@ CliOption? _getOptions(FieldElement element) {
       final objectValue = defaultsToReader.objectValue;
       if (objectValue.type != element.type) {
         throwUnsupported(
-            element,
-            'The type provided to defaultsTo is '
-            'different than the field type. Check that the num types are the '
-            'same, or try making the field type non-nullable.');
+          element,
+          'The type provided to defaultsTo is '
+          'different than the field type. Check that the num types are the '
+          'same, or try making the field type non-nullable.',
+        );
       }
 
       defaultsTo =
@@ -210,7 +221,10 @@ CliOption? _getOptions(FieldElement element) {
       if (entry.key!.type!.isEnum) {
         assert(allowedValues != null);
         final stringValue = _enumValueForDartObject<String>(
-            entry.key!, allowedValues!.cast<String>(), (v) => v);
+          entry.key!,
+          allowedValues!.cast<String>(),
+          (v) => v,
+        );
         allowedHelp[stringValue] = entry.value!.toStringValue()!;
         continue;
       }
@@ -237,17 +251,20 @@ CliOption? _getOptions(FieldElement element) {
       defaultsTo = defaultsToReader.literalValue;
     } else {
       throwUnsupported(
-          element,
-          'Could not process the default value '
-          '`${defaultsToReader.literalValue}`.');
+        element,
+        'Could not process the default value '
+        '`${defaultsToReader.literalValue}`.',
+      );
     }
   }
 
   if (allowedValues != null &&
       defaultsTo != null &&
       !allowedValues.contains(defaultsTo)) {
-    throwUnsupported(element,
-        'The `defaultsTo` value – `$defaultsTo` is not in `allowedValues`.');
+    throwUnsupported(
+      element,
+      'The `defaultsTo` value – `$defaultsTo` is not in `allowedValues`.',
+    );
   }
 
   final option = CliOption(
@@ -271,10 +288,11 @@ CliOption? _getOptions(FieldElement element) {
 
     if (functionElement is MethodElement) {
       throwUnsupported(
-          element,
-          'The function provided for `convert` must be top-level.'
-          ' Static class methods (like `${functionElement.name}`) are not '
-          'supported.');
+        element,
+        'The function provided for `convert` must be top-level.'
+        ' Static class methods (like `${functionElement.name}`) are not '
+        'supported.',
+      );
     }
 
     if (functionElement.parameters.isEmpty ||
@@ -283,9 +301,10 @@ CliOption? _getOptions(FieldElement element) {
         !element.library.typeProvider.stringType
             .isAssignableTo(functionElement.parameters.first.type)) {
       throwUnsupported(
-          element,
-          'The convert function `${functionElement.name}` must have one '
-          'positional parameter of type `String`.');
+        element,
+        'The convert function `${functionElement.name}` must have one '
+        'positional parameter of type `String`.',
+      );
     }
 
     if (!functionElement.returnType.isAssignableTo(element.type)) {

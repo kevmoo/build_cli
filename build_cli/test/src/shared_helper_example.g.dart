@@ -8,28 +8,43 @@ part of 'shared_helper_example.dart';
 // CliGenerator
 // **************************************************************************
 
-T _$enumValueHelper<T>(Map<T, String> enumValues, String source) => enumValues
-    .entries
-    .singleWhere((e) => e.value == source,
-        orElse: () =>
-            throw ArgumentError('`$source` is not one of the supported values: '
-                '${enumValues.values.join(', ')}'))
-    .key;
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) =>
+    enumValues.entries
+        .singleWhere(
+          (e) => e.value == source,
+          orElse: () => throw ArgumentError(
+            '`$source` is not one of the supported values: '
+            '${enumValues.values.join(', ')}',
+          ),
+        )
+        .key;
 
 T? _$nullableEnumValueHelperNullable<T>(
-        Map<T, String> enumValues, String? source) =>
+  Map<T, String> enumValues,
+  String? source,
+) =>
     source == null ? null : _$enumValueHelper(enumValues, source);
 
 T _$badNumberFormat<T extends num>(
-        String source, String type, String argName) =>
+  String source,
+  String type,
+  String argName,
+) =>
     throw FormatException(
-        'Cannot parse "$source" into `$type` for option "$argName".');
+      'Cannot parse "$source" into `$type` for option "$argName".',
+    );
 
 FirstOptions _$parseFirstOptionsResult(ArgResults result) => FirstOptions()
   ..value = _$nullableEnumValueHelperNullable(
-      _$OptionValueEnumMapBuildCli, result['value'] as String?)
+    _$OptionValueEnumMapBuildCli,
+    result['value'] as String?,
+  )
   ..count = int.tryParse(result['count'] as String) ??
-      _$badNumberFormat(result['count'] as String, 'int', 'count');
+      _$badNumberFormat(
+        result['count'] as String,
+        'int',
+        'count',
+      );
 
 const _$OptionValueEnumMapBuildCli = <OptionValue, String>{
   OptionValue.a: 'a',
@@ -38,8 +53,13 @@ const _$OptionValueEnumMapBuildCli = <OptionValue, String>{
 };
 
 ArgParser _$populateFirstOptionsParser(ArgParser parser) => parser
-  ..addOption('value', allowed: ['a', 'b', 'c'])
-  ..addOption('count');
+  ..addOption(
+    'value',
+    allowed: ['a', 'b', 'c'],
+  )
+  ..addOption(
+    'count',
+  );
 
 final _$parserForFirstOptions = _$populateFirstOptionsParser(ArgParser());
 
@@ -50,13 +70,24 @@ FirstOptions parseFirstOptions(List<String> args) {
 
 SecondOptions _$parseSecondOptionsResult(ArgResults result) => SecondOptions()
   ..value = _$nullableEnumValueHelperNullable(
-      _$OptionValueEnumMapBuildCli, result['value'] as String?)
+    _$OptionValueEnumMapBuildCli,
+    result['value'] as String?,
+  )
   ..count = int.tryParse(result['count'] as String) ??
-      _$badNumberFormat(result['count'] as String, 'int', 'count');
+      _$badNumberFormat(
+        result['count'] as String,
+        'int',
+        'count',
+      );
 
 ArgParser _$populateSecondOptionsParser(ArgParser parser) => parser
-  ..addOption('value', allowed: ['a', 'b', 'c'])
-  ..addOption('count');
+  ..addOption(
+    'value',
+    allowed: ['a', 'b', 'c'],
+  )
+  ..addOption(
+    'count',
+  );
 
 final _$parserForSecondOptions = _$populateSecondOptionsParser(ArgParser());
 

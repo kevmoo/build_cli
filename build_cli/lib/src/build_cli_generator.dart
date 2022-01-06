@@ -32,10 +32,11 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
     if (element is! ClassElement) {
       final friendlyName = element.displayName;
       throw InvalidGenerationSourceError(
-          'Generator cannot target `$friendlyName`. '
-          '`@CliOptions` can only be applied to a class.',
-          todo: 'Remove the `@CliOptions` annotation from `$friendlyName`.',
-          element: element);
+        'Generator cannot target `$friendlyName`. '
+        '`@CliOptions` can only be applied to a class.',
+        todo: 'Remove the `@CliOptions` annotation from `$friendlyName`.',
+        element: element,
+      );
     }
 
     // Get all of the fields that need to be assigned
@@ -43,8 +44,10 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
     final fieldsList = createSortedFieldSet(element);
 
     // Explicitly using `LinkedHashMap` – we want these ordered.
-    final fields = LinkedHashMap<String, FieldElement>.fromIterable(fieldsList,
-        key: (f) => (f as FieldElement).name);
+    final fields = LinkedHashMap<String, FieldElement>.fromIterable(
+      fieldsList,
+      key: (f) => (f as FieldElement).name,
+    );
 
     // Get the constructor to use for the factory
 
@@ -55,17 +58,25 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
     if (fieldsList.any((fe) => fe.type.isEnum)) {
       yield enumValueHelper;
 
-      if (fieldsList.any((fe) =>
-          fe.type.isEnum &&
-          fe.type.nullabilitySuffix != NullabilitySuffix.none)) {
+      if (fieldsList.any(
+        (fe) =>
+            fe.type.isEnum &&
+            fe.type.nullabilitySuffix != NullabilitySuffix.none,
+      )) {
         yield nullableEnumValueHelper;
       }
     }
 
     if (fieldsList.any((fe) => numChecker.isAssignableFromType(fe.type))) {
       yield r'''
-T _$badNumberFormat<T extends num>(String source, String type, String argName) =>
-  throw FormatException('Cannot parse "$source" into `$type` for option "$argName".'); 
+T _$badNumberFormat<T extends num>(
+  String source,
+  String type,
+  String argName,
+) =>
+  throw FormatException(
+    'Cannot parse "$source" into `$type` for option "$argName".',
+  ); 
 ''';
     }
 
@@ -75,17 +86,20 @@ T _$badNumberFormat<T extends num>(String source, String type, String argName) =
 ${element.name} $resultParserName(ArgResults result) =>''',
       );
 
-    String deserializeForField(String fieldName,
-            {ParameterElement? ctorParam}) =>
+    String deserializeForField(
+      String fieldName, {
+      ParameterElement? ctorParam,
+    }) =>
         _deserializeForField(fields[fieldName]!, ctorParam, fields);
 
     final usedFields = writeConstructorInvocation(
-        buffer,
-        element,
-        fields.keys,
-        fields.values.where((fe) => !fe.isFinal).map((fe) => fe.name),
-        {},
-        deserializeForField);
+      buffer,
+      element,
+      fields.keys,
+      fields.values.where((fe) => !fe.isFinal).map((fe) => fe.name),
+      {},
+      deserializeForField,
+    );
 
     final unusedFields = fields.keys.toSet()..removeAll(usedFields);
 
@@ -97,10 +111,11 @@ ${element.name} $resultParserName(ArgResults result) =>''',
     }
     yield buffer.toString();
 
-    final provideOverrides = fields
-        .map((k, v) => MapEntry(k, ArgInfo.fromField(v)))
-      ..removeWhere(
-          (k, v) => !(v.optionData?.provideDefaultToOverride ?? false));
+    final provideOverrides =
+        fields.map((k, v) => MapEntry(k, ArgInfo.fromField(v)))
+          ..removeWhere(
+            (k, v) => !(v.optionData?.provideDefaultToOverride ?? false),
+          );
 
     final fyis = <String>[];
 
@@ -135,8 +150,10 @@ ${element.name} $resultParserName(ArgResults result) =>''',
 
     buffer = StringBuffer()
       ..writeAll(fyis.map((e) => '/// $e\n'))
-      ..write('ArgParser $populateParserName(ArgParser parser$overrideArgs) => '
-          'parser');
+      ..write(
+        'ArgParser $populateParserName(ArgParser parser$overrideArgs) => '
+        'parser',
+      );
     for (var f in fields.values) {
       if (f.type.isEnum) {
         yield enumValueMapFromType(f.type)!;
@@ -166,8 +183,11 @@ const _numCheckers = <TypeChecker, String>{
   TypeChecker.fromRuntime(double): 'double'
 };
 
-String _deserializeForField(FieldElement field, ParameterElement? ctorParam,
-    Map<String, FieldElement> allFields) {
+String _deserializeForField(
+  FieldElement field,
+  ParameterElement? ctorParam,
+  Map<String, FieldElement> allFields,
+) {
   final info = ArgInfo.fromField(field);
 
   if (info.argType == ArgType.rest) {
@@ -221,7 +241,7 @@ String _deserializeForField(FieldElement field, ParameterElement? ctorParam,
     final nullableBit = targetType.isNullableType ? '?' : '';
 
     return '$helperName('
-        '${enumConstMapName(targetType)}, $argAccess as String$nullableBit)';
+        '${enumConstMapName(targetType)}, $argAccess as String$nullableBit,)';
   }
 
   if (info.argType == ArgType.multiOption) {
@@ -245,14 +265,16 @@ String _deserializeForField(FieldElement field, ParameterElement? ctorParam,
     }
 
     throwUnsupported(
-        field, 'Lists of type `${args.single}` are not supported.');
+      field,
+      'Lists of type `${args.single}` are not supported.',
+    );
   }
 
   for (var checker in _numCheckers.entries) {
     if (checker.key.isExactlyType(targetType)) {
       return '${checker.value}.tryParse($argAccess as String) ?? '
           "_\$badNumberFormat($argAccess as String, '${checker.value}', "
-          "'${_getArgName(field)}')";
+          "'${_getArgName(field)}',)";
     }
   }
 
@@ -304,8 +326,10 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
 
   if (options.provideDefaultToOverride) {
     if (info.dartType.isEnum) {
-      defaultsToValues.add('${enumConstMapName(element.type)}'
-          '[${_overrideParamName(element.name)}]');
+      defaultsToValues.add(
+        '${enumConstMapName(element.type)}'
+        '[${_overrideParamName(element.name)}]',
+      );
     } else {
       defaultsToValues.add(_overrideParamName(element.name));
     }
@@ -356,7 +380,7 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
     buffer.write(', hide: ${options.hide}');
   }
 
-  buffer.writeln(')');
+  buffer.writeln(',)');
 }
 
 const _dynamicChecker = TypeChecker.fromRuntime(Object);
