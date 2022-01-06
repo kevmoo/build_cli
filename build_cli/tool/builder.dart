@@ -46,7 +46,6 @@ class _NonNullableGenerator extends _ReplaceGenerator {
   Iterable<_Replacement> createReplacements(String baseName) sync* {
     yield* super.createReplacements(baseName);
 
-    // ignore: require_trailing_commas
     yield _Replacement(
       '@CliOption(',
       '@CliOption(\n    provideDefaultToOverride: true,',
