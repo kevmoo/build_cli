@@ -9,10 +9,12 @@ import 'package:analyzer/src/dart/element/inheritance_manager3.dart'
     show InheritanceManager3;
 import 'package:source_gen/source_gen.dart';
 
-Never throwBugFound<T>(FieldElement element) =>
-    throwUnsupported(element, "You've hit a bug in build_cli!",
-        todo: 'Please rerun your build with --verbose and file as issue '
-            'with the stace trace.');
+Never throwBugFound<T>(FieldElement element) => throwUnsupported(
+      element,
+      "You've hit a bug in build_cli!",
+      todo: 'Please rerun your build with --verbose and file as issue '
+          'with the stace trace.',
+    );
 
 Never throwUnsupported(
   FieldElement element,
@@ -105,13 +107,14 @@ const _dartCoreObjectChecker = TypeChecker.fromRuntime(Object);
 /// Set set of all constructor parameters and and fields that are populated is
 /// returned.
 Set<String> writeConstructorInvocation(
-    StringBuffer buffer,
-    ClassElement classElement,
-    Iterable<String> availableConstructorParameters,
-    Iterable<String> writeableFields,
-    Map<String, String> unavailableReasons,
-    String Function(String paramOrFieldName, {ParameterElement ctorParam})
-        deserializeForField) {
+  StringBuffer buffer,
+  ClassElement classElement,
+  Iterable<String> availableConstructorParameters,
+  Iterable<String> writeableFields,
+  Map<String, String> unavailableReasons,
+  String Function(String paramOrFieldName, {ParameterElement ctorParam})
+      deserializeForField,
+) {
   final className = classElement.displayName;
 
   var ctor = classElement.unnamedConstructor;
@@ -170,18 +173,17 @@ Set<String> writeConstructorInvocation(
   buffer
     ..write('$className$ctorName(')
     ..writeAll(
-        constructorArguments.map((paramElement) =>
-            deserializeForField(paramElement.name, ctorParam: paramElement)),
-        ', ');
-  if (constructorArguments.isNotEmpty && namedConstructorArguments.isNotEmpty) {
-    buffer.write(', ');
-  }
-  buffer
-    ..writeAll(namedConstructorArguments.map((paramElement) {
-      final value =
-          deserializeForField(paramElement.name, ctorParam: paramElement);
-      return '${paramElement.name}: $value';
-    }), ', ')
+      constructorArguments.map(
+        (e) => '${deserializeForField(e.name, ctorParam: e)},',
+      ),
+    )
+    ..writeAll(
+      namedConstructorArguments.map((paramElement) {
+        final value =
+            deserializeForField(paramElement.name, ctorParam: paramElement);
+        return '${paramElement.name}: $value,';
+      }),
+    )
     ..write(')');
   if (remainingFieldsForInvocationBody.isEmpty) {
     buffer.writeln(';');

@@ -26,9 +26,10 @@ Future validateSdkConstraint(BuildStep buildStep) async {
 
       if (constraint.allowsAny(VersionRange(max: _lowestSdkSupported))) {
         throw InvalidGenerationSourceError(
-            'The SDK constraint on `package:${buildStep.inputId.package}` is '
-            'not valid: `$constraint`. '
-            'The minimum supported Dart SDK must be `>=$_lowestSdkSupported`.');
+          'The SDK constraint on `package:${buildStep.inputId.package}` is '
+          'not valid: `$constraint`. '
+          'The minimum supported Dart SDK must be `>=$_lowestSdkSupported`.',
+        );
       }
     }
   }

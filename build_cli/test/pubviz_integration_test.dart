@@ -38,11 +38,14 @@ void main() {
 
     for (var item in items.entries) {
       test('`${item.value.join(' ')}`', () {
-        expect(() => parsePubvizOptions(item.value), throwsA((error) {
-          expect(error, isFormatException);
-          expect((error as FormatException).message, item.key);
-          return true;
-        }));
+        expect(
+          () => parsePubvizOptions(item.value),
+          throwsA((error) {
+            expect(error, isFormatException);
+            expect((error as FormatException).message, item.key);
+            return true;
+          }),
+        );
       });
     }
   });
@@ -50,7 +53,9 @@ void main() {
   test('usage', () {
     final prettyUsage = prettyParser.usage;
     printOnFailure(prettyUsage);
-    expect(prettyUsage, r'''
+    expect(
+      prettyUsage,
+      r'''
 -f, --format                    
           [dot]                 Generate a GraphViz 'dot' file.
           [html] (default)      Wrap the GraphViz dot format in an HTML template
@@ -68,6 +73,7 @@ void main() {
 
     --list-of-nothing           
     --list-of-dynamic           
-    --list-of-object            ''');
+    --list-of-object            ''',
+    );
   });
 }

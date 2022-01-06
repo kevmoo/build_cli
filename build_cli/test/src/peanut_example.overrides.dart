@@ -151,7 +151,8 @@ Duration? _convert(String? source) {
 
   if (seconds == null) {
     throw FormatException(
-        'The value provided for "max-runtime" – "$source" – was not a number.');
+      'The value provided for "max-runtime" – "$source" – was not a number.',
+    );
   }
 
   return Duration(seconds: seconds);
@@ -162,7 +163,8 @@ Duration _convertNotNull(String source) {
 
   if (seconds == null) {
     throw FormatException(
-        'The value provided for "max-runtime" – "$source" – was not a number.');
+      'The value provided for "max-runtime" – "$source" – was not a number.',
+    );
   }
 
   return Duration(seconds: seconds);

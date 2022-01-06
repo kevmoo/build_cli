@@ -8,17 +8,19 @@ ArgParser get prettyParser =>
 @CliOptions()
 class PubvizOptions {
   @CliOption(
-      abbr: 'f',
-      defaultsTo: FormatOptions.html,
-      allowedHelp: _formatOptionsHelp)
+    abbr: 'f',
+    defaultsTo: FormatOptions.html,
+    allowedHelp: _formatOptionsHelp,
+  )
   final FormatOptions format;
 
   @CliOption(hide: true)
   final String? secret;
 
   @CliOption(
-      abbr: 'i',
-      help: 'A comma seperated list of packages to exclude in the output.')
+    abbr: 'i',
+    help: 'A comma seperated list of packages to exclude in the output.',
+  )
   final List<String>? ignorePackages;
 
   @CliOption(defaultsTo: 8080, valueHelp: 'PORT')
@@ -30,15 +32,15 @@ class PubvizOptions {
   @CliOption(defaultsTo: 3e3)
   double doubleValue;
 
-  @CliOption(defaultsTo: 8080, allowed: [
-    8080,
-    9090,
-    42
-  ], allowedHelp: {
-    8080: 'the cool port',
-    9090: 'the alt port',
-    42: 'the knowledge port'
-  })
+  @CliOption(
+    defaultsTo: 8080,
+    allowed: [8080, 9090, 42],
+    allowedHelp: {
+      8080: 'the cool port',
+      9090: 'the alt port',
+      42: 'the knowledge port'
+    },
+  )
   int devPort;
 
   List? listOfNothing;
