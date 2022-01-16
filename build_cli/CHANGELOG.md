@@ -1,6 +1,7 @@
-## 2.1.5-dev
+## 2.1.5
 
 - Add trailing commas to many places in output.
+- Fix issues with latest `package:analyzer` related to enums and annotations.
 
 ## 2.1.4
 

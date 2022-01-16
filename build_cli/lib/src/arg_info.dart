@@ -331,4 +331,4 @@ T _enumValueForDartObject<T>(
   List<T> items,
   String Function(T) name,
 ) =>
-    items.singleWhere((v) => source.getField(name(v)) != null);
+    items[source.getField('index')!.toIntValue()!];
