@@ -350,6 +350,7 @@ PrivateCtor parsePrivateCtor(List<String> args) {
 class PrivateCtor {
   final bool? flag;
 
+  // ignore: unused_element
   PrivateCtor._({this.flag});
 }
 
