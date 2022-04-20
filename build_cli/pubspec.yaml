@@ -1,5 +1,5 @@
 name: build_cli
-version: 2.1.5
+version: 2.1.6
 description: >-
   Parse command line arguments directly into an annotation class
   using the power of build_runner and source_gen.
@@ -9,7 +9,7 @@ environment:
   sdk: '>=2.12.3 <3.0.0'
 
 dependencies:
-  analyzer: '>=2.1.0 <4.0.0'
+  analyzer: '>=2.1.0 <5.0.0'
   build: ^2.0.0
   # Limit version range on build_cli_annotations
   # new features need to stay in sync
