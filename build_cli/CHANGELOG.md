@@ -1,3 +1,7 @@
+## 2.1.6
+- 
+- Support the latest `package:analyzer`.
+
 ## 2.1.5
 
 - Add trailing commas to many places in output.
