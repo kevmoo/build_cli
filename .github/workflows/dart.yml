@@ -31,7 +31,7 @@ jobs:
         with:
           sdk: stable
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - name: mono_repo self validate
         run: dart pub global activate mono_repo 6.2.0
       - name: mono_repo self validate
@@ -54,7 +54,7 @@ jobs:
         with:
           sdk: "2.12.3"
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: build_cli_pub_upgrade
         name: build_cli; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -93,7 +93,7 @@ jobs:
         with:
           sdk: "2.12.3"
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: build_cli_pub_upgrade
         name: build_cli; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -132,7 +132,7 @@ jobs:
         with:
           sdk: dev
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: build_cli_pub_upgrade
         name: build_cli; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -171,7 +171,7 @@ jobs:
         with:
           sdk: dev
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: build_cli_pub_upgrade
         name: build_cli; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -210,7 +210,7 @@ jobs:
         with:
           sdk: "2.12.3"
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: build_cli_pub_upgrade
         name: build_cli; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -244,7 +244,7 @@ jobs:
         with:
           sdk: dev
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: build_cli_pub_upgrade
         name: build_cli; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
