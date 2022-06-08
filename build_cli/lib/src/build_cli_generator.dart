@@ -178,7 +178,7 @@ mixin _\$${element.name}ForCliCommand on CliCommand<${element.name}> {
   @override
   void populateOptionsParser() => $populateParserName(argParser);
 
-  @protected
+  @override
   ${element.name} parseOptionsResult(ArgResults result) => $resultParserName(result);
 }
     ''';
