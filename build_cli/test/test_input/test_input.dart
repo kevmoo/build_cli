@@ -130,6 +130,14 @@ Empty parseEmpty(List<String> args) {
   final result = _$parserForEmpty.parse(args);
   return _$parseEmptyResult(result);
 }
+
+mixin _$EmptyForCliCommand on CliCommand<Empty> {
+  @override
+  void populateOptionsParser() => _$populateEmptyParser(argParser);
+
+  @override
+  Empty parseOptionsResult(ArgResults result) => _$parseEmptyResult(result);
+}
 ''',
 )
 @CliOptions()
@@ -147,6 +155,15 @@ final _$parserForWithCommand = _$populateWithCommandParser(ArgParser());
 WithCommand parseWithCommand(List<String> args) {
   final result = _$parserForWithCommand.parse(args);
   return _$parseWithCommandResult(result);
+}
+
+mixin _$WithCommandForCliCommand on CliCommand<WithCommand> {
+  @override
+  void populateOptionsParser() => _$populateWithCommandParser(argParser);
+
+  @override
+  WithCommand parseOptionsResult(ArgResults result) =>
+      _$parseWithCommandResult(result);
 }
 ''',
 )
@@ -176,6 +193,16 @@ SpecialNotAnnotated parseSpecialNotAnnotated(List<String> args) {
   final result = _$parserForSpecialNotAnnotated.parse(args);
   return _$parseSpecialNotAnnotatedResult(result);
 }
+
+mixin _$SpecialNotAnnotatedForCliCommand on CliCommand<SpecialNotAnnotated> {
+  @override
+  void populateOptionsParser() =>
+      _$populateSpecialNotAnnotatedParser(argParser);
+
+  @override
+  SpecialNotAnnotated parseOptionsResult(ArgResults result) =>
+      _$parseSpecialNotAnnotatedResult(result);
+}
 ''',
 )
 @CliOptions()
@@ -204,6 +231,17 @@ final _$parserForAnnotatedCommandWithParser =
 AnnotatedCommandWithParser parseAnnotatedCommandWithParser(List<String> args) {
   final result = _$parserForAnnotatedCommandWithParser.parse(args);
   return _$parseAnnotatedCommandWithParserResult(result);
+}
+
+mixin _$AnnotatedCommandWithParserForCliCommand
+    on CliCommand<AnnotatedCommandWithParser> {
+  @override
+  void populateOptionsParser() =>
+      _$populateAnnotatedCommandWithParserParser(argParser);
+
+  @override
+  AnnotatedCommandWithParser parseOptionsResult(ArgResults result) =>
+      _$parseAnnotatedCommandWithParserResult(result);
 }
 ''',
 )
@@ -310,6 +348,15 @@ DefaultOverride parseDefaultOverride(List<String> args) {
   final result = _$parserForDefaultOverride.parse(args);
   return _$parseDefaultOverrideResult(result);
 }
+
+mixin _$DefaultOverrideForCliCommand on CliCommand<DefaultOverride> {
+  @override
+  void populateOptionsParser() => _$populateDefaultOverrideParser(argParser);
+
+  @override
+  DefaultOverride parseOptionsResult(ArgResults result) =>
+      _$parseDefaultOverrideResult(result);
+}
 ''',
 )
 @CliOptions()
@@ -343,6 +390,15 @@ final _$parserForPrivateCtor = _$populatePrivateCtorParser(ArgParser());
 PrivateCtor parsePrivateCtor(List<String> args) {
   final result = _$parserForPrivateCtor.parse(args);
   return _$parsePrivateCtorResult(result);
+}
+
+mixin _$PrivateCtorForCliCommand on CliCommand<PrivateCtor> {
+  @override
+  void populateOptionsParser() => _$populatePrivateCtorParser(argParser);
+
+  @override
+  PrivateCtor parseOptionsResult(ArgResults result) =>
+      _$parsePrivateCtorResult(result);
 }
 ''',
 )
@@ -425,6 +481,15 @@ final _$parserForNonNullableTypes =
 NonNullableTypes parseNonNullableTypes(List<String> args) {
   final result = _$parserForNonNullableTypes.parse(args);
   return _$parseNonNullableTypesResult(result);
+}
+
+mixin _$NonNullableTypesForCliCommand on CliCommand<NonNullableTypes> {
+  @override
+  void populateOptionsParser() => _$populateNonNullableTypesParser(argParser);
+
+  @override
+  NonNullableTypes parseOptionsResult(ArgResults result) =>
+      _$parseNonNullableTypesResult(result);
 }
 ''',
 )
