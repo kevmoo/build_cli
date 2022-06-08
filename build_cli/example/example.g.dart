@@ -62,3 +62,11 @@ Options parseOptions(List<String> args) {
   final result = _$parserForOptions.parse(args);
   return _$parseOptionsResult(result);
 }
+
+mixin _$OptionsForCliCommand on CliCommand<Options> {
+  @override
+  void populateOptionsParser() => _$populateOptionsParser(argParser);
+
+  @override
+  Options parseOptionsResult(ArgResults result) => _$parseOptionsResult(result);
+}

@@ -25,3 +25,12 @@ NullableOptions parseNullableOptions(List<String> args) {
   final result = _$parserForNullableOptions.parse(args);
   return _$parseNullableOptionsResult(result);
 }
+
+mixin _$NullableOptionsForCliCommand on CliCommand<NullableOptions> {
+  @override
+  void populateOptionsParser() => _$populateNullableOptionsParser(argParser);
+
+  @override
+  NullableOptions parseOptionsResult(ArgResults result) =>
+      _$parseNullableOptionsResult(result);
+}
