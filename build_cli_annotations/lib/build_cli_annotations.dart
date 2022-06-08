@@ -50,5 +50,5 @@ abstract class CliCommand<Option> extends Command<void> {
   void populateOptionsParser();
 
   @protected
-  Option parseOptionsResult(ArgResults argResults);
+  Option parseOptionsResult(ArgResults result);
 }

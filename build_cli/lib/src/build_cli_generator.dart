@@ -172,6 +172,16 @@ ${element.name} parse${element.name}(List<String> args) {
   return $resultParserName(result);
 }
 ''';
+
+    yield '''
+mixin _\$${element.name}ForCliCommand on CliCommand<${element.name}> {
+  @override
+  void populateOptionsParser() => $populateParserName(argParser);
+
+  @protected
+  ${element.name} parseOptionsResult(ArgResults result) => $resultParserName(result);
+}
+    ''';
   }
 }
 

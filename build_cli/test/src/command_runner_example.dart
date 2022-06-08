@@ -14,7 +14,7 @@ class CommitCommandOptions {
 }
 
 class CommitCommand extends CliCommand<CommitCommandOptions>
-  with _$CommitCommand {
+  with _$CommitCommandOptionsForCliCommand {
   static CommitCommandOptions? debugOptionsWhenRun; // for testing purpose
 
   @override
