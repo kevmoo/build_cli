@@ -1,3 +1,7 @@
+import 'package:args/command_runner.dart';
+import 'package:args/src/arg_results.dart';
+import 'package:meta/meta.dart';
+
 export 'package:args/args.dart' show ArgParser, ArgResults;
 
 class CliOptions {
@@ -33,4 +37,18 @@ class CliOption {
     this.convert,
     this.provideDefaultToOverride = false,
   });
+}
+
+abstract class CliCommand<Option> extends Command<void> {
+  CliCommand() {
+    populateOptionsParser();
+  }
+
+  Option get cliArgResults => parseOptionsResult(argResults!);
+
+  @protected
+  void populateOptionsParser();
+
+  @protected
+  Option parseOptionsResult(ArgResults argResults);
 }
