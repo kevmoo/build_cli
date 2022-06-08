@@ -1,5 +1,5 @@
+import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
-import 'package:args/src/arg_results.dart';
 import 'package:meta/meta.dart';
 
 export 'package:args/args.dart' show ArgParser, ArgResults;
