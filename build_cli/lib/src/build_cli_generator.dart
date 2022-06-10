@@ -173,15 +173,18 @@ ${element.name} parse${element.name}(List<String> args) {
 }
 ''';
 
-    yield '''
-mixin _\$${element.name}ForCliCommand on CliCommand<${element.name}> {
-  @override
-  void populateOptionsParser() => $populateParserName(argParser);
+    final createCommand = annotation.read('createCommand').boolValue;
+    if (createCommand) {
+      yield '''
+abstract class _\$${element.name}Command<T> extends Command<T> {
+  _\$${element.name}Command() {
+    $populateParserName(argParser);
+  }
 
-  @override
-  ${element.name} parseOptionsResult(ArgResults result) => $resultParserName(result);
+  late final _options => $resultParserName(argResults!);
 }
-    ''';
+      ''';
+    }
   }
 }
 

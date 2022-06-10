@@ -1,7 +1,11 @@
 export 'package:args/args.dart' show ArgParser, ArgResults;
 
 class CliOptions {
-  const CliOptions();
+  final bool createCommand;
+
+  const CliOptions({
+    this.createCommand = false,
+  });
 }
 
 class CliOption {
