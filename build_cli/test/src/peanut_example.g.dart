@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: lines_longer_than_80_chars, unused_element
+// ignore_for_file: lines_longer_than_80_chars
 
 part of 'peanut_example.dart';
 
