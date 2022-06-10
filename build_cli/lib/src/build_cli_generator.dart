@@ -172,6 +172,19 @@ ${element.name} parse${element.name}(List<String> args) {
   return $resultParserName(result);
 }
 ''';
+
+    final createCommand = annotation.read('createCommand').boolValue;
+    if (createCommand) {
+      yield '''
+abstract class _\$${element.name}Command<T> extends Command<T> {
+  _\$${element.name}Command() {
+    $populateParserName(argParser);
+  }
+
+  late final _options = $resultParserName(argResults!);
+}
+      ''';
+    }
   }
 }
 

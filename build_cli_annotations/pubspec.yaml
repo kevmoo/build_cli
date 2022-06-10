@@ -1,5 +1,5 @@
 name: build_cli_annotations
-version: 2.0.0
+version: 2.1.0
 description: >-
   Contains annotations for `package:build_cli`.
   See that package for more information.

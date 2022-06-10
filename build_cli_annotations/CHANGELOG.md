@@ -1,3 +1,7 @@
+## 2.1.0
+
+- Support CommandRunner/Command
+
 ## 2.0.0
 
 - This package now generates null safe code. Use with build_cli_annotations
