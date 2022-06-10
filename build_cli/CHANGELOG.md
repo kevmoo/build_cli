@@ -1,3 +1,7 @@
+## 2.2.0
+
+- Support CommandRunner/Command
+
 ## 2.1.6
 - 
 - Support the latest `package:analyzer`.
