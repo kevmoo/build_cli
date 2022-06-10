@@ -1,8 +1,9 @@
+import 'package:args/command_runner.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 
 part 'command_runner_example.g.dart';
 
-@CliOptions()
+@CliOptions(createCommand: true)
 class CommitOptions {
   @CliOption(abbr: 'a')
   final bool all;

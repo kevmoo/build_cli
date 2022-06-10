@@ -129,12 +129,3 @@ PubvizOptions parsePubvizOptions(List<String> args) {
   final result = _$parserForPubvizOptions.parse(args);
   return _$parsePubvizOptionsResult(result);
 }
-
-mixin _$PubvizOptionsForCliCommand on CliCommand<PubvizOptions> {
-  @override
-  void populateOptionsParser() => _$populatePubvizOptionsParser(argParser);
-
-  @override
-  PubvizOptions parseOptionsResult(ArgResults result) =>
-      _$parsePubvizOptionsResult(result);
-}

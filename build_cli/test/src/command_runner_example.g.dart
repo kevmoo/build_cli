@@ -8,31 +8,27 @@ part of 'command_runner_example.dart';
 // CliGenerator
 // **************************************************************************
 
-CommitCommandOptions _$parseCommitCommandOptionsResult(ArgResults result) =>
-    CommitCommandOptions(
+CommitOptions _$parseCommitOptionsResult(ArgResults result) => CommitOptions(
       all: result['all'] as bool,
     );
 
-ArgParser _$populateCommitCommandOptionsParser(ArgParser parser) => parser
+ArgParser _$populateCommitOptionsParser(ArgParser parser) => parser
   ..addFlag(
     'all',
     abbr: 'a',
   );
 
-final _$parserForCommitCommandOptions =
-    _$populateCommitCommandOptionsParser(ArgParser());
+final _$parserForCommitOptions = _$populateCommitOptionsParser(ArgParser());
 
-CommitCommandOptions parseCommitCommandOptions(List<String> args) {
-  final result = _$parserForCommitCommandOptions.parse(args);
-  return _$parseCommitCommandOptionsResult(result);
+CommitOptions parseCommitOptions(List<String> args) {
+  final result = _$parserForCommitOptions.parse(args);
+  return _$parseCommitOptionsResult(result);
 }
 
-mixin _$CommitCommandOptionsForCliCommand on CliCommand<CommitCommandOptions> {
-  @override
-  void populateOptionsParser() =>
-      _$populateCommitCommandOptionsParser(argParser);
+abstract class _$CommitOptionsCommand<T> extends Command<T> {
+  _$CommitOptionsCommand() {
+    _$populateCommitOptionsParser(argParser);
+  }
 
-  @override
-  CommitCommandOptions parseOptionsResult(ArgResults result) =>
-      _$parseCommitCommandOptionsResult(result);
+  late final _options = _$parseCommitOptionsResult(argResults!);
 }

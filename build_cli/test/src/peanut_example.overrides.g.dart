@@ -177,12 +177,3 @@ PeanutOptions parsePeanutOptions(List<String> args) {
   final result = _$parserForPeanutOptions.parse(args);
   return _$parsePeanutOptionsResult(result);
 }
-
-mixin _$PeanutOptionsForCliCommand on CliCommand<PeanutOptions> {
-  @override
-  void populateOptionsParser() => _$populatePeanutOptionsParser(argParser);
-
-  @override
-  PeanutOptions parseOptionsResult(ArgResults result) =>
-      _$parsePeanutOptionsResult(result);
-}

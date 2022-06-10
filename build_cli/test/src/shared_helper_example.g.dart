@@ -68,15 +68,6 @@ FirstOptions parseFirstOptions(List<String> args) {
   return _$parseFirstOptionsResult(result);
 }
 
-mixin _$FirstOptionsForCliCommand on CliCommand<FirstOptions> {
-  @override
-  void populateOptionsParser() => _$populateFirstOptionsParser(argParser);
-
-  @override
-  FirstOptions parseOptionsResult(ArgResults result) =>
-      _$parseFirstOptionsResult(result);
-}
-
 SecondOptions _$parseSecondOptionsResult(ArgResults result) => SecondOptions()
   ..value = _$nullableEnumValueHelperNullable(
     _$OptionValueEnumMapBuildCli,
@@ -103,13 +94,4 @@ final _$parserForSecondOptions = _$populateSecondOptionsParser(ArgParser());
 SecondOptions parseSecondOptions(List<String> args) {
   final result = _$parserForSecondOptions.parse(args);
   return _$parseSecondOptionsResult(result);
-}
-
-mixin _$SecondOptionsForCliCommand on CliCommand<SecondOptions> {
-  @override
-  void populateOptionsParser() => _$populateSecondOptionsParser(argParser);
-
-  @override
-  SecondOptions parseOptionsResult(ArgResults result) =>
-      _$parseSecondOptionsResult(result);
 }

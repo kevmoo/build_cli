@@ -181,7 +181,7 @@ abstract class _\$${element.name}Command<T> extends Command<T> {
     $populateParserName(argParser);
   }
 
-  late final _options => $resultParserName(argResults!);
+  late final _options = $resultParserName(argResults!);
 }
       ''';
     }
