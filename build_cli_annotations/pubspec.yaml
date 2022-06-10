@@ -12,4 +12,3 @@ environment:
 dependencies:
   # Limit version range on args – it's exported
   args: '>=2.0.0 <3.0.0'
-  meta: ^1.3.0
