@@ -1,6 +1,14 @@
+import 'package:args/args.dart';
+import 'package:args/command_runner.dart';
+import 'package:meta/meta_meta.dart';
+
 export 'package:args/args.dart' show ArgParser, ArgResults;
 
+/// Annotate classes with this type to create [ArgParser] helpers.
+@Target({TargetKind.classType})
 class CliOptions {
+  /// If `true`, creates a [Command] abstract class associated with the
+  /// annotated type.
   final bool createCommand;
 
   const CliOptions({
@@ -8,6 +16,7 @@ class CliOptions {
   });
 }
 
+/// Annotate fields to configure the generated [ArgParser] helpers.
 class CliOption {
   final String? name;
   final String? abbr;

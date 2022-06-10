@@ -1,6 +1,7 @@
 ## 2.2.0
 
-- Support CommandRunner/Command
+- Generate a `Command` helper class when (the new) `CliOptions.createCommand`
+  field is `true`.
 
 ## 2.1.6
 - 

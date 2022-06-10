@@ -238,6 +238,7 @@ class AnnotatedCommandNoParser {
   'class.',
   todo: 'Remove the `@CliOptions` annotation from `theAnswer`.',
 )
+// ignore: invalid_annotation_target
 @CliOptions()
 const theAnswer = 42;
 
@@ -246,6 +247,7 @@ const theAnswer = 42;
   ' `@CliOptions` can only be applied to a class.',
   todo: 'Remove the `@CliOptions` annotation from `annotatedMethod`.',
 )
+// ignore: invalid_annotation_target
 @CliOptions()
 Object? annotatedMethod() => null;
 
