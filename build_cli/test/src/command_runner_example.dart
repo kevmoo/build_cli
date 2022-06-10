@@ -3,18 +3,17 @@ import 'package:build_cli_annotations/build_cli_annotations.dart';
 part 'command_runner_example.g.dart';
 
 @CliOptions()
-class CommitCommandOptions {
+class CommitOptions {
   @CliOption(abbr: 'a')
   final bool all;
 
-  CommitCommandOptions({
+  CommitOptions({
     required this.all,
   });
 }
 
-class CommitCommand extends CliCommand<CommitCommandOptions>
-  with _$CommitCommandOptionsForCliCommand {
-  static CommitCommandOptions? debugOptionsWhenRun; // for testing purpose
+class CommitCommand extends _$CommitOptionsCommand<void> {
+  static CommitOptions? debugOptionsWhenRun; // for testing purpose
 
   @override
   final name = 'commit';
@@ -23,6 +22,6 @@ class CommitCommand extends CliCommand<CommitCommandOptions>
 
   @override
   void run() {
-    debugOptionsWhenRun = cliArgResults; // for testing purpose
+    debugOptionsWhenRun = _options; // for testing purpose
   }
 }
