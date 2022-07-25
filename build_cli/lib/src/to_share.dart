@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// ignore_for_file: implementation_imports
+// ignore_for_file: implementation_imports, deprecated_member_use
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/src/dart/element/inheritance_manager3.dart'
