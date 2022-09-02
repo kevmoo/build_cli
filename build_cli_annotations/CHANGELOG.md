@@ -1,3 +1,7 @@
+## 2.1.1-dev
+
+- Require Dart >=2.17
+
 ## 2.1.0
 
 - Added `CliOptions.createCommand` field to support creating `Command` helper
@@ -7,10 +11,6 @@
 
 - This package now generates null safe code. Use with build_cli_annotations
   ^2.0.0 and SDK ^2.12 to get started.
-
-## 1.2.1-dev
-
-- Require Dart SDK `>=2.7.0 <3.0.0`.
 
 ## 1.2.0
 

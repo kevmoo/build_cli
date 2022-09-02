@@ -10,22 +10,22 @@ String? enumValueMapFromType(DartType targetType) {
   }
 
   final items = enumMap.entries.map(
-    (e) => '  ${targetType.element!.name}.${e.key.name}: '
+    (e) => '  ${targetType.element2!.name}.${e.key.name}: '
         '${escapeDartString(e.value.kebab)}',
   );
 
   return 'const ${enumConstMapName(targetType)} = '
-      '<${targetType.element!.name}, String>{\n${items.join(',\n')}\n};';
+      '<${targetType.element2!.name}, String>{\n${items.join(',\n')}\n};';
 }
 
 String enumConstMapName(DartType targetType) =>
-    '_\$${targetType.element!.name}EnumMapBuildCli';
+    '_\$${targetType.element2!.name}EnumMapBuildCli';
 
 /// If [targetType] is not an enum, `null` is returned.
 Map<FieldElement, String>? _enumFieldsMap(DartType targetType) {
-  if (targetType is InterfaceType && targetType.element.isEnum) {
+  if (targetType is InterfaceType && targetType.element2 is EnumElement) {
     return Map<FieldElement, String>.fromEntries(
-      targetType.element.fields
+      targetType.element2.fields
           .where((p) => !p.isSynthetic)
           .map((p) => MapEntry(p, p.name)),
     );
