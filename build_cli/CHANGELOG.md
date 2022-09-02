@@ -1,3 +1,7 @@
+## 2.2.1-dev
+
+- Require Dart >=2.17
+
 ## 2.2.0
 
 - Generate a `Command` helper class when (the new) `CliOptions.createCommand`
