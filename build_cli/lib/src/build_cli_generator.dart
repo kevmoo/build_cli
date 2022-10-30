@@ -243,7 +243,7 @@ String _deserializeForField(
       boolChecker.isExactlyType(targetType)) {
     final suffix =
         targetType.nullabilitySuffix == NullabilitySuffix.question ? '?' : '';
-    return '$argAccess as ${targetType.element2!.name}$suffix';
+    return '$argAccess as ${targetType.element!.name}$suffix';
   }
 
   if (targetType.isEnum) {
