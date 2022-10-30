@@ -39,7 +39,7 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
 
   for (var v in manager.getInheritedMap2(element).values) {
     assert(v is! FieldElement);
-    if (_dartCoreObjectChecker.isExactly(v.enclosingElement3)) {
+    if (_dartCoreObjectChecker.isExactly(v.enclosingElement)) {
       continue;
     }
 
@@ -57,20 +57,20 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
 
 int _sortByLocation(FieldElement a, FieldElement b) {
   final checkerA =
-      TypeChecker.fromStatic((a.enclosingElement3 as ClassElement).thisType);
+      TypeChecker.fromStatic((a.enclosingElement as ClassElement).thisType);
 
-  if (!checkerA.isExactly(b.enclosingElement3)) {
+  if (!checkerA.isExactly(b.enclosingElement)) {
     // in this case, you want to prioritize the enclosingElement that is more
     // "super".
 
-    if (checkerA.isSuperOf(b.enclosingElement3)) {
+    if (checkerA.isSuperOf(b.enclosingElement)) {
       return -1;
     }
 
     final checkerB =
-        TypeChecker.fromStatic((b.enclosingElement3 as ClassElement).thisType);
+        TypeChecker.fromStatic((b.enclosingElement as ClassElement).thisType);
 
-    if (checkerB.isSuperOf(a.enclosingElement3)) {
+    if (checkerB.isSuperOf(a.enclosingElement)) {
       return 1;
     }
   }
