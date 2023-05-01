@@ -3,7 +3,7 @@ import 'dart:collection';
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
-import 'package:build/build.dart' show log, BuildStep;
+import 'package:build/build.dart' show BuildStep, log;
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:source_helper/source_helper.dart';
