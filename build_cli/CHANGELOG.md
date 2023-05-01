@@ -1,7 +1,7 @@
 ## 2.2.2-dev
 
 - Require `analyzer: ^5.2.0`
-- Require `sdk: '>=2.18.0 <3.0.0'`
+- Require `sdk: '>=2.19.0 <3.0.0'`
 
 ## 2.2.1
 

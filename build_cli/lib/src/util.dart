@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:build/build.dart' show BuildStep, AssetId;
+import 'package:build/build.dart' show AssetId, BuildStep;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:yaml/yaml.dart';
