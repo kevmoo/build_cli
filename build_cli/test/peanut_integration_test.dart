@@ -36,7 +36,7 @@ void main() {
       '--debug-build-tool',
       'pub',
       'extra',
-      'things'
+      'things',
     ]);
 
     expect(options.directory, 'dir');
@@ -61,8 +61,8 @@ void main() {
       '"foo" is not an allowed value for option "mode".': ['--mode', 'foo'],
       'The value provided for "max-runtime" – "bob" – was not a number.': [
         '--max-runtime',
-        'bob'
-      ]
+        'bob',
+      ],
     };
 
     for (var item in items.entries) {

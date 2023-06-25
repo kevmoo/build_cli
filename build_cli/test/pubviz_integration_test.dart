@@ -20,19 +20,19 @@ void main() {
       '"foo" is not an allowed value for option "format".': ['--format', 'foo'],
       'Cannot parse "3.14" into `int` for option "production-port".': [
         '--production-port',
-        '3.14'
+        '3.14',
       ],
       'Cannot parse "foo" into `int` for option "production-port".': [
         '--production-port',
-        'foo'
+        'foo',
       ],
       'Cannot parse "foo" into `num` for option "num-value".': [
         '--num-value',
-        'foo'
+        'foo',
       ],
       'Cannot parse "foo" into `double` for option "double-value".': [
         '--double-value',
-        'foo'
+        'foo',
       ],
     };
 
