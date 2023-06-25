@@ -38,7 +38,7 @@ class PubvizOptions {
     allowedHelp: {
       8080: 'the cool port',
       9090: 'the alt port',
-      42: 'the knowledge port'
+      42: 'the knowledge port',
     },
   )
   int devPort;
@@ -66,5 +66,5 @@ enum FormatOptions { dot, html }
 const _formatOptionsHelp = <FormatOptions, String>{
   FormatOptions.dot: "Generate a GraphViz 'dot' file.",
   FormatOptions.html:
-      'Wrap the GraphViz dot format in an HTML template which renders it.'
+      'Wrap the GraphViz dot format in an HTML template which renders it.',
 };

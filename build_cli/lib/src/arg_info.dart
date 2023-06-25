@@ -38,7 +38,7 @@ enum ArgType { option, flag, multiOption, rest, wasParsed, command }
 const specialTypes = <ArgType, bool Function(FieldElement)>{
   ArgType.rest: _couldBeRestArg,
   ArgType.wasParsed: _couldBeWasParsedArg,
-  ArgType.command: _couldBeCommand
+  ArgType.command: _couldBeCommand,
 };
 
 const wasParsedSuffix = 'WasParsed';

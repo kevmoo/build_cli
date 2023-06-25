@@ -194,7 +194,7 @@ String _overrideParamName(String fieldName) => '${fieldName}DefaultOverride';
 const _numCheckers = <TypeChecker, String>{
   numChecker: 'num',
   TypeChecker.fromRuntime(int): 'int',
-  TypeChecker.fromRuntime(double): 'double'
+  TypeChecker.fromRuntime(double): 'double',
 };
 
 String _deserializeForField(
