@@ -1,5 +1,5 @@
 name: build_cli_annotations
-version: 2.1.1-dev
+version: 2.1.1-wip
 description: >-
   Contains annotations for `package:build_cli`.
   See that package for more information.
@@ -7,7 +7,7 @@ description: >-
 homepage: https://github.com/kevmoo/build_cli
 
 environment:
-  sdk: '>=2.19.0 <3.0.0'
+  sdk: ^3.0.0
 
 dependencies:
   # Limit version range on args – it's exported
