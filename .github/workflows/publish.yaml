@@ -12,3 +12,5 @@ jobs:
   publish:
     if: ${{ github.repository_owner == 'kevmoo' }}
     uses: dart-lang/ecosystem/.github/workflows/publish.yaml@main
+    permissions:
+      id-token: write # Required for authentication using OIDC
