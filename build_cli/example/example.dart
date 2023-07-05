@@ -64,10 +64,8 @@ void main(List<String> args) {
   switch (options.displayLanguage) {
     case Language.en:
       buffer.write('Hello, ');
-      break;
     case Language.es:
       buffer.write('¡Hola, ');
-      break;
   }
 
   buffer

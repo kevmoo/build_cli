@@ -308,13 +308,10 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   switch (info.argType) {
     case ArgType.flag:
       buffer.write('..addFlag');
-      break;
     case ArgType.option:
       buffer.write('..addOption');
-      break;
     case ArgType.multiOption:
       buffer.write('..addMultiOption');
-      break;
     default:
       if (specialTypes.keys.contains(info.argType)) {
         return;

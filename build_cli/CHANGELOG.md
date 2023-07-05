@@ -1,7 +1,7 @@
-## 2.2.2-dev
+## 2.2.2-wip
 
-- Require `analyzer: ^5.12.0`
-- Require `sdk: '>=2.19.0 <3.0.0'`
+- Support the latest `package:analyzer`.
+- Require `sdk: ^3.0.0`
 
 ## 2.2.1
 
