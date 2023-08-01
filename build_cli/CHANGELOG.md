@@ -1,4 +1,4 @@
-## 2.2.2-wip
+## 2.2.2
 
 - Support the latest `package:analyzer`.
 - Require `sdk: ^3.0.0`
