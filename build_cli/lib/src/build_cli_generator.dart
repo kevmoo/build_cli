@@ -77,7 +77,7 @@ T _$badNumberFormat<T extends num>(
 ) =>
   throw FormatException(
     'Cannot parse "$source" into `$type` for option "$argName".',
-  ); 
+  );
 ''';
     }
 
@@ -287,9 +287,13 @@ String _deserializeForField(
 
   for (var checker in _numCheckers.entries) {
     if (checker.key.isExactlyType(targetType)) {
-      return '${checker.value}.tryParse($argAccess as String) ?? '
+      final conversionStatement =
+          '${checker.value}.tryParse($argAccess as String) ?? '
           "_\$badNumberFormat($argAccess as String, '${checker.value}', "
           "'${_getArgName(field)}',)";
+      return targetType.isNullableType
+          ? '$argAccess != null ? $conversionStatement : null'
+          : conversionStatement;
     }
   }
 
