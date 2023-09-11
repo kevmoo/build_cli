@@ -39,12 +39,14 @@ FirstOptions _$parseFirstOptionsResult(ArgResults result) => FirstOptions()
     _$OptionValueEnumMapBuildCli,
     result['value'] as String?,
   )
-  ..count = int.tryParse(result['count'] as String) ??
-      _$badNumberFormat(
-        result['count'] as String,
-        'int',
-        'count',
-      );
+  ..count = result['count'] != null
+      ? int.tryParse(result['count'] as String) ??
+          _$badNumberFormat(
+            result['count'] as String,
+            'int',
+            'count',
+          )
+      : null;
 
 const _$OptionValueEnumMapBuildCli = <OptionValue, String>{
   OptionValue.a: 'a',
@@ -73,12 +75,14 @@ SecondOptions _$parseSecondOptionsResult(ArgResults result) => SecondOptions()
     _$OptionValueEnumMapBuildCli,
     result['value'] as String?,
   )
-  ..count = int.tryParse(result['count'] as String) ??
-      _$badNumberFormat(
-        result['count'] as String,
-        'int',
-        'count',
-      );
+  ..count = result['count'] != null
+      ? int.tryParse(result['count'] as String) ??
+          _$badNumberFormat(
+            result['count'] as String,
+            'int',
+            'count',
+          )
+      : null;
 
 ArgParser _$populateSecondOptionsParser(ArgParser parser) => parser
   ..addOption(
