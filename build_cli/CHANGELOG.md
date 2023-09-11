@@ -1,3 +1,8 @@
+## 2.2.3
+
+- Fix bug where nullable number options lead to an exception when parsing if
+  `null` is the default value and no value is passed to the command line.
+
 ## 2.2.2
 
 - Support the latest `package:analyzer`.
@@ -14,7 +19,7 @@
   field is `true`.
 
 ## 2.1.6
-- 
+-
 - Support the latest `package:analyzer`.
 
 ## 2.1.5
@@ -103,7 +108,7 @@
 
 - Added support for the new `provideDefaultToOverride` value on `CliOption` to
   allow users to provide an override to `defaultsTo` by including an optional
-  `[fieldName]DefaultOverride` param to the generated 
+  `[fieldName]DefaultOverride` param to the generated
   `_$populate[ClassName]Parser` function.
 - Handle kebab-case enum value names correctly, including when they are used as
   default values.
@@ -118,7 +123,7 @@
 ## 1.2.1
 
 - Generate all local variables as `final` where applicable.
-  Allows consumers to enable the `prefer_final_locals` lint. 
+  Allows consumers to enable the `prefer_final_locals` lint.
 
 ## 1.2.0
 
@@ -168,7 +173,7 @@
 
 ## 0.2.2
 
-- Added support for populating `ArgResults command` if the field is not 
+- Added support for populating `ArgResults command` if the field is not
   annotated.
 - Improved error output, including in cases where a bug may be found.
 
@@ -190,7 +195,7 @@
 - Improve error messages for some failures.
 - Support `defaultsTo` for flags.
 - Generate another private method `_$populate[OptionClassName]Parser`.
-  Allows usage for already existing `ArgParser` instances, such as with 
+  Allows usage for already existing `ArgParser` instances, such as with
   `package:args` `CommandRunner`.
 
 ## 0.1.1+1
