@@ -7,7 +7,7 @@ void main() {
     final options = parsePubvizOptions([]);
 
     expect(options.secret, isNull);
-    expect(options.ignorePackages, []);
+    expect(options.ignorePackages, <void>[]);
     expect(options.productionPort, 8080);
     expect(options.numValue, 3.14);
     expect(options.doubleValue, 3000.0);
@@ -40,11 +40,9 @@ void main() {
       test('`${item.value.join(' ')}`', () {
         expect(
           () => parsePubvizOptions(item.value),
-          throwsA((error) {
-            expect(error, isFormatException);
-            expect((error as FormatException).message, item.key);
-            return true;
-          }),
+          throwsA(
+            isFormatException.having((e) => e.message, 'message', item.key),
+          ),
         );
       });
     }
