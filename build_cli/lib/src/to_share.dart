@@ -9,7 +9,7 @@ import 'package:analyzer/src/dart/element/inheritance_manager3.dart'
     show InheritanceManager3;
 import 'package:source_gen/source_gen.dart';
 
-Never throwBugFound<T>(FieldElement element) => throwUnsupported(
+Never throwBugFound(FieldElement element) => throwUnsupported(
       element,
       "You've hit a bug in build_cli!",
       todo: 'Please rerun your build with --verbose and file as issue '

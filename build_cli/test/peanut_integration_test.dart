@@ -69,11 +69,9 @@ void main() {
       test('`${item.value.join(' ')}`', () {
         expect(
           () => parsePeanutOptions(item.value),
-          throwsA((error) {
-            expect(error, isFormatException);
-            expect((error as FormatException).message, item.key);
-            return true;
-          }),
+          throwsA(
+            isFormatException.having((e) => e.message, 'message', item.key),
+          ),
         );
       });
     }
