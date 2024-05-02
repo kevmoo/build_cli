@@ -7,7 +7,7 @@ description: >-
 homepage: https://github.com/kevmoo/build_cli
 
 environment:
-  sdk: ^3.0.0
+  sdk: ^3.3.0
 
 dependencies:
   # Limit version range on args – it's exported

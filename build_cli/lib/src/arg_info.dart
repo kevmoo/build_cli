@@ -141,7 +141,7 @@ ArgType _getArgType(FieldElement element, CliOption option) {
 
   throwUnsupported(
     element,
-    '`${targetType.getDisplayString(withNullability: false)}`'
+    '`${targetType.getDisplayString()}`'
     ' is not a supported type.',
   );
 }
@@ -172,8 +172,8 @@ CliOption? _getOptions(FieldElement element) {
               // field's type is `BuildTool?` it's accessors will be the
               // non-nullable type, `BuildTool`.
               // TODO: find a better way to compare the underlying type
-              p.returnType.getDisplayString(withNullability: false) ==
-              element.type.getDisplayString(withNullability: false),
+              p.returnType.getDisplayString() ==
+              element.type.getDisplayString(),
         )
         .map((p) => p.name)
         .toList();
@@ -308,13 +308,12 @@ CliOption? _getOptions(FieldElement element) {
     }
 
     if (!functionElement.returnType.isAssignableTo(element.type)) {
-      final typeString =
-          functionElement.returnType.getDisplayString(withNullability: false);
+      final typeString = functionElement.returnType.getDisplayString();
       throwUnsupported(
         element,
         'The convert function `${functionElement.name}` return type '
         '`$typeString` is not compatible with the field '
-        'type `${element.type.getDisplayString(withNullability: false)}`.',
+        'type `${element.type.getDisplayString()}`.',
       );
     }
     _convertName[option] = ConverterData(

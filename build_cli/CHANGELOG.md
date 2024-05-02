@@ -1,3 +1,8 @@
+## 2.2.4-wip
+
+- Require latest `package:analyzer`.
+- Require Dart `3.3`.
+
 ## 2.2.3
 
 - Fix bug where nullable number options lead to an exception when parsing if
