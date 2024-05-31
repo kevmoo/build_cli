@@ -126,12 +126,12 @@ ${element.name} $resultParserName(ArgResults result) =>''',
       assert(info.optionData!.provideDefaultToOverride);
       String typeInfo;
       if (converterDataFromOptions(info.optionData!) == null) {
-        typeInfo = info.dartType.getDisplayString();
+        typeInfo = info.dartType.toStringNonNullable();
       } else {
         fyis.add(
           'The value for [${_overrideParamName(fieldName)}] must be a '
           '[String] that is convertible to '
-          '[${info.dartType.getDisplayString()}].',
+          '[${info.dartType.toStringNonNullable()}].',
         );
         typeInfo = 'String';
       }
