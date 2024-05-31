@@ -1,3 +1,8 @@
+## 2.2.4-wip
+
+- Require latest `package:analyzer`.
+- Require `sdk: ^3.4.0`
+
 ## 2.2.3
 
 - Fix bug where nullable number options lead to an exception when parsing if

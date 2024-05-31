@@ -7,10 +7,10 @@ description: >-
 homepage: https://github.com/kevmoo/build_cli
 
 environment:
-  sdk: ^3.0.0
+  sdk: ^3.4.0
 
 dependencies:
   # Limit version range on args – it's exported
   args: '>=2.0.0 <3.0.0'
-  dart_flutter_team_lints: ^2.0.0
+  dart_flutter_team_lints: ^3.0.0
   meta: ^1.7.0

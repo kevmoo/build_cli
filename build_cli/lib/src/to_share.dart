@@ -5,6 +5,7 @@
 // ignore_for_file: implementation_imports
 
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/src/dart/element/inheritance_manager3.dart'
     show InheritanceManager3;
 import 'package:source_gen/source_gen.dart';
@@ -43,8 +44,8 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
       continue;
     }
 
-    if (v is PropertyAccessorElement && v.variable is FieldElement) {
-      fieldsList.add(v.variable as FieldElement);
+    if (v is PropertyAccessorElement && v.variable2 is FieldElement) {
+      fieldsList.add(v.variable2 as FieldElement);
     }
   }
 
@@ -200,4 +201,20 @@ Set<String> writeConstructorInvocation(
   buffer.writeln();
 
   return usedCtorParamsAndFields;
+}
+
+extension DartTypeExtension on DartType {
+  String toStringNonNullable() {
+    final val = getDisplayString();
+    if (val.endsWith('?')) return val.substring(0, val.length - 1);
+    return val;
+  }
+}
+
+extension ElementExtension on Element {
+  String toStringNonNullable() {
+    final val = getDisplayString();
+    if (val.endsWith('?')) return val.substring(0, val.length - 1);
+    return val;
+  }
 }
