@@ -6,10 +6,10 @@ description: >-
 homepage: https://github.com/kevmoo/build_cli
 
 environment:
-  sdk: ^3.3.0
+  sdk: ^3.4.0
 
 dependencies:
-  analyzer: ^6.4.0
+  analyzer: ^6.5.0
   build: ^2.0.0
   # Limit version range on build_cli_annotations
   # new features need to stay in sync

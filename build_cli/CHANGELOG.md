@@ -1,7 +1,7 @@
 ## 2.2.4-wip
 
 - Require latest `package:analyzer`.
-- Require Dart `3.3`.
+- Require `sdk: ^3.4.0`
 
 ## 2.2.3
 
