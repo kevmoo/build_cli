@@ -5,6 +5,6 @@
 ///
 /// See [package:build_runner](https://pub.dev/packages/build_runner)
 /// for more information.
-library build_cli;
+library;
 
 export 'src/build_cli_generator.dart' show CliGenerator;
