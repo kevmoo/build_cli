@@ -2,7 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// ignore_for_file: implementation_imports
+// TODO: remove deprecated_member_use when we bump min SDK to Dart 3.6
+// ignore_for_file: implementation_imports, deprecated_member_use
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
