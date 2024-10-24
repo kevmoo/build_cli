@@ -16,8 +16,11 @@ void main() {
 
   group('with invalid args', () {
     final items = {
-      'Could not find an option named "no-help".': ['--no-help'],
-      '"foo" is not an allowed value for option "format".': ['--format', 'foo'],
+      'Could not find an option named "--no-help".': ['--no-help'],
+      '"foo" is not an allowed value for option "--format".': [
+        '--format',
+        'foo',
+      ],
       'Cannot parse "3.14" into `int` for option "production-port".': [
         '--production-port',
         '3.14',
