@@ -57,8 +57,8 @@ void main() {
 
   group('with invalid args', () {
     final items = {
-      'Cannot negate option "no-help".': ['--no-help'],
-      '"foo" is not an allowed value for option "mode".': ['--mode', 'foo'],
+      'Cannot negate option "--no-help".': ['--no-help'],
+      '"foo" is not an allowed value for option "--mode".': ['--mode', 'foo'],
       'The value provided for "max-runtime" – "bob" – was not a number.': [
         '--max-runtime',
         'bob',

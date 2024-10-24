@@ -1,5 +1,6 @@
 ## 2.1.1-wip
 
+- Require `args: ^2.6.0`
 - Require `sdk: ^3.5.0`
 
 ## 2.1.0
