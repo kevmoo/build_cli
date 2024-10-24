@@ -19,7 +19,7 @@ void main() {
       'Could not find an option named "--no-help".': ['--no-help'],
       '"foo" is not an allowed value for option "--format".': [
         '--format',
-        'foo'
+        'foo',
       ],
       'Cannot parse "3.14" into `int` for option "production-port".': [
         '--production-port',
