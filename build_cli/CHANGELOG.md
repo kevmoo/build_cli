@@ -1,7 +1,7 @@
 ## 2.2.4-wip
 
-- Require latest `package:analyzer`.
-- Require `sdk: ^3.5.0`
+- Support the latest `package:analyzer` and `package:source_gen`.
+- Require `sdk: ^3.6.0`
 
 ## 2.2.3
 
