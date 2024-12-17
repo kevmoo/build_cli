@@ -11,7 +11,7 @@ import 'package:source_gen/source_gen.dart';
 LibraryBuilder _builder(_ReplaceGenerator generator) => LibraryBuilder(
       generator,
       generatedExtension: '.${generator.gName}.dart',
-      formatOutput: (a) => a,
+      formatOutput: (a, v) => a,
     );
 
 Builder defaultOverride([_]) => _builder(_NonNullableGenerator());

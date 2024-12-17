@@ -2,8 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// TODO: remove deprecated_member_use when we bump min SDK to Dart 3.6
-// ignore_for_file: implementation_imports, deprecated_member_use
+// ignore_for_file: implementation_imports
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
@@ -41,7 +40,7 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
 
   for (var v in manager.getInheritedMap2(element).values) {
     assert(v is! FieldElement);
-    if (_dartCoreObjectChecker.isExactly(v.enclosingElement)) {
+    if (_dartCoreObjectChecker.isExactly(v.enclosingElement3)) {
       continue;
     }
 
@@ -59,20 +58,20 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
 
 int _sortByLocation(FieldElement a, FieldElement b) {
   final checkerA =
-      TypeChecker.fromStatic((a.enclosingElement as ClassElement).thisType);
+      TypeChecker.fromStatic((a.enclosingElement3 as ClassElement).thisType);
 
-  if (!checkerA.isExactly(b.enclosingElement)) {
+  if (!checkerA.isExactly(b.enclosingElement3)) {
     // in this case, you want to prioritize the enclosingElement that is more
     // "super".
 
-    if (checkerA.isSuperOf(b.enclosingElement)) {
+    if (checkerA.isSuperOf(b.enclosingElement3)) {
       return -1;
     }
 
     final checkerB =
-        TypeChecker.fromStatic((b.enclosingElement as ClassElement).thisType);
+        TypeChecker.fromStatic((b.enclosingElement3 as ClassElement).thisType);
 
-    if (checkerB.isSuperOf(a.enclosingElement)) {
+    if (checkerB.isSuperOf(a.enclosingElement3)) {
       return 1;
     }
   }
