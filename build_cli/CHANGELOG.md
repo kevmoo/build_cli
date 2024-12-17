@@ -1,4 +1,4 @@
-## 2.2.4-wip
+## 2.2.4
 
 - Support the latest `package:analyzer` and `package:source_gen`.
 - Require `sdk: ^3.6.0`
