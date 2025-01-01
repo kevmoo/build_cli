@@ -14,7 +14,8 @@ LibraryBuilder _builder(_ReplaceGenerator generator) => LibraryBuilder(
       formatOutput: (a, v) => a,
     );
 
-Builder defaultOverride([_]) => _builder(_NonNullableGenerator());
+Builder defaultOverride([BuilderOptions? _]) =>
+    _builder(_NonNullableGenerator());
 
 abstract class _ReplaceGenerator extends Generator {
   final String gName;
