@@ -17,6 +17,7 @@ class CliOptions {
 }
 
 /// Annotate fields to configure the generated [ArgParser] helpers.
+@Target({TargetKind.field})
 class CliOption {
   final String? name;
   final String? abbr;
