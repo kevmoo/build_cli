@@ -44,8 +44,8 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
       continue;
     }
 
-    if (v is PropertyAccessorElement && v.variable2 is FieldElement) {
-      fieldsList.add(v.variable2 as FieldElement);
+    if (v is PropertyAccessorElement && v.declaration is FieldElement) {
+      fieldsList.add(v.declaration as FieldElement);
     }
   }
 
