@@ -1,3 +1,7 @@
+## 2.2.5
+
+- Fix issue with latest version of `package:analyzer`.
+
 ## 2.2.4
 
 - Support the latest `package:analyzer` and `package:source_gen`.
