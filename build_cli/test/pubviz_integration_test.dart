@@ -68,9 +68,9 @@ void main() {
     --num-value                 (defaults to "3.14")
     --double-value              (defaults to "3000.0")
     --dev-port                  
-          [42]                  the knowledge port
           [8080] (default)      the cool port
           [9090]                the alt port
+          [42]                  the knowledge port
 
     --list-of-nothing           
     --list-of-dynamic           
