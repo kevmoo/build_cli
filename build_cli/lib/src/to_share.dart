@@ -2,12 +2,16 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// ignore_for_file: implementation_imports
+// ignore_for_file: deprecated_member_use
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:analyzer/src/dart/element/inheritance_manager3.dart'
-    show InheritanceManager3;
+import 'package:analyzer/src/dart/element/element.dart' // ignore: implementation_imports
+    show
+        InterfaceElementImpl;
+import 'package:analyzer/src/dart/element/inheritance_manager3.dart' // ignore: implementation_imports
+    show
+        InheritanceManager3;
 import 'package:source_gen/source_gen.dart';
 
 Never throwBugFound(FieldElement element) => throwUnsupported(
@@ -38,7 +42,8 @@ Set<FieldElement> createSortedFieldSet(ClassElement element) {
 
   final manager = InheritanceManager3();
 
-  for (var v in manager.getInheritedMap2(element).values) {
+  for (var v
+      in manager.getInheritedMap2(element as InterfaceElementImpl).values) {
     assert(v is! FieldElement);
     if (_dartCoreObjectChecker.isExactly(v.enclosingElement3)) {
       continue;
