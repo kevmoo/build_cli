@@ -1,4 +1,4 @@
-## 2.2.7-wip
+## 2.2.7
 
 - Fix issue with latest version of `package:source_gen`.
 
