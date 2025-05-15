@@ -22,7 +22,7 @@ import 'util.dart';
 /// Developers shouldn't need to access this class directly unless they are
 /// configuring a `package:source_gen` `PartBuilder` in code.
 class CliGenerator extends GeneratorForAnnotation<CliOptions> {
-  const CliGenerator();
+  const CliGenerator() : super(throwOnUnresolved: false);
 
   @override
   Stream<String> generateForAnnotatedElement(
