@@ -1,3 +1,7 @@
+## 2.2.7-wip
+
+- Fix issue with latest version of `package:source_gen`.
+
 ## 2.2.6
 
 - Fix issue with latest version of `package:analyzer`.
