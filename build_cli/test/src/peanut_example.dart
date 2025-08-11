@@ -11,17 +11,10 @@ ArgParser get prettyParser =>
 
 @CliOptions()
 class PeanutOptions {
-  @CliOption(
-    name: _directoryFlag,
-    abbr: 'd',
-    defaultsTo: 'web',
-  )
+  @CliOption(name: _directoryFlag, abbr: 'd', defaultsTo: 'web')
   final String directory;
 
-  @CliOption(
-    abbr: 'b',
-    defaultsTo: 'gh-pages',
-  )
+  @CliOption(abbr: 'b', defaultsTo: 'gh-pages')
   final String branch;
 
   @CliOption(
@@ -34,7 +27,8 @@ class PeanutOptions {
 
   @CliOption(
     abbr: 'c',
-    help: 'The configuration to use when running `build_runner`. '
+    help:
+        'The configuration to use when running `build_runner`. '
         'If this option is not set, `$_defaultConfig` is used if '
         '`$_defaultConfigFile` exists in the current directory.',
   )
@@ -42,15 +36,13 @@ class PeanutOptions {
 
   final bool buildConfigWasParsed;
 
-  @CliOption(
-    abbr: 'm',
-    defaultsTo: 'Built <$_directoryFlag>',
-  )
+  @CliOption(abbr: 'm', defaultsTo: 'Built <$_directoryFlag>')
   final String message;
 
   @CliOption(
     abbr: 't',
-    help: 'If `$_defaultConfigFile` exists in the current directory, defaults'
+    help:
+        'If `$_defaultConfigFile` exists in the current directory, defaults'
         ' to "build". Otherwise, "pub".',
   )
   final BuildTool? buildTool;
@@ -61,42 +53,30 @@ class PeanutOptions {
   )
   final BuildTool debugBuildTool;
 
-  @CliOption(
-    defaultsTo: BazelOptions.toSource,
-    help: 'nice options',
-  )
+  @CliOption(defaultsTo: BazelOptions.toSource, help: 'nice options')
   final BazelOptions bazelOptions;
 
   @CliOption(
     abbr: 'h',
     negatable: false,
-    help: 'Prints usage information. '
+    help:
+        'Prints usage information. '
         'Which is so "\$" you don\'t even know it!',
   )
   final bool help;
 
-  @CliOption(
-    hide: true,
-  )
+  @CliOption(hide: true)
   final bool secret;
 
-  @CliOption(
-    defaultsTo: true,
-    negatable: true,
-  )
+  @CliOption(defaultsTo: true, negatable: true)
   final bool release;
 
   final List<String> rest;
 
-  @CliOption(
-    convert: _convert,
-  )
+  @CliOption(convert: _convert)
   Duration? maxRuntime;
 
-  @CliOption(
-    convert: _convertNotNull,
-    defaultsTo: 0,
-  )
+  @CliOption(convert: _convertNotNull, defaultsTo: 0)
   final Duration minRuntime;
 
   // Explicitly not used – to validate logging behavior

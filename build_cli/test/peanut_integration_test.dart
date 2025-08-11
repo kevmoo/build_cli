@@ -80,9 +80,7 @@ void main() {
   test('usage', () {
     final prettyUsage = prettyParser.usage;
     printOnFailure(prettyUsage);
-    expect(
-      prettyUsage,
-      r'''
+    expect(prettyUsage, r'''
 -d, --directory           (defaults to "web")
 -b, --branch              (defaults to "gh-pages")
     --mode                The mode to run `pub build` in.
@@ -102,7 +100,6 @@ void main() {
                           even know it!
     --[no-]release        (defaults to on)
     --max-runtime         
-    --min-runtime         (defaults to "0")''',
-    );
+    --min-runtime         (defaults to "0")''');
   });
 }

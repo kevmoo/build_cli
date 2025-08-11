@@ -1,3 +1,11 @@
+## 2.2.8
+
+- Required `analyzer: ^8.1.1`
+- Required `build: ^4.0.0`
+- Required `build_config: ^1.2.0`
+- Required `source_gen: ^4.0.1`
+- Required `source_helper: ^1.3.8`
+
 ## 2.2.7
 
 - Fix issue with latest version of `package:source_gen`.

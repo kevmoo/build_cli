@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart' show BuildStep, log;
@@ -26,13 +26,13 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
 
   @override
   Stream<String> generateForAnnotatedElement(
-    Element element,
+    Element2 element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) async* {
     await validateSdkConstraint(buildStep);
 
-    if (element is! ClassElement) {
+    if (element is! ClassElement2) {
       final friendlyName = element.displayName;
       throw InvalidGenerationSourceError(
         'Generator cannot target `$friendlyName`. '
@@ -47,16 +47,16 @@ class CliGenerator extends GeneratorForAnnotation<CliOptions> {
     final fieldsList = createSortedFieldSet(element);
 
     // Explicitly using `LinkedHashMap` – we want these ordered.
-    final fields = LinkedHashMap<String, FieldElement>.fromIterable(
+    final fields = LinkedHashMap<String, FieldElement2>.fromIterable(
       fieldsList,
-      key: (f) => (f as FieldElement).name,
+      key: (f) => (f as FieldElement2).name3!,
     );
 
     // Get the constructor to use for the factory
 
-    final populateParserName = '_\$populate${element.name}Parser';
-    final parserFieldName = '_\$parserFor${element.name}';
-    final resultParserName = '_\$parse${element.name}Result';
+    final populateParserName = '_\$populate${element.name3}Parser';
+    final parserFieldName = '_\$parserFor${element.name3}';
+    final resultParserName = '_\$parse${element.name3}Result';
 
     if (fieldsList.any((fe) => fe.type.isEnum)) {
       yield enumValueHelper;
@@ -83,23 +83,20 @@ T _$badNumberFormat<T extends num>(
 ''';
     }
 
-    var buffer = StringBuffer()
-      ..write(
-        '''
-${element.name} $resultParserName(ArgResults result) =>''',
-      );
+    var buffer =
+        StringBuffer()..write('''
+${element.name3} $resultParserName(ArgResults result) =>''');
 
     String deserializeForField(
       String fieldName, {
-      ParameterElement? ctorParam,
-    }) =>
-        _deserializeForField(fields[fieldName]!, ctorParam, fields);
+      FormalParameterElement? ctorParam,
+    }) => _deserializeForField(fields[fieldName]!, ctorParam, fields);
 
     final usedFields = writeConstructorInvocation(
       buffer,
       element,
       fields.keys,
-      fields.values.where((fe) => !fe.isFinal).map((fe) => fe.name),
+      fields.values.where((fe) => !fe.isFinal).map((fe) => fe.name3!),
       {},
       deserializeForField,
     );
@@ -114,11 +111,11 @@ ${element.name} $resultParserName(ArgResults result) =>''',
     }
     yield buffer.toString();
 
-    final provideOverrides =
-        fields.map((k, v) => MapEntry(k, ArgInfo.fromField(v)))
-          ..removeWhere(
-            (k, v) => !(v.optionData?.provideDefaultToOverride ?? false),
-          );
+    final provideOverrides = fields.map(
+      (k, v) => MapEntry(k, ArgInfo.fromField(v)),
+    )..removeWhere(
+      (k, v) => !(v.optionData?.provideDefaultToOverride ?? false),
+    );
 
     final fyis = <String>[];
 
@@ -151,12 +148,13 @@ ${element.name} $resultParserName(ArgResults result) =>''',
       overrideArgs = ',{$overrideArgs}';
     }
 
-    buffer = StringBuffer()
-      ..writeAll(fyis.map((e) => '/// $e\n'))
-      ..write(
-        'ArgParser $populateParserName(ArgParser parser$overrideArgs) => '
-        'parser',
-      );
+    buffer =
+        StringBuffer()
+          ..writeAll(fyis.map((e) => '/// $e\n'))
+          ..write(
+            'ArgParser $populateParserName(ArgParser parser$overrideArgs) => '
+            'parser',
+          );
     for (var f in fields.values) {
       if (f.type.isEnum) {
         yield enumValueMapFromType(f.type)!;
@@ -170,7 +168,7 @@ ${element.name} $resultParserName(ArgResults result) =>''',
     yield 'final $parserFieldName = $populateParserName(ArgParser());';
 
     yield '''
-${element.name} parse${element.name}(List<String> args) {
+${element.name3} parse${element.name3}(List<String> args) {
   final result = $parserFieldName.parse(args);
   return $resultParserName(result);
 }
@@ -179,8 +177,8 @@ ${element.name} parse${element.name}(List<String> args) {
     final createCommand = annotation.read('createCommand').boolValue;
     if (createCommand) {
       yield '''
-abstract class _\$${element.name}Command<T> extends Command<T> {
-  _\$${element.name}Command() {
+abstract class _\$${element.name3}Command<T> extends Command<T> {
+  _\$${element.name3}Command() {
     $populateParserName(argParser);
   }
 
@@ -193,16 +191,16 @@ abstract class _\$${element.name}Command<T> extends Command<T> {
 
 String _overrideParamName(String fieldName) => '${fieldName}DefaultOverride';
 
-const _numCheckers = <TypeChecker, String>{
+final _numCheckers = <TypeChecker, String>{
   numChecker: 'num',
-  TypeChecker.fromRuntime(int): 'int',
-  TypeChecker.fromRuntime(double): 'double',
+  const TypeChecker.fromUrl('dart:core#int'): 'int',
+  const TypeChecker.fromUrl('dart:core#double'): 'double',
 };
 
 String _deserializeForField(
-  FieldElement field,
-  ParameterElement? ctorParam,
-  Map<String, FieldElement> allFields,
+  FieldElement2 field,
+  FormalParameterElement? ctorParam,
+  Map<String, FieldElement2> allFields,
 ) {
   final info = ArgInfo.fromField(field);
 
@@ -211,10 +209,12 @@ String _deserializeForField(
   }
 
   if (info.argType == ArgType.wasParsed) {
-    final name = field.name;
+    final name = field.name3!;
     assert(name.endsWith(wasParsedSuffix));
-    final targetFieldName =
-        name.substring(0, name.length - wasParsedSuffix.length);
+    final targetFieldName = name.substring(
+      0,
+      name.length - wasParsedSuffix.length,
+    );
     final targetField = allFields[targetFieldName];
     if (targetField == null) {
       throwUnsupported(
@@ -250,9 +250,10 @@ String _deserializeForField(
   }
 
   if (targetType.isEnum) {
-    final helperName = targetType.isNullableType
-        ? nullableEnumValueHelperFunctionName
-        : enumValueHelperFunctionName;
+    final helperName =
+        targetType.isNullableType
+            ? nullableEnumValueHelperFunctionName
+            : enumValueHelperFunctionName;
 
     final nullableBit = targetType.isNullableType ? '?' : '';
 
@@ -268,11 +269,11 @@ String _deserializeForField(
 
     assert(args.length == 1);
 
-    if (objectChecker.isExactlyType(args.single)) {
+    if (dartCoreObjectChecker.isExactlyType(args.single)) {
       return '$argAccess as List<Object>';
     }
 
-    if (_dynamicChecker.isExactlyType(args.single) ||
+    if (dartCoreObjectChecker.isExactlyType(args.single) ||
         args.single is DynamicType) {
       return '$argAccess as List';
     }
@@ -302,13 +303,13 @@ String _deserializeForField(
   throwUnsupported(field, 'The type `$targetType` is not supported.');
 }
 
-String _getArgName(FieldElement element) =>
-    ArgInfo.fromField(element).optionData?.name ?? element.name.kebab;
+String _getArgName(FieldElement2 element) =>
+    ArgInfo.fromField(element).optionData?.name ?? element.name3!.kebab;
 
-String _getArgNameStringLiteral(FieldElement element) =>
+String _getArgNameStringLiteral(FieldElement2 element) =>
     escapeDartString(_getArgName(element));
 
-void _parserOptionFor(StringBuffer buffer, FieldElement element) {
+void _parserOptionFor(StringBuffer buffer, FieldElement2 element) {
   final info = ArgInfo.fromField(element);
 
   switch (info.argType) {
@@ -346,10 +347,10 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
     if (info.dartType.isEnum) {
       defaultsToValues.add(
         '${enumConstMapName(element.type)}'
-        '[${_overrideParamName(element.name)}]',
+        '[${_overrideParamName(element.name3!)}]',
       );
     } else {
-      defaultsToValues.add(_overrideParamName(element.name));
+      defaultsToValues.add(_overrideParamName(element.name3!));
     }
   }
 
@@ -359,9 +360,10 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
     // value – even if it's null.
     defaultsToValues.add((options.defaultsTo as bool?).toString());
   } else if (options.defaultsTo != null) {
-    final defaultValueLiteral = (info.argType == ArgType.flag)
-        ? (options.defaultsTo as bool).toString()
-        : escapeDartString(options.defaultsTo.toString());
+    final defaultValueLiteral =
+        (info.argType == ArgType.flag)
+            ? (options.defaultsTo as bool).toString()
+            : escapeDartString(options.defaultsTo.toString());
 
     if (defaultValueLiteral != 'false') {
       // Don't populate `defaultValue` if it's redundant (false)
@@ -375,18 +377,21 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
   }
 
   if (options.allowed != null) {
-    final allowedItems =
-        options.allowed!.map((e) => escapeDartString(e.toString())).join(', ');
+    final allowedItems = options.allowed!
+        .map((e) => escapeDartString(e.toString()))
+        .join(', ');
     buffer.write(', allowed: [$allowedItems]');
   }
 
   if (options.allowedHelp != null) {
     // TODO: throw/warn if `allowed` is null or doesn't match these?
-    final allowedHelpItems = options.allowedHelp!.entries.map((e) {
-      final escapedKey = escapeDartString(e.key.toString());
-      final escapedValue = escapeDartString(e.value);
-      return '$escapedKey: $escapedValue';
-    }).join(',');
+    final allowedHelpItems = options.allowedHelp!.entries
+        .map((e) {
+          final escapedKey = escapeDartString(e.key.toString());
+          final escapedValue = escapeDartString(e.value);
+          return '$escapedKey: $escapedValue';
+        })
+        .join(',');
     buffer.write(', allowedHelp: <String, String>{$allowedHelpItems}');
   }
 
@@ -400,5 +405,3 @@ void _parserOptionFor(StringBuffer buffer, FieldElement element) {
 
   buffer.writeln(',)');
 }
-
-const _dynamicChecker = TypeChecker.fromRuntime(Object);

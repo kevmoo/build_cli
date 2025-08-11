@@ -8,15 +8,11 @@ part of 'command_runner_example.dart';
 // CliGenerator
 // **************************************************************************
 
-CommitOptions _$parseCommitOptionsResult(ArgResults result) => CommitOptions(
-      all: result['all'] as bool,
-    );
+CommitOptions _$parseCommitOptionsResult(ArgResults result) =>
+    CommitOptions(all: result['all'] as bool);
 
-ArgParser _$populateCommitOptionsParser(ArgParser parser) => parser
-  ..addFlag(
-    'all',
-    abbr: 'a',
-  );
+ArgParser _$populateCommitOptionsParser(ArgParser parser) =>
+    parser..addFlag('all', abbr: 'a');
 
 final _$parserForCommitOptions = _$populateCommitOptionsParser(ArgParser());
 

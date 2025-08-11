@@ -46,20 +46,12 @@ NullableOptions _$parseNullableOptionsResult(ArgResults result) =>
           : null,
     );
 
-ArgParser _$populateNullableOptionsParser(ArgParser parser) => parser
-  ..addFlag(
-    'nullable-boolean',
-    defaultsTo: null,
-  )
-  ..addOption(
-    'nullable-integer',
-  )
-  ..addOption(
-    'nullable-double',
-  )
-  ..addOption(
-    'nullable-num',
-  );
+ArgParser _$populateNullableOptionsParser(ArgParser parser) =>
+    parser
+      ..addFlag('nullable-boolean', defaultsTo: null)
+      ..addOption('nullable-integer')
+      ..addOption('nullable-double')
+      ..addOption('nullable-num');
 
 final _$parserForNullableOptions = _$populateNullableOptionsParser(ArgParser());
 

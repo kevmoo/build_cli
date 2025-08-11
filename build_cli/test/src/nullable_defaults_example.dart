@@ -4,24 +4,16 @@ part 'nullable_defaults_example.g.dart';
 
 @CliOptions()
 class NullableOptions {
-  @CliOption(
-    defaultsTo: null,
-  )
+  @CliOption(defaultsTo: null)
   final bool? nullableBoolean;
 
-  @CliOption(
-    defaultsTo: null,
-  )
+  @CliOption(defaultsTo: null)
   final int? nullableInteger;
 
-  @CliOption(
-    defaultsTo: null,
-  )
+  @CliOption(defaultsTo: null)
   final double? nullableDouble;
 
-  @CliOption(
-    defaultsTo: null,
-  )
+  @CliOption(defaultsTo: null)
   final num? nullableNum;
 
   NullableOptions(

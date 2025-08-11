@@ -12,10 +12,12 @@ T _$enumValueHelper<T>(Map<T, String> enumValues, String source) =>
     enumValues.entries
         .singleWhere(
           (e) => e.value == source,
-          orElse: () => throw ArgumentError(
-            '`$source` is not one of the supported values: '
-            '${enumValues.values.join(', ')}',
-          ),
+          orElse:
+              () =>
+                  throw ArgumentError(
+                    '`$source` is not one of the supported values: '
+                    '${enumValues.values.join(', ')}',
+                  ),
         )
         .key;
 
@@ -28,100 +30,83 @@ T _$badNumberFormat<T extends num>(
       'Cannot parse "$source" into `$type` for option "$argName".',
     );
 
-PubvizOptions _$parsePubvizOptionsResult(ArgResults result) => PubvizOptions(
-      format: _$enumValueHelper(
-        _$FormatOptionsEnumMapBuildCli,
-        result['format'] as String,
-      ),
-      productionPort: int.tryParse(result['production-port'] as String) ??
-          _$badNumberFormat(
-            result['production-port'] as String,
-            'int',
-            'production-port',
-          ),
-      devPort: int.tryParse(result['dev-port'] as String) ??
-          _$badNumberFormat(
-            result['dev-port'] as String,
-            'int',
-            'dev-port',
-          ),
-      doubleValue: double.tryParse(result['double-value'] as String) ??
-          _$badNumberFormat(
-            result['double-value'] as String,
-            'double',
-            'double-value',
-          ),
-      numValue: num.tryParse(result['num-value'] as String) ??
-          _$badNumberFormat(
-            result['num-value'] as String,
-            'num',
-            'num-value',
-          ),
-      secret: result['secret'] as String?,
-      ignorePackages: result['ignore-packages'] as List<String>,
-    )
+PubvizOptions _$parsePubvizOptionsResult(ArgResults result) =>
+    PubvizOptions(
+        format: _$enumValueHelper(
+          _$FormatOptionsEnumMapBuildCli,
+          result['format'] as String,
+        ),
+        productionPort:
+            int.tryParse(result['production-port'] as String) ??
+            _$badNumberFormat(
+              result['production-port'] as String,
+              'int',
+              'production-port',
+            ),
+        devPort:
+            int.tryParse(result['dev-port'] as String) ??
+            _$badNumberFormat(result['dev-port'] as String, 'int', 'dev-port'),
+        doubleValue:
+            double.tryParse(result['double-value'] as String) ??
+            _$badNumberFormat(
+              result['double-value'] as String,
+              'double',
+              'double-value',
+            ),
+        numValue:
+            num.tryParse(result['num-value'] as String) ??
+            _$badNumberFormat(
+              result['num-value'] as String,
+              'num',
+              'num-value',
+            ),
+        secret: result['secret'] as String?,
+        ignorePackages: result['ignore-packages'] as List<String>,
+      )
       ..listOfNothing = result['list-of-nothing'] as List
       ..listOfDynamic = result['list-of-dynamic'] as List
       ..listOfObject = result['list-of-object'] as List<Object>;
 
 const _$FormatOptionsEnumMapBuildCli = <FormatOptions, String>{
   FormatOptions.dot: 'dot',
-  FormatOptions.html: 'html'
+  FormatOptions.html: 'html',
 };
 
-ArgParser _$populatePubvizOptionsParser(ArgParser parser) => parser
-  ..addOption(
-    'format',
-    abbr: 'f',
-    defaultsTo: 'html',
-    allowed: ['dot', 'html'],
-    allowedHelp: <String, String>{
-      'dot': "Generate a GraphViz 'dot' file.",
-      'html':
-          'Wrap the GraphViz dot format in an HTML template which renders it.'
-    },
-  )
-  ..addOption(
-    'secret',
-    hide: true,
-  )
-  ..addMultiOption(
-    'ignore-packages',
-    abbr: 'i',
-    help: 'A comma seperated list of packages to exclude in the output.',
-  )
-  ..addOption(
-    'production-port',
-    valueHelp: 'PORT',
-    defaultsTo: '8080',
-  )
-  ..addOption(
-    'num-value',
-    defaultsTo: '3.14',
-  )
-  ..addOption(
-    'double-value',
-    defaultsTo: '3000.0',
-  )
-  ..addOption(
-    'dev-port',
-    defaultsTo: '8080',
-    allowed: ['8080', '9090', '42'],
-    allowedHelp: <String, String>{
-      '8080': 'the cool port',
-      '9090': 'the alt port',
-      '42': 'the knowledge port'
-    },
-  )
-  ..addMultiOption(
-    'list-of-nothing',
-  )
-  ..addMultiOption(
-    'list-of-dynamic',
-  )
-  ..addMultiOption(
-    'list-of-object',
-  );
+ArgParser _$populatePubvizOptionsParser(ArgParser parser) =>
+    parser
+      ..addOption(
+        'format',
+        abbr: 'f',
+        defaultsTo: 'html',
+        allowed: ['dot', 'html'],
+        allowedHelp: <String, String>{
+          'dot': "Generate a GraphViz 'dot' file.",
+          'html':
+              'Wrap the GraphViz dot format in an HTML template which renders it.',
+        },
+      )
+      ..addOption('secret', hide: true)
+      ..addMultiOption(
+        'ignore-packages',
+        abbr: 'i',
+        help: 'A comma seperated list of packages to exclude in the output.',
+      )
+      ..addOption('production-port', valueHelp: 'PORT', defaultsTo: '8080')
+      ..addOption('num-value', defaultsTo: '3.14')
+      ..addOption('double-value', defaultsTo: '3000.0')
+      ..addOption(
+        'dev-port',
+        defaultsTo: '8080',
+        allowed: ['8080', '9090', '42'],
+        allowedHelp: <String, String>{
+          '8080': 'the cool port',
+          '9090': 'the alt port',
+          '42': 'the knowledge port',
+        },
+      )
+      ..addMultiOption('list-of-nothing')
+      ..addMultiOption('list-of-dynamic')
+      ..addMultiOption('list-of-object');
 
 final _$parserForPubvizOptions = _$populatePubvizOptionsParser(ArgParser());
 

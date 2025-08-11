@@ -12,7 +12,8 @@ String? enumValueMapFromType(DartType targetType) {
   }
 
   final items = enumMap.entries.map(
-    (e) => '  ${targetType.element!.name}.${e.key.name}: '
+    (e) =>
+        '  ${targetType.element!.name}.${e.key.name}: '
         '${escapeDartString(e.value.kebab)}',
   );
 
@@ -29,7 +30,7 @@ Map<FieldElement, String>? _enumFieldsMap(DartType targetType) {
     return Map<FieldElement, String>.fromEntries(
       targetType.element.fields
           .where((p) => !p.isSynthetic)
-          .map((p) => MapEntry(p, p.name)),
+          .map((p) => MapEntry(p, p.name!)),
     );
   }
   return null;

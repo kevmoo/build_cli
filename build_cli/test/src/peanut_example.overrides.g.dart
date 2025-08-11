@@ -12,66 +12,68 @@ T _$enumValueHelper<T>(Map<T, String> enumValues, String source) =>
     enumValues.entries
         .singleWhere(
           (e) => e.value == source,
-          orElse: () => throw ArgumentError(
-            '`$source` is not one of the supported values: '
-            '${enumValues.values.join(', ')}',
-          ),
+          orElse:
+              () =>
+                  throw ArgumentError(
+                    '`$source` is not one of the supported values: '
+                    '${enumValues.values.join(', ')}',
+                  ),
         )
         .key;
 
 T? _$nullableEnumValueHelperNullable<T>(
   Map<T, String> enumValues,
   String? source,
-) =>
-    source == null ? null : _$enumValueHelper(enumValues, source);
+) => source == null ? null : _$enumValueHelper(enumValues, source);
 
-PeanutOptions _$parsePeanutOptionsResult(ArgResults result) => PeanutOptions(
-      bazelOptions: _$enumValueHelper(
-        _$BazelOptionsEnumMapBuildCli,
-        result['bazel-options'] as String,
-      ),
-      branch: result['branch'] as String,
-      buildConfigWasParsed: result.wasParsed('build-config'),
-      debugBuildTool: _$enumValueHelper(
-        _$BuildToolEnumMapBuildCli,
-        result['debug-build-tool'] as String,
-      ),
-      directory: result['directory'] as String,
-      help: result['help'] as bool,
-      message: result['message'] as String,
-      mode: _$enumValueHelper(
-        _$PubBuildModeEnumMapBuildCli,
-        result['mode'] as String,
-      ),
-      modeWasParsed: result.wasParsed('mode'),
-      release: result['release'] as bool,
-      rest: result.rest,
-      secret: result['secret'] as bool,
-      minRuntime: _convertNotNull(result['min-runtime'] as String),
-      buildConfig: result['build-config'] as String?,
-      buildTool: _$nullableEnumValueHelperNullable(
-        _$BuildToolEnumMapBuildCli,
-        result['build-tool'] as String?,
-      ),
-    )
+PeanutOptions _$parsePeanutOptionsResult(ArgResults result) =>
+    PeanutOptions(
+        bazelOptions: _$enumValueHelper(
+          _$BazelOptionsEnumMapBuildCli,
+          result['bazel-options'] as String,
+        ),
+        branch: result['branch'] as String,
+        buildConfigWasParsed: result.wasParsed('build-config'),
+        debugBuildTool: _$enumValueHelper(
+          _$BuildToolEnumMapBuildCli,
+          result['debug-build-tool'] as String,
+        ),
+        directory: result['directory'] as String,
+        help: result['help'] as bool,
+        message: result['message'] as String,
+        mode: _$enumValueHelper(
+          _$PubBuildModeEnumMapBuildCli,
+          result['mode'] as String,
+        ),
+        modeWasParsed: result.wasParsed('mode'),
+        release: result['release'] as bool,
+        rest: result.rest,
+        secret: result['secret'] as bool,
+        minRuntime: _convertNotNull(result['min-runtime'] as String),
+        buildConfig: result['build-config'] as String?,
+        buildTool: _$nullableEnumValueHelperNullable(
+          _$BuildToolEnumMapBuildCli,
+          result['build-tool'] as String?,
+        ),
+      )
       ..maxRuntime = _convert(result['max-runtime'] as String?)
       ..command = result.command;
 
 const _$PubBuildModeEnumMapBuildCli = <PubBuildMode, String>{
   PubBuildMode.release: 'release',
-  PubBuildMode.debug: 'debug'
+  PubBuildMode.debug: 'debug',
 };
 
 const _$BuildToolEnumMapBuildCli = <BuildTool, String>{
   BuildTool.pub: 'pub',
   BuildTool.build: 'build',
-  BuildTool.$loco: r'$loco'
+  BuildTool.$loco: r'$loco',
 };
 
 const _$BazelOptionsEnumMapBuildCli = <BazelOptions, String>{
   BazelOptions.toSource: 'to-source',
   BazelOptions.fromSource: 'from-source',
-  BazelOptions.viaAssets: 'via-assets'
+  BazelOptions.viaAssets: 'via-assets',
 };
 
 /// The value for [maxRuntimeDefaultOverride] must be a [String] that is convertible to [Duration].
@@ -133,7 +135,8 @@ ArgParser _$populatePeanutOptionsParser(
       ..addOption(
         'debug-build-tool',
         help: 'The build tool to use for debugging.',
-        defaultsTo: _$BuildToolEnumMapBuildCli[debugBuildToolDefaultOverride] ??
+        defaultsTo:
+            _$BuildToolEnumMapBuildCli[debugBuildToolDefaultOverride] ??
             r'$loco',
         allowed: ['pub', 'build', r'$loco'],
       )
@@ -142,7 +145,7 @@ ArgParser _$populatePeanutOptionsParser(
         help: 'nice options',
         defaultsTo:
             _$BazelOptionsEnumMapBuildCli[bazelOptionsDefaultOverride] ??
-                'to-source',
+            'to-source',
         allowed: ['to-source', 'from-source', 'via-assets'],
       )
       ..addFlag(
@@ -153,23 +156,10 @@ ArgParser _$populatePeanutOptionsParser(
         defaultsTo: helpDefaultOverride,
         negatable: false,
       )
-      ..addFlag(
-        'secret',
-        defaultsTo: secretDefaultOverride,
-        hide: true,
-      )
-      ..addFlag(
-        'release',
-        defaultsTo: releaseDefaultOverride ?? true,
-      )
-      ..addOption(
-        'max-runtime',
-        defaultsTo: maxRuntimeDefaultOverride,
-      )
-      ..addOption(
-        'min-runtime',
-        defaultsTo: minRuntimeDefaultOverride ?? '0',
-      );
+      ..addFlag('secret', defaultsTo: secretDefaultOverride, hide: true)
+      ..addFlag('release', defaultsTo: releaseDefaultOverride ?? true)
+      ..addOption('max-runtime', defaultsTo: maxRuntimeDefaultOverride)
+      ..addOption('min-runtime', defaultsTo: minRuntimeDefaultOverride ?? '0');
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(ArgParser());
 
