@@ -1,8 +1,8 @@
-## 2.1.1-wip
+## 2.1.1
 
 - Added `@Target({TargetKind.field})` to `CliOption`.
 - Require `args: ^2.6.0`
-- Require `sdk: ^3.6.0`
+- Require `sdk: ^3.8.0`
 
 ## 2.1.0
 
