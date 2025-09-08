@@ -15,7 +15,7 @@ dependencies:
   build: ^4.0.0
   # Limit version range on build_cli_annotations
   # new features need to stay in sync
-  build_cli_annotations: ">=2.1.1-wip <2.2.0"
+  build_cli_annotations: ">=2.1.1 <2.2.0"
   build_config: ^1.2.0
   pub_semver: ^2.1.4
   source_gen: ^4.0.1
