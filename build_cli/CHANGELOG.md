@@ -1,5 +1,6 @@
 ## 2.2.8
 
+- Required `sdk: ^3.8.0`
 - Required `analyzer: ^8.1.1`
 - Required `build: ^4.0.0`
 - Required `build_config: ^1.2.0`

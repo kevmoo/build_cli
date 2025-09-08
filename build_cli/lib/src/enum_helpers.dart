@@ -38,7 +38,8 @@ Map<FieldElement, String>? _enumFieldsMap(DartType targetType) {
 
 const enumValueHelperFunctionName = r'_$enumValueHelper';
 
-const enumValueHelper = '''
+const enumValueHelper =
+    '''
 T $enumValueHelperFunctionName<T>(Map<T, String> enumValues, String source) =>
  enumValues
     .entries
@@ -52,7 +53,8 @@ T $enumValueHelperFunctionName<T>(Map<T, String> enumValues, String source) =>
 const nullableEnumValueHelperFunctionName =
     r'_$nullableEnumValueHelperNullable';
 
-const nullableEnumValueHelper = '''
+const nullableEnumValueHelper =
+    '''
 T? $nullableEnumValueHelperFunctionName<T>(
   Map<T, String> enumValues,
   String? source,

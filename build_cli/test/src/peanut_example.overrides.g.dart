@@ -8,18 +8,16 @@ part of 'peanut_example.overrides.dart';
 // CliGenerator
 // **************************************************************************
 
-T _$enumValueHelper<T>(Map<T, String> enumValues, String source) =>
-    enumValues.entries
-        .singleWhere(
-          (e) => e.value == source,
-          orElse:
-              () =>
-                  throw ArgumentError(
-                    '`$source` is not one of the supported values: '
-                    '${enumValues.values.join(', ')}',
-                  ),
-        )
-        .key;
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) => enumValues
+    .entries
+    .singleWhere(
+      (e) => e.value == source,
+      orElse: () => throw ArgumentError(
+        '`$source` is not one of the supported values: '
+        '${enumValues.values.join(', ')}',
+      ),
+    )
+    .key;
 
 T? _$nullableEnumValueHelperNullable<T>(
   Map<T, String> enumValues,
@@ -93,73 +91,69 @@ ArgParser _$populatePeanutOptionsParser(
   bool? releaseDefaultOverride,
   String? maxRuntimeDefaultOverride,
   String? minRuntimeDefaultOverride,
-}) =>
-    parser
-      ..addOption(
-        'directory',
-        abbr: 'd',
-        defaultsTo: directoryDefaultOverride ?? 'web',
-      )
-      ..addOption(
-        'branch',
-        abbr: 'b',
-        defaultsTo: branchDefaultOverride ?? 'gh-pages',
-      )
-      ..addOption(
-        'mode',
-        help: 'The mode to run `pub build` in.',
-        defaultsTo:
-            _$PubBuildModeEnumMapBuildCli[modeDefaultOverride] ?? 'release',
-        allowed: ['release', 'debug'],
-      )
-      ..addOption(
-        'build-config',
-        abbr: 'c',
-        help:
-            'The configuration to use when running `build_runner`. If this option is not set, `release` is used if `build.release.yaml` exists in the current directory.',
-        defaultsTo: buildConfigDefaultOverride,
-      )
-      ..addOption(
-        'message',
-        abbr: 'm',
-        defaultsTo: messageDefaultOverride ?? 'Built <directory>',
-      )
-      ..addOption(
-        'build-tool',
-        abbr: 't',
-        help:
-            'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
-        defaultsTo: _$BuildToolEnumMapBuildCli[buildToolDefaultOverride],
-        allowed: ['pub', 'build', r'$loco'],
-      )
-      ..addOption(
-        'debug-build-tool',
-        help: 'The build tool to use for debugging.',
-        defaultsTo:
-            _$BuildToolEnumMapBuildCli[debugBuildToolDefaultOverride] ??
-            r'$loco',
-        allowed: ['pub', 'build', r'$loco'],
-      )
-      ..addOption(
-        'bazel-options',
-        help: 'nice options',
-        defaultsTo:
-            _$BazelOptionsEnumMapBuildCli[bazelOptionsDefaultOverride] ??
-            'to-source',
-        allowed: ['to-source', 'from-source', 'via-assets'],
-      )
-      ..addFlag(
-        'help',
-        abbr: 'h',
-        help:
-            'Prints usage information. Which is so "\$" you don\'t even know it!',
-        defaultsTo: helpDefaultOverride,
-        negatable: false,
-      )
-      ..addFlag('secret', defaultsTo: secretDefaultOverride, hide: true)
-      ..addFlag('release', defaultsTo: releaseDefaultOverride ?? true)
-      ..addOption('max-runtime', defaultsTo: maxRuntimeDefaultOverride)
-      ..addOption('min-runtime', defaultsTo: minRuntimeDefaultOverride ?? '0');
+}) => parser
+  ..addOption(
+    'directory',
+    abbr: 'd',
+    defaultsTo: directoryDefaultOverride ?? 'web',
+  )
+  ..addOption(
+    'branch',
+    abbr: 'b',
+    defaultsTo: branchDefaultOverride ?? 'gh-pages',
+  )
+  ..addOption(
+    'mode',
+    help: 'The mode to run `pub build` in.',
+    defaultsTo: _$PubBuildModeEnumMapBuildCli[modeDefaultOverride] ?? 'release',
+    allowed: ['release', 'debug'],
+  )
+  ..addOption(
+    'build-config',
+    abbr: 'c',
+    help:
+        'The configuration to use when running `build_runner`. If this option is not set, `release` is used if `build.release.yaml` exists in the current directory.',
+    defaultsTo: buildConfigDefaultOverride,
+  )
+  ..addOption(
+    'message',
+    abbr: 'm',
+    defaultsTo: messageDefaultOverride ?? 'Built <directory>',
+  )
+  ..addOption(
+    'build-tool',
+    abbr: 't',
+    help:
+        'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
+    defaultsTo: _$BuildToolEnumMapBuildCli[buildToolDefaultOverride],
+    allowed: ['pub', 'build', r'$loco'],
+  )
+  ..addOption(
+    'debug-build-tool',
+    help: 'The build tool to use for debugging.',
+    defaultsTo:
+        _$BuildToolEnumMapBuildCli[debugBuildToolDefaultOverride] ?? r'$loco',
+    allowed: ['pub', 'build', r'$loco'],
+  )
+  ..addOption(
+    'bazel-options',
+    help: 'nice options',
+    defaultsTo:
+        _$BazelOptionsEnumMapBuildCli[bazelOptionsDefaultOverride] ??
+        'to-source',
+    allowed: ['to-source', 'from-source', 'via-assets'],
+  )
+  ..addFlag(
+    'help',
+    abbr: 'h',
+    help: 'Prints usage information. Which is so "\$" you don\'t even know it!',
+    defaultsTo: helpDefaultOverride,
+    negatable: false,
+  )
+  ..addFlag('secret', defaultsTo: secretDefaultOverride, hide: true)
+  ..addFlag('release', defaultsTo: releaseDefaultOverride ?? true)
+  ..addOption('max-runtime', defaultsTo: maxRuntimeDefaultOverride)
+  ..addOption('min-runtime', defaultsTo: minRuntimeDefaultOverride ?? '0');
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(ArgParser());
 

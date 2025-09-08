@@ -8,18 +8,16 @@ part of 'peanut_example.dart';
 // CliGenerator
 // **************************************************************************
 
-T _$enumValueHelper<T>(Map<T, String> enumValues, String source) =>
-    enumValues.entries
-        .singleWhere(
-          (e) => e.value == source,
-          orElse:
-              () =>
-                  throw ArgumentError(
-                    '`$source` is not one of the supported values: '
-                    '${enumValues.values.join(', ')}',
-                  ),
-        )
-        .key;
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) => enumValues
+    .entries
+    .singleWhere(
+      (e) => e.value == source,
+      orElse: () => throw ArgumentError(
+        '`$source` is not one of the supported values: '
+        '${enumValues.values.join(', ')}',
+      ),
+    )
+    .key;
 
 T? _$nullableEnumValueHelperNullable<T>(
   Map<T, String> enumValues,
@@ -76,53 +74,51 @@ const _$BazelOptionsEnumMapBuildCli = <BazelOptions, String>{
   BazelOptions.viaAssets: 'via-assets',
 };
 
-ArgParser _$populatePeanutOptionsParser(ArgParser parser) =>
-    parser
-      ..addOption('directory', abbr: 'd', defaultsTo: 'web')
-      ..addOption('branch', abbr: 'b', defaultsTo: 'gh-pages')
-      ..addOption(
-        'mode',
-        help: 'The mode to run `pub build` in.',
-        defaultsTo: 'release',
-        allowed: ['release', 'debug'],
-      )
-      ..addOption(
-        'build-config',
-        abbr: 'c',
-        help:
-            'The configuration to use when running `build_runner`. If this option is not set, `release` is used if `build.release.yaml` exists in the current directory.',
-      )
-      ..addOption('message', abbr: 'm', defaultsTo: 'Built <directory>')
-      ..addOption(
-        'build-tool',
-        abbr: 't',
-        help:
-            'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
-        allowed: ['pub', 'build', r'$loco'],
-      )
-      ..addOption(
-        'debug-build-tool',
-        help: 'The build tool to use for debugging.',
-        defaultsTo: r'$loco',
-        allowed: ['pub', 'build', r'$loco'],
-      )
-      ..addOption(
-        'bazel-options',
-        help: 'nice options',
-        defaultsTo: 'to-source',
-        allowed: ['to-source', 'from-source', 'via-assets'],
-      )
-      ..addFlag(
-        'help',
-        abbr: 'h',
-        help:
-            'Prints usage information. Which is so "\$" you don\'t even know it!',
-        negatable: false,
-      )
-      ..addFlag('secret', hide: true)
-      ..addFlag('release', defaultsTo: true)
-      ..addOption('max-runtime')
-      ..addOption('min-runtime', defaultsTo: '0');
+ArgParser _$populatePeanutOptionsParser(ArgParser parser) => parser
+  ..addOption('directory', abbr: 'd', defaultsTo: 'web')
+  ..addOption('branch', abbr: 'b', defaultsTo: 'gh-pages')
+  ..addOption(
+    'mode',
+    help: 'The mode to run `pub build` in.',
+    defaultsTo: 'release',
+    allowed: ['release', 'debug'],
+  )
+  ..addOption(
+    'build-config',
+    abbr: 'c',
+    help:
+        'The configuration to use when running `build_runner`. If this option is not set, `release` is used if `build.release.yaml` exists in the current directory.',
+  )
+  ..addOption('message', abbr: 'm', defaultsTo: 'Built <directory>')
+  ..addOption(
+    'build-tool',
+    abbr: 't',
+    help:
+        'If `build.release.yaml` exists in the current directory, defaults to "build". Otherwise, "pub".',
+    allowed: ['pub', 'build', r'$loco'],
+  )
+  ..addOption(
+    'debug-build-tool',
+    help: 'The build tool to use for debugging.',
+    defaultsTo: r'$loco',
+    allowed: ['pub', 'build', r'$loco'],
+  )
+  ..addOption(
+    'bazel-options',
+    help: 'nice options',
+    defaultsTo: 'to-source',
+    allowed: ['to-source', 'from-source', 'via-assets'],
+  )
+  ..addFlag(
+    'help',
+    abbr: 'h',
+    help: 'Prints usage information. Which is so "\$" you don\'t even know it!',
+    negatable: false,
+  )
+  ..addFlag('secret', hide: true)
+  ..addFlag('release', defaultsTo: true)
+  ..addOption('max-runtime')
+  ..addOption('min-runtime', defaultsTo: '0');
 
 final _$parserForPeanutOptions = _$populatePeanutOptionsParser(ArgParser());
 

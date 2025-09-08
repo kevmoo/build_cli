@@ -83,8 +83,8 @@ T _$badNumberFormat<T extends num>(
 ''';
     }
 
-    var buffer =
-        StringBuffer()..write('''
+    var buffer = StringBuffer()
+      ..write('''
 ${element.name3} $resultParserName(ArgResults result) =>''');
 
     String deserializeForField(
@@ -111,11 +111,10 @@ ${element.name3} $resultParserName(ArgResults result) =>''');
     }
     yield buffer.toString();
 
-    final provideOverrides = fields.map(
-      (k, v) => MapEntry(k, ArgInfo.fromField(v)),
-    )..removeWhere(
-      (k, v) => !(v.optionData?.provideDefaultToOverride ?? false),
-    );
+    final provideOverrides =
+        fields.map((k, v) => MapEntry(k, ArgInfo.fromField(v)))..removeWhere(
+          (k, v) => !(v.optionData?.provideDefaultToOverride ?? false),
+        );
 
     final fyis = <String>[];
 
@@ -148,13 +147,12 @@ ${element.name3} $resultParserName(ArgResults result) =>''');
       overrideArgs = ',{$overrideArgs}';
     }
 
-    buffer =
-        StringBuffer()
-          ..writeAll(fyis.map((e) => '/// $e\n'))
-          ..write(
-            'ArgParser $populateParserName(ArgParser parser$overrideArgs) => '
-            'parser',
-          );
+    buffer = StringBuffer()
+      ..writeAll(fyis.map((e) => '/// $e\n'))
+      ..write(
+        'ArgParser $populateParserName(ArgParser parser$overrideArgs) => '
+        'parser',
+      );
     for (var f in fields.values) {
       if (f.type.isEnum) {
         yield enumValueMapFromType(f.type)!;
@@ -244,16 +242,16 @@ String _deserializeForField(
 
   if (stringChecker.isExactlyType(targetType) ||
       boolChecker.isExactlyType(targetType)) {
-    final suffix =
-        targetType.nullabilitySuffix == NullabilitySuffix.question ? '?' : '';
+    final suffix = targetType.nullabilitySuffix == NullabilitySuffix.question
+        ? '?'
+        : '';
     return '$argAccess as ${targetType.element!.name}$suffix';
   }
 
   if (targetType.isEnum) {
-    final helperName =
-        targetType.isNullableType
-            ? nullableEnumValueHelperFunctionName
-            : enumValueHelperFunctionName;
+    final helperName = targetType.isNullableType
+        ? nullableEnumValueHelperFunctionName
+        : enumValueHelperFunctionName;
 
     final nullableBit = targetType.isNullableType ? '?' : '';
 
@@ -360,10 +358,9 @@ void _parserOptionFor(StringBuffer buffer, FieldElement2 element) {
     // value – even if it's null.
     defaultsToValues.add((options.defaultsTo as bool?).toString());
   } else if (options.defaultsTo != null) {
-    final defaultValueLiteral =
-        (info.argType == ArgType.flag)
-            ? (options.defaultsTo as bool).toString()
-            : escapeDartString(options.defaultsTo.toString());
+    final defaultValueLiteral = (info.argType == ArgType.flag)
+        ? (options.defaultsTo as bool).toString()
+        : escapeDartString(options.defaultsTo.toString());
 
     if (defaultValueLiteral != 'false') {
       // Don't populate `defaultValue` if it's redundant (false)

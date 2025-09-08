@@ -8,18 +8,16 @@ part of 'example.dart';
 // CliGenerator
 // **************************************************************************
 
-T _$enumValueHelper<T>(Map<T, String> enumValues, String source) =>
-    enumValues.entries
-        .singleWhere(
-          (e) => e.value == source,
-          orElse:
-              () =>
-                  throw ArgumentError(
-                    '`$source` is not one of the supported values: '
-                    '${enumValues.values.join(', ')}',
-                  ),
-        )
-        .key;
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) => enumValues
+    .entries
+    .singleWhere(
+      (e) => e.value == source,
+      orElse: () => throw ArgumentError(
+        '`$source` is not one of the supported values: '
+        '${enumValues.values.join(', ')}',
+      ),
+    )
+    .key;
 
 Options _$parseOptionsResult(ArgResults result) =>
     Options(result['name'] as String, nameWasParsed: result.wasParsed('name'))
@@ -35,21 +33,20 @@ const _$LanguageEnumMapBuildCli = <Language, String>{
   Language.es: 'es',
 };
 
-ArgParser _$populateOptionsParser(ArgParser parser) =>
-    parser
-      ..addOption(
-        'name',
-        abbr: 'n',
-        help: 'Required. The name to use in the greeting.',
-      )
-      ..addFlag('yell')
-      ..addOption(
-        'display-language',
-        abbr: 'l',
-        defaultsTo: 'en',
-        allowed: ['en', 'es'],
-      )
-      ..addFlag('help', help: 'Prints usage information.', negatable: false);
+ArgParser _$populateOptionsParser(ArgParser parser) => parser
+  ..addOption(
+    'name',
+    abbr: 'n',
+    help: 'Required. The name to use in the greeting.',
+  )
+  ..addFlag('yell')
+  ..addOption(
+    'display-language',
+    abbr: 'l',
+    defaultsTo: 'en',
+    allowed: ['en', 'es'],
+  )
+  ..addFlag('help', help: 'Prints usage information.', negatable: false);
 
 final _$parserForOptions = _$populateOptionsParser(ArgParser());
 

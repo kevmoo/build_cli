@@ -18,11 +18,14 @@ ArgParser get prettyParser =>
 @CliOptions()
 class PeanutOptions {
   @CliOption(
-    provideDefaultToOverride: true,name: _directoryFlag, abbr: 'd', defaultsTo: 'web')
+    provideDefaultToOverride: true,
+    name: _directoryFlag,
+    abbr: 'd',
+    defaultsTo: 'web',
+  )
   final String directory;
 
-  @CliOption(
-    provideDefaultToOverride: true,abbr: 'b', defaultsTo: 'gh-pages')
+  @CliOption(provideDefaultToOverride: true, abbr: 'b', defaultsTo: 'gh-pages')
   final String branch;
 
   @CliOption(
@@ -47,7 +50,10 @@ class PeanutOptions {
   final bool buildConfigWasParsed;
 
   @CliOption(
-    provideDefaultToOverride: true,abbr: 'm', defaultsTo: 'Built <$_directoryFlag>')
+    provideDefaultToOverride: true,
+    abbr: 'm',
+    defaultsTo: 'Built <$_directoryFlag>',
+  )
   final String message;
 
   @CliOption(
@@ -67,7 +73,10 @@ class PeanutOptions {
   final BuildTool debugBuildTool;
 
   @CliOption(
-    provideDefaultToOverride: true,defaultsTo: BazelOptions.toSource, help: 'nice options')
+    provideDefaultToOverride: true,
+    defaultsTo: BazelOptions.toSource,
+    help: 'nice options',
+  )
   final BazelOptions bazelOptions;
 
   @CliOption(
@@ -80,22 +89,22 @@ class PeanutOptions {
   )
   final bool help;
 
-  @CliOption(
-    provideDefaultToOverride: true,hide: true)
+  @CliOption(provideDefaultToOverride: true, hide: true)
   final bool secret;
 
-  @CliOption(
-    provideDefaultToOverride: true,defaultsTo: true, negatable: true)
+  @CliOption(provideDefaultToOverride: true, defaultsTo: true, negatable: true)
   final bool release;
 
   final List<String> rest;
 
-  @CliOption(
-    provideDefaultToOverride: true,convert: _convert)
+  @CliOption(provideDefaultToOverride: true, convert: _convert)
   Duration? maxRuntime;
 
   @CliOption(
-    provideDefaultToOverride: true,convert: _convertNotNull, defaultsTo: 0)
+    provideDefaultToOverride: true,
+    convert: _convertNotNull,
+    defaultsTo: 0,
+  )
   final Duration minRuntime;
 
   // Explicitly not used – to validate logging behavior

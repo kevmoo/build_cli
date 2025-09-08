@@ -74,13 +74,12 @@ class ArgInfo {
 
     ArgType type;
     if (option == null) {
-      type =
-          specialTypes.entries
-              .singleWhere(
-                (e) => e.value(element),
-                orElse: () => throwBugFound(element),
-              )
-              .key;
+      type = specialTypes.entries
+          .singleWhere(
+            (e) => e.value(element),
+            orElse: () => throwBugFound(element),
+          )
+          .key;
     } else {
       type = _getArgType(element, option);
     }
@@ -163,25 +162,25 @@ CliOption? _getOptions(FieldElement2 element) {
     return null;
   }
 
-  final defaultsToReader =
-      annotation.isNull ? null : annotation.read('defaultsTo');
+  final defaultsToReader = annotation.isNull
+      ? null
+      : annotation.read('defaultsTo');
 
   if (element.type.isEnum) {
     final interfaceType = element.type as InterfaceType;
 
-    final enumNames =
-        interfaceType.getters
-            .where(
-              (p) =>
-                  // An enum's values are non-nullable. For example, If the enum
-                  // field's type is `BuildTool?` it's accessors will be the
-                  // non-nullable type, `BuildTool`.
-                  // TODO: find a better way to compare the underlying type
-                  p.returnType.toStringNonNullable() ==
-                  element.type.toStringNonNullable(),
-            )
-            .map((p) => p.name3!)
-            .toList();
+    final enumNames = interfaceType.getters
+        .where(
+          (p) =>
+              // An enum's values are non-nullable. For example, If the enum
+              // field's type is `BuildTool?` it's accessors will be the
+              // non-nullable type, `BuildTool`.
+              // TODO: find a better way to compare the underlying type
+              p.returnType.toStringNonNullable() ==
+              element.type.toStringNonNullable(),
+        )
+        .map((p) => p.name3!)
+        .toList();
 
     if (defaultsToReader != null && !defaultsToReader.isNull) {
       final objectValue = defaultsToReader.objectValue;
@@ -243,10 +242,9 @@ CliOption? _getOptions(FieldElement2 element) {
 
   final allowedReader = annotation.read('allowed');
   if (!allowedReader.isNull) {
-    allowedValues =
-        allowedReader.listValue
-            .map((o) => ConstantReader(o).literalValue!)
-            .toList();
+    allowedValues = allowedReader.listValue
+        .map((o) => ConstantReader(o).literalValue!)
+        .toList();
   }
 
   if (!defaultsToReader!.isNull) {
