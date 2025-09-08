@@ -8,9 +8,7 @@ class CommitOptions {
   @CliOption(abbr: 'a')
   final bool all;
 
-  CommitOptions({
-    required this.all,
-  });
+  CommitOptions({required this.all});
 }
 
 class CommitCommand extends _$CommitOptionsCommand<void> {

@@ -11,9 +11,7 @@ class CliOptions {
   /// annotated type.
   final bool createCommand;
 
-  const CliOptions({
-    this.createCommand = false,
-  });
+  const CliOptions({this.createCommand = false});
 }
 
 /// Annotate fields to configure the generated [ArgParser] helpers.

@@ -8,31 +8,29 @@ part of 'shared_helper_example.dart';
 // CliGenerator
 // **************************************************************************
 
-T _$enumValueHelper<T>(Map<T, String> enumValues, String source) =>
-    enumValues.entries
-        .singleWhere(
-          (e) => e.value == source,
-          orElse: () => throw ArgumentError(
-            '`$source` is not one of the supported values: '
-            '${enumValues.values.join(', ')}',
-          ),
-        )
-        .key;
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) => enumValues
+    .entries
+    .singleWhere(
+      (e) => e.value == source,
+      orElse: () => throw ArgumentError(
+        '`$source` is not one of the supported values: '
+        '${enumValues.values.join(', ')}',
+      ),
+    )
+    .key;
 
 T? _$nullableEnumValueHelperNullable<T>(
   Map<T, String> enumValues,
   String? source,
-) =>
-    source == null ? null : _$enumValueHelper(enumValues, source);
+) => source == null ? null : _$enumValueHelper(enumValues, source);
 
 T _$badNumberFormat<T extends num>(
   String source,
   String type,
   String argName,
-) =>
-    throw FormatException(
-      'Cannot parse "$source" into `$type` for option "$argName".',
-    );
+) => throw FormatException(
+  'Cannot parse "$source" into `$type` for option "$argName".',
+);
 
 FirstOptions _$parseFirstOptionsResult(ArgResults result) => FirstOptions()
   ..value = _$nullableEnumValueHelperNullable(
@@ -41,27 +39,18 @@ FirstOptions _$parseFirstOptionsResult(ArgResults result) => FirstOptions()
   )
   ..count = result['count'] != null
       ? int.tryParse(result['count'] as String) ??
-          _$badNumberFormat(
-            result['count'] as String,
-            'int',
-            'count',
-          )
+            _$badNumberFormat(result['count'] as String, 'int', 'count')
       : null;
 
 const _$OptionValueEnumMapBuildCli = <OptionValue, String>{
   OptionValue.a: 'a',
   OptionValue.b: 'b',
-  OptionValue.c: 'c'
+  OptionValue.c: 'c',
 };
 
 ArgParser _$populateFirstOptionsParser(ArgParser parser) => parser
-  ..addOption(
-    'value',
-    allowed: ['a', 'b', 'c'],
-  )
-  ..addOption(
-    'count',
-  );
+  ..addOption('value', allowed: ['a', 'b', 'c'])
+  ..addOption('count');
 
 final _$parserForFirstOptions = _$populateFirstOptionsParser(ArgParser());
 
@@ -77,21 +66,12 @@ SecondOptions _$parseSecondOptionsResult(ArgResults result) => SecondOptions()
   )
   ..count = result['count'] != null
       ? int.tryParse(result['count'] as String) ??
-          _$badNumberFormat(
-            result['count'] as String,
-            'int',
-            'count',
-          )
+            _$badNumberFormat(result['count'] as String, 'int', 'count')
       : null;
 
 ArgParser _$populateSecondOptionsParser(ArgParser parser) => parser
-  ..addOption(
-    'value',
-    allowed: ['a', 'b', 'c'],
-  )
-  ..addOption(
-    'count',
-  );
+  ..addOption('value', allowed: ['a', 'b', 'c'])
+  ..addOption('count');
 
 final _$parserForSecondOptions = _$populateSecondOptionsParser(ArgParser());
 

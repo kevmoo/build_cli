@@ -12,7 +12,8 @@ String? enumValueMapFromType(DartType targetType) {
   }
 
   final items = enumMap.entries.map(
-    (e) => '  ${targetType.element!.name}.${e.key.name}: '
+    (e) =>
+        '  ${targetType.element!.name}.${e.key.name}: '
         '${escapeDartString(e.value.kebab)}',
   );
 
@@ -29,7 +30,7 @@ Map<FieldElement, String>? _enumFieldsMap(DartType targetType) {
     return Map<FieldElement, String>.fromEntries(
       targetType.element.fields
           .where((p) => !p.isSynthetic)
-          .map((p) => MapEntry(p, p.name)),
+          .map((p) => MapEntry(p, p.name!)),
     );
   }
   return null;
@@ -37,7 +38,8 @@ Map<FieldElement, String>? _enumFieldsMap(DartType targetType) {
 
 const enumValueHelperFunctionName = r'_$enumValueHelper';
 
-const enumValueHelper = '''
+const enumValueHelper =
+    '''
 T $enumValueHelperFunctionName<T>(Map<T, String> enumValues, String source) =>
  enumValues
     .entries
@@ -51,7 +53,8 @@ T $enumValueHelperFunctionName<T>(Map<T, String> enumValues, String source) =>
 const nullableEnumValueHelperFunctionName =
     r'_$nullableEnumValueHelperNullable';
 
-const nullableEnumValueHelper = '''
+const nullableEnumValueHelper =
+    '''
 T? $nullableEnumValueHelperFunctionName<T>(
   Map<T, String> enumValues,
   String? source,

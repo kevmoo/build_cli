@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // _NonNullableGenerator
@@ -25,11 +26,7 @@ class PeanutOptions {
   )
   final String directory;
 
-  @CliOption(
-    provideDefaultToOverride: true,
-    abbr: 'b',
-    defaultsTo: 'gh-pages',
-  )
+  @CliOption(provideDefaultToOverride: true, abbr: 'b', defaultsTo: 'gh-pages')
   final String branch;
 
   @CliOption(
@@ -44,7 +41,8 @@ class PeanutOptions {
   @CliOption(
     provideDefaultToOverride: true,
     abbr: 'c',
-    help: 'The configuration to use when running `build_runner`. '
+    help:
+        'The configuration to use when running `build_runner`. '
         'If this option is not set, `$_defaultConfig` is used if '
         '`$_defaultConfigFile` exists in the current directory.',
   )
@@ -62,7 +60,8 @@ class PeanutOptions {
   @CliOption(
     provideDefaultToOverride: true,
     abbr: 't',
-    help: 'If `$_defaultConfigFile` exists in the current directory, defaults'
+    help:
+        'If `$_defaultConfigFile` exists in the current directory, defaults'
         ' to "build". Otherwise, "pub".',
   )
   final BuildTool? buildTool;
@@ -85,30 +84,21 @@ class PeanutOptions {
     provideDefaultToOverride: true,
     abbr: 'h',
     negatable: false,
-    help: 'Prints usage information. '
+    help:
+        'Prints usage information. '
         'Which is so "\$" you don\'t even know it!',
   )
   final bool help;
 
-  @CliOption(
-    provideDefaultToOverride: true,
-    hide: true,
-  )
+  @CliOption(provideDefaultToOverride: true, hide: true)
   final bool secret;
 
-  @CliOption(
-    provideDefaultToOverride: true,
-    defaultsTo: true,
-    negatable: true,
-  )
+  @CliOption(provideDefaultToOverride: true, defaultsTo: true, negatable: true)
   final bool release;
 
   final List<String> rest;
 
-  @CliOption(
-    provideDefaultToOverride: true,
-    convert: _convert,
-  )
+  @CliOption(provideDefaultToOverride: true, convert: _convert)
   Duration? maxRuntime;
 
   @CliOption(

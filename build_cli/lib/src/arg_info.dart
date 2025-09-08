@@ -2,6 +2,7 @@
 
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
@@ -9,14 +10,13 @@ import 'package:source_helper/source_helper.dart';
 
 import 'to_share.dart';
 
-const boolChecker = TypeChecker.fromRuntime(bool);
-const listChecker = TypeChecker.fromRuntime(List);
-const numChecker = TypeChecker.fromRuntime(num);
-const stringChecker = TypeChecker.fromRuntime(String);
-const objectChecker = TypeChecker.fromRuntime(Object);
-const _argResultsChecker = TypeChecker.fromRuntime(ArgResults);
-const _cliOptionChecker = TypeChecker.fromRuntime(CliOption);
-const _iterableChecker = TypeChecker.fromRuntime(Iterable);
+const boolChecker = TypeChecker.fromUrl('dart:core#bool');
+const listChecker = TypeChecker.fromUrl('dart:core#List');
+const numChecker = TypeChecker.fromUrl('dart:core#num');
+const stringChecker = TypeChecker.fromUrl('dart:core#String');
+const _argResultsChecker = TypeChecker.typeNamed(ArgResults);
+const _cliOptionChecker = TypeChecker.typeNamed(CliOption);
+const _iterableChecker = TypeChecker.fromUrl('dart:core#Iterable');
 
 class ConverterData {
   final String name;
@@ -37,7 +37,7 @@ final _argInfoCache = Expando<ArgInfo>();
 
 enum ArgType { option, flag, multiOption, rest, wasParsed, command }
 
-const specialTypes = <ArgType, bool Function(FieldElement)>{
+const specialTypes = <ArgType, bool Function(FieldElement2)>{
   ArgType.rest: _couldBeRestArg,
   ArgType.wasParsed: _couldBeWasParsedArg,
   ArgType.command: _couldBeCommand,
@@ -45,15 +45,15 @@ const specialTypes = <ArgType, bool Function(FieldElement)>{
 
 const wasParsedSuffix = 'WasParsed';
 
-bool _couldBeRestArg(FieldElement element) => element.name == 'rest';
+bool _couldBeRestArg(FieldElement2 element) => element.name3 == 'rest';
 
-bool _couldBeWasParsedArg(FieldElement element) =>
-    element.name.endsWith(wasParsedSuffix) &&
-    element.name.length > wasParsedSuffix.length &&
+bool _couldBeWasParsedArg(FieldElement2 element) =>
+    element.name3!.endsWith(wasParsedSuffix) &&
+    element.name3!.length > wasParsedSuffix.length &&
     boolChecker.isAssignableFromType(element.type);
 
-bool _couldBeCommand(FieldElement element) =>
-    element.name == 'command' &&
+bool _couldBeCommand(FieldElement2 element) =>
+    element.name3 == 'command' &&
     _argResultsChecker.isAssignableFromType(element.type);
 
 class ArgInfo {
@@ -61,10 +61,10 @@ class ArgInfo {
   final ArgType argType;
   final DartType dartType;
 
-  ArgInfo(this.argType, this.optionData, FieldElement element)
-      : dartType = element.type;
+  ArgInfo(this.argType, this.optionData, FieldElement2 element)
+    : dartType = element.type;
 
-  static ArgInfo fromField(FieldElement element) {
+  static ArgInfo fromField(FieldElement2 element) {
     final info = _argInfoCache[element];
     if (info != null) {
       return info;
@@ -120,7 +120,7 @@ class ArgInfo {
   }
 }
 
-ArgType _getArgType(FieldElement element, CliOption option) {
+ArgType _getArgType(FieldElement2 element, CliOption option) {
   final targetType = element.type;
 
   if (converterDataFromOptions(option) != null) {
@@ -148,9 +148,10 @@ ArgType _getArgType(FieldElement element, CliOption option) {
   );
 }
 
-CliOption? _getOptions(FieldElement element) {
-  final obj = _cliOptionChecker.firstAnnotationOfExact(element) ??
-      _cliOptionChecker.firstAnnotationOfExact(element.getter!);
+CliOption? _getOptions(FieldElement2 element) {
+  final obj =
+      _cliOptionChecker.firstAnnotationOfExact(element) ??
+      _cliOptionChecker.firstAnnotationOfExact(element.getter2!);
 
   List<Object>? allowedValues;
   Object? defaultsTo;
@@ -161,13 +162,14 @@ CliOption? _getOptions(FieldElement element) {
     return null;
   }
 
-  final defaultsToReader =
-      annotation.isNull ? null : annotation.read('defaultsTo');
+  final defaultsToReader = annotation.isNull
+      ? null
+      : annotation.read('defaultsTo');
 
   if (element.type.isEnum) {
     final interfaceType = element.type as InterfaceType;
 
-    final enumNames = interfaceType.accessors
+    final enumNames = interfaceType.getters
         .where(
           (p) =>
               // An enum's values are non-nullable. For example, If the enum
@@ -177,7 +179,7 @@ CliOption? _getOptions(FieldElement element) {
               p.returnType.toStringNonNullable() ==
               element.type.toStringNonNullable(),
         )
-        .map((p) => p.name)
+        .map((p) => p.name3!)
         .toList();
 
     if (defaultsToReader != null && !defaultsToReader.isNull) {
@@ -191,8 +193,11 @@ CliOption? _getOptions(FieldElement element) {
         );
       }
 
-      defaultsTo =
-          _enumValueForDartObject<String>(objectValue, enumNames, (v) => v);
+      defaultsTo = _enumValueForDartObject<String>(
+        objectValue,
+        enumNames,
+        (v) => v,
+      );
       defaultsTo = (defaultsTo as String).kebab;
     }
 
@@ -280,7 +285,7 @@ CliOption? _getOptions(FieldElement element) {
     negatable: annotation.read('negatable').literalValue as bool?,
     provideDefaultToOverride:
         annotation.read('provideDefaultToOverride').literalValue as bool? ??
-            false,
+        false,
     valueHelp: annotation.read('valueHelp').literalValue as String?,
   );
 
@@ -297,11 +302,14 @@ CliOption? _getOptions(FieldElement element) {
       );
     }
 
-    if (functionElement.parameters.isEmpty ||
-        functionElement.parameters.first.isNamed ||
-        functionElement.parameters.where((pe) => !pe.isOptional).length > 1 ||
-        !element.library.typeProvider.stringType
-            .isAssignableTo(functionElement.parameters.first.type)) {
+    final formalParams = functionElement.formalParameters;
+
+    if (formalParams.isEmpty ||
+        formalParams.first.isNamed ||
+        formalParams.where((pe) => !pe.isOptional).length > 1 ||
+        !element.library2.typeProvider.stringType.isAssignableTo(
+          formalParams.first.type,
+        )) {
       throwUnsupported(
         element,
         'The convert function `${functionElement.name}` must have one '
@@ -319,8 +327,8 @@ CliOption? _getOptions(FieldElement element) {
       );
     }
     _convertName[option] = ConverterData(
-      functionElement.name,
-      functionElement.parameters.first.type.isNullableType,
+      functionElement.name3!,
+      formalParams.first.type.isNullableType,
     );
   }
 
@@ -331,5 +339,4 @@ T _enumValueForDartObject<T>(
   DartObject source,
   List<T> items,
   String Function(T) name,
-) =>
-    items[source.getField('index')!.toIntValue()!];
+) => items[source.getField('index')!.toIntValue()!];

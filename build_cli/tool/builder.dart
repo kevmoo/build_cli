@@ -8,11 +8,8 @@ import 'package:build/build.dart';
 import 'package:path/path.dart' as p;
 import 'package:source_gen/source_gen.dart';
 
-LibraryBuilder _builder(_ReplaceGenerator generator) => LibraryBuilder(
-      generator,
-      generatedExtension: '.${generator.gName}.dart',
-      formatOutput: (a, v) => a,
-    );
+LibraryBuilder _builder(_ReplaceGenerator generator) =>
+    LibraryBuilder(generator, generatedExtension: '.${generator.gName}.dart');
 
 Builder defaultOverride([BuilderOptions? _]) =>
     _builder(_NonNullableGenerator());

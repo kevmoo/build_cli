@@ -19,10 +19,5 @@ Builder buildCli(BuilderOptions options) {
     );
   }
 
-  return SharedPartBuilder(
-    const [
-      CliGenerator(),
-    ],
-    'build_cli',
-  );
+  return SharedPartBuilder(const [CliGenerator()], 'build_cli');
 }

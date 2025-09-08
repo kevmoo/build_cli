@@ -1,5 +1,5 @@
 name: build_cli_annotations
-version: 2.1.1-wip
+version: 2.1.1
 description: >-
   Contains annotations for `package:build_cli`.
   See that package for more information.
@@ -7,12 +7,14 @@ description: >-
 homepage: https://github.com/kevmoo/build_cli
 
 environment:
-  sdk: ^3.6.0
+  sdk: ^3.8.0
 
 resolution: workspace
 
 dependencies:
   # Limit version range on args – it's exported
   args: ^2.6.0
-  dart_flutter_team_lints: ^3.0.0
-  meta: ^1.7.0
+  meta: ^1.16.0
+
+dev_dependencies:
+  dart_flutter_team_lints: ^3.2.0
