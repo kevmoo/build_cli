@@ -8,4 +8,5 @@ stages:
   - analyze: --fatal-infos .
   - format
 - unit_test:
-  - test: --run-skipped --reporter expanded
+  - test:
+  - test: --run-skipped --tags presubmit-only

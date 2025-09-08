@@ -204,14 +204,14 @@ jobs:
     needs:
       - job_001
   job_006:
-    name: "unit_test; Dart 3.8.0; PKG: build_cli; `dart test --run-skipped --reporter expanded`"
+    name: "unit_test; Dart 3.8.0; PKG: build_cli; `dart test --run-skipped --tags presubmit-only`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.8.0;packages:build_cli;commands:test"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.8.0;packages:build_cli;commands:test_1"
           restore-keys: |
             os:ubuntu-latest;pub-cache-hosted;sdk:3.8.0;packages:build_cli
             os:ubuntu-latest;pub-cache-hosted;sdk:3.8.0
@@ -229,8 +229,8 @@ jobs:
         run: dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli
-      - name: "build_cli; dart test --run-skipped --reporter expanded"
-        run: dart test --run-skipped --reporter expanded
+      - name: "build_cli; dart test --run-skipped --tags presubmit-only"
+        run: dart test --run-skipped --tags presubmit-only
         if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli
     needs:
@@ -240,14 +240,50 @@ jobs:
       - job_004
       - job_005
   job_007:
-    name: "unit_test; Dart dev; PKG: build_cli; `dart test --run-skipped --reporter expanded`"
+    name: "unit_test; Dart 3.8.0; PKG: build_cli; `dart test`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:build_cli;commands:test"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.8.0;packages:build_cli;commands:test_0"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.8.0;packages:build_cli
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.8.0
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
+        with:
+          sdk: "3.8.0"
+      - id: checkout
+        name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - id: build_cli_pub_upgrade
+        name: build_cli; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli
+      - name: build_cli; dart test
+        run: dart test
+        if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli
+    needs:
+      - job_001
+      - job_002
+      - job_003
+      - job_004
+      - job_005
+  job_008:
+    name: "unit_test; Dart dev; PKG: build_cli; `dart test --run-skipped --tags presubmit-only`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:build_cli;commands:test_1"
           restore-keys: |
             os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:build_cli
             os:ubuntu-latest;pub-cache-hosted;sdk:dev
@@ -265,8 +301,44 @@ jobs:
         run: dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: build_cli
-      - name: "build_cli; dart test --run-skipped --reporter expanded"
-        run: dart test --run-skipped --reporter expanded
+      - name: "build_cli; dart test --run-skipped --tags presubmit-only"
+        run: dart test --run-skipped --tags presubmit-only
+        if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
+        working-directory: build_cli
+    needs:
+      - job_001
+      - job_002
+      - job_003
+      - job_004
+      - job_005
+  job_009:
+    name: "unit_test; Dart dev; PKG: build_cli; `dart test`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:build_cli;commands:test_0"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:build_cli
+            os:ubuntu-latest;pub-cache-hosted;sdk:dev
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
+        with:
+          sdk: dev
+      - id: checkout
+        name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - id: build_cli_pub_upgrade
+        name: build_cli; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: build_cli
+      - name: build_cli; dart test
+        run: dart test
         if: "always() && steps.build_cli_pub_upgrade.conclusion == 'success'"
         working-directory: build_cli
     needs:
