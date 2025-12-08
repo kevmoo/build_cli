@@ -163,11 +163,10 @@ Set<String> writeConstructorInvocation(
     usedCtorParamsAndFields,
   );
 
-  final ctorNameRaw = ctor.name!;
-
-  final ctorName = ctorNameRaw.isEmpty || ctorNameRaw == 'new'
-      ? ''
-      : '.$ctorNameRaw';
+  final ctorName = switch (ctor.name!) {
+    '' || 'new' => '',
+    final name => '.$name',
+  };
 
   //
   // Generate the static factory method
