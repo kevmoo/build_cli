@@ -2,7 +2,6 @@
 
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
@@ -37,7 +36,7 @@ final _argInfoCache = Expando<ArgInfo>();
 
 enum ArgType { option, flag, multiOption, rest, wasParsed, command }
 
-const specialTypes = <ArgType, bool Function(FieldElement2)>{
+const specialTypes = <ArgType, bool Function(FieldElement)>{
   ArgType.rest: _couldBeRestArg,
   ArgType.wasParsed: _couldBeWasParsedArg,
   ArgType.command: _couldBeCommand,
@@ -45,15 +44,15 @@ const specialTypes = <ArgType, bool Function(FieldElement2)>{
 
 const wasParsedSuffix = 'WasParsed';
 
-bool _couldBeRestArg(FieldElement2 element) => element.name3 == 'rest';
+bool _couldBeRestArg(FieldElement element) => element.name == 'rest';
 
-bool _couldBeWasParsedArg(FieldElement2 element) =>
-    element.name3!.endsWith(wasParsedSuffix) &&
-    element.name3!.length > wasParsedSuffix.length &&
+bool _couldBeWasParsedArg(FieldElement element) =>
+    element.name!.endsWith(wasParsedSuffix) &&
+    element.name!.length > wasParsedSuffix.length &&
     boolChecker.isAssignableFromType(element.type);
 
-bool _couldBeCommand(FieldElement2 element) =>
-    element.name3 == 'command' &&
+bool _couldBeCommand(FieldElement element) =>
+    element.name == 'command' &&
     _argResultsChecker.isAssignableFromType(element.type);
 
 class ArgInfo {
@@ -61,10 +60,10 @@ class ArgInfo {
   final ArgType argType;
   final DartType dartType;
 
-  ArgInfo(this.argType, this.optionData, FieldElement2 element)
+  ArgInfo(this.argType, this.optionData, FieldElement element)
     : dartType = element.type;
 
-  static ArgInfo fromField(FieldElement2 element) {
+  static ArgInfo fromField(FieldElement element) {
     final info = _argInfoCache[element];
     if (info != null) {
       return info;
@@ -120,7 +119,7 @@ class ArgInfo {
   }
 }
 
-ArgType _getArgType(FieldElement2 element, CliOption option) {
+ArgType _getArgType(FieldElement element, CliOption option) {
   final targetType = element.type;
 
   if (converterDataFromOptions(option) != null) {
@@ -148,10 +147,10 @@ ArgType _getArgType(FieldElement2 element, CliOption option) {
   );
 }
 
-CliOption? _getOptions(FieldElement2 element) {
+CliOption? _getOptions(FieldElement element) {
   final obj =
       _cliOptionChecker.firstAnnotationOfExact(element) ??
-      _cliOptionChecker.firstAnnotationOfExact(element.getter2!);
+      _cliOptionChecker.firstAnnotationOfExact(element.getter!);
 
   List<Object>? allowedValues;
   Object? defaultsTo;
@@ -179,7 +178,7 @@ CliOption? _getOptions(FieldElement2 element) {
               p.returnType.toStringNonNullable() ==
               element.type.toStringNonNullable(),
         )
-        .map((p) => p.name3!)
+        .map((p) => p.name!)
         .toList();
 
     if (defaultsToReader != null && !defaultsToReader.isNull) {
@@ -307,7 +306,7 @@ CliOption? _getOptions(FieldElement2 element) {
     if (formalParams.isEmpty ||
         formalParams.first.isNamed ||
         formalParams.where((pe) => !pe.isOptional).length > 1 ||
-        !element.library2.typeProvider.stringType.isAssignableTo(
+        !element.library.typeProvider.stringType.isAssignableTo(
           formalParams.first.type,
         )) {
       throwUnsupported(
@@ -327,7 +326,7 @@ CliOption? _getOptions(FieldElement2 element) {
       );
     }
     _convertName[option] = ConverterData(
-      functionElement.name3!,
+      functionElement.name!,
       formalParams.first.type.isNullableType,
     );
   }
