@@ -1,3 +1,12 @@
+## 2.2.9
+
+- Required `sdk: ^3.9.0`
+- Required `analyzer: ^9.0.0`
+- Required `build: ^4.0.3`
+- Required `source_gen: ^4.1.1`
+- Required `source_helper: ^1.3.9`
+- Required `yaml: ^3.1.3`
+
 ## 2.2.8
 
 - Required `sdk: ^3.8.0`

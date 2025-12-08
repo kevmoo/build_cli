@@ -5,13 +5,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/src/dart/element/inheritance_manager3.dart' // ignore: implementation_imports
     show InheritanceManager3;
 import 'package:source_gen/source_gen.dart';
 
-Never throwBugFound(FieldElement2 element) => throwUnsupported(
+Never throwBugFound(FieldElement element) => throwUnsupported(
   element,
   "You've hit a bug in build_cli!",
   todo:
@@ -19,7 +18,7 @@ Never throwBugFound(FieldElement2 element) => throwUnsupported(
       'with the stace trace.',
 );
 
-Never throwUnsupported(FieldElement2 element, String message, {String? todo}) =>
+Never throwUnsupported(FieldElement element, String message, {String? todo}) =>
     throw InvalidGenerationSourceError(
       'Could not handle field `${element.displayName}`. $message',
       element: element,
@@ -29,21 +28,21 @@ Never throwUnsupported(FieldElement2 element, String message, {String? todo}) =>
 /// Returns a [Set] of all instance [FieldElement] items for [element] and
 /// super classes, sorted first by their location in the inheritance hierarchy
 /// (super first) and then by their location in the source file.
-Set<FieldElement2> createSortedFieldSet(InstanceElement2 element) {
+Set<FieldElement> createSortedFieldSet(InstanceElement element) {
   // Get all of the fields that need to be assigned
   // TODO: support overriding the field set with an annotation option
-  final fieldsList = element.fields2.where((e) => !e.isStatic).toList();
+  final fieldsList = element.fields.where((e) => !e.isStatic).toList();
 
   final manager = InheritanceManager3();
 
-  for (var v in manager.getInheritedMap(element as InterfaceElement2).values) {
-    assert(v is! FieldElement2);
-    if (dartCoreObjectChecker.isExactly(v.enclosingElement2!)) {
+  for (var v in manager.getInheritedMap(element as InterfaceElement).values) {
+    assert(v is! FieldElement);
+    if (dartCoreObjectChecker.isExactly(v.enclosingElement!)) {
       continue;
     }
 
-    if (v is PropertyAccessorElement2 && v.baseElement is FieldElement2) {
-      fieldsList.add(v.baseElement as FieldElement2);
+    if (v is PropertyAccessorElement && v.baseElement is FieldElement) {
+      fieldsList.add(v.baseElement as FieldElement);
     }
   }
 
@@ -54,31 +53,31 @@ Set<FieldElement2> createSortedFieldSet(InstanceElement2 element) {
   return fieldsList.toSet();
 }
 
-int _sortByLocation(FieldElement2 a, FieldElement2 b) {
-  final checkerA = TypeChecker.fromStatic(a.enclosingElement2.thisType);
+int _sortByLocation(FieldElement a, FieldElement b) {
+  final checkerA = TypeChecker.fromStatic(a.enclosingElement.thisType);
 
-  if (!checkerA.isExactly(b.enclosingElement2)) {
+  if (!checkerA.isExactly(b.enclosingElement)) {
     // in this case, you want to prioritize the enclosingElement that is more
     // "super".
 
-    if (checkerA.isAssignableFrom(b.enclosingElement2)) {
+    if (checkerA.isAssignableFrom(b.enclosingElement)) {
       return -1;
     }
 
-    final checkerB = TypeChecker.fromStatic(b.enclosingElement2.thisType);
+    final checkerB = TypeChecker.fromStatic(b.enclosingElement.thisType);
 
-    if (checkerB.isAssignableFrom(a.enclosingElement2)) {
+    if (checkerB.isAssignableFrom(a.enclosingElement)) {
       return 1;
     }
   }
 
   /// Returns the offset of given field/property in its source file – with a
   /// preference for the getter if it's defined.
-  int offsetFor(FieldElement2 e) {
+  int offsetFor(FieldElement e) {
     if (e.isSynthetic) {
-      return (e.getter2 ?? e.setter2)!.firstFragment.nameOffset2 ?? 0;
+      return (e.getter ?? e.setter)!.firstFragment.nameOffset ?? 0;
     }
-    return e.firstFragment.nameOffset2 ?? 0;
+    return e.firstFragment.nameOffset ?? 0;
   }
 
   return offsetFor(a).compareTo(offsetFor(b));
@@ -105,7 +104,7 @@ const dartCoreObjectChecker = TypeChecker.fromUrl('dart:core#Object');
 /// returned.
 Set<String> writeConstructorInvocation(
   StringBuffer buffer,
-  ClassElement2 classElement,
+  ClassElement classElement,
   Iterable<String> availableConstructorParameters,
   Iterable<String> writeableFields,
   Map<String, String> unavailableReasons,
@@ -114,10 +113,10 @@ Set<String> writeConstructorInvocation(
 ) {
   final className = classElement.displayName;
 
-  var ctor = classElement.unnamedConstructor2;
+  var ctor = classElement.unnamedConstructor;
   if (ctor == null) {
-    if (classElement.constructors2.length == 1) {
-      ctor = classElement.constructors2.single;
+    if (classElement.constructors.length == 1) {
+      ctor = classElement.constructors.single;
     } else {
       // TODO: allow specifying the target constructor
       throw InvalidGenerationSourceError(
@@ -132,13 +131,13 @@ Set<String> writeConstructorInvocation(
   final namedConstructorArguments = <FormalParameterElement>[];
 
   for (var arg in ctor.formalParameters) {
-    if (!availableConstructorParameters.contains(arg.name3)) {
+    if (!availableConstructorParameters.contains(arg.name)) {
       if (arg.isPositional) {
         var msg =
             'Cannot populate the required constructor '
             'argument: ${arg.displayName}.';
 
-        final additionalInfo = unavailableReasons[arg.name3];
+        final additionalInfo = unavailableReasons[arg.name];
 
         if (additionalInfo != null) {
           msg = '$msg $additionalInfo';
@@ -156,7 +155,7 @@ Set<String> writeConstructorInvocation(
     } else {
       constructorArguments.add(arg);
     }
-    usedCtorParamsAndFields.add(arg.name3!);
+    usedCtorParamsAndFields.add(arg.name!);
   }
 
   // fields that aren't already set by the constructor and that aren't final
@@ -164,11 +163,10 @@ Set<String> writeConstructorInvocation(
     usedCtorParamsAndFields,
   );
 
-  final ctorNameRaw = ctor.name3!;
-
-  final ctorName = ctorNameRaw.isEmpty || ctorNameRaw == 'new'
-      ? ''
-      : '.$ctorNameRaw';
+  final ctorName = switch (ctor.name!) {
+    '' || 'new' => '',
+    final name => '.$name',
+  };
 
   //
   // Generate the static factory method
@@ -177,16 +175,16 @@ Set<String> writeConstructorInvocation(
     ..write('$className$ctorName(')
     ..writeAll(
       constructorArguments.map(
-        (e) => '${deserializeForField(e.name3!, ctorParam: e)},',
+        (e) => '${deserializeForField(e.name!, ctorParam: e)},',
       ),
     )
     ..writeAll(
       namedConstructorArguments.map((paramElement) {
         final value = deserializeForField(
-          paramElement.name3!,
+          paramElement.name!,
           ctorParam: paramElement,
         );
-        return '${paramElement.name3}: $value,';
+        return '${paramElement.name}: $value,';
       }),
     )
     ..write(')');
