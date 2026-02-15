@@ -1,3 +1,7 @@
+## 2.2.10
+
+- Support the latest `package:analyzer`.
+
 ## 2.2.9
 
 - Required `sdk: ^3.9.0`
