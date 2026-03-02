@@ -168,6 +168,7 @@ CliOption? _getOptions(FieldElement element) {
   if (element.type.isEnum) {
     final interfaceType = element.type as InterfaceType;
 
+    final targetType = element.type.toStringNonNullable();
     final enumNames = interfaceType.getters
         .where(
           (p) =>
@@ -175,8 +176,7 @@ CliOption? _getOptions(FieldElement element) {
               // field's type is `BuildTool?` it's accessors will be the
               // non-nullable type, `BuildTool`.
               // TODO: find a better way to compare the underlying type
-              p.returnType.toStringNonNullable() ==
-              element.type.toStringNonNullable(),
+              p.returnType.toStringNonNullable() == targetType,
         )
         .map((p) => p.name!)
         .toList();
