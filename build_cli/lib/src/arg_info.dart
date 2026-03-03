@@ -275,7 +275,8 @@ CliOption? _getOptions(FieldElement element) {
 
   if (allowedHelp != null) {
     final unallowedKeys = allowedHelp.keys
-        .where((k) => !(allowedValues?.contains(k) ?? false));
+        .where((k) => !(allowedValues?.contains(k) ?? false))
+        .toList();
     if (unallowedKeys.isNotEmpty) {
       throwUnsupported(
         element,
