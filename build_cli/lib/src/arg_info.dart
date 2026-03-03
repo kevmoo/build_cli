@@ -273,6 +273,19 @@ CliOption? _getOptions(FieldElement element) {
     );
   }
 
+  if (allowedHelp != null) {
+    final unallowedKeys = allowedHelp.keys
+        .where((k) => !(allowedValues?.contains(k) ?? false))
+        .toList();
+    if (unallowedKeys.isNotEmpty) {
+      throwUnsupported(
+        element,
+        'The `allowedHelp` keys – {${unallowedKeys.join(', ')}} '
+        'are not in `allowedValues`.',
+      );
+    }
+  }
+
   final option = CliOption(
     abbr: annotation.read('abbr').literalValue as String?,
     allowed: allowedValues,
