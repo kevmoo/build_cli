@@ -1,3 +1,7 @@
+## 2.2.11-wip
+
+- Validate that `allowedHelp` keys match `allowed` values.
+
 ## 2.2.10
 
 - Support the latest `package:analyzer`.

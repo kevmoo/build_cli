@@ -119,6 +119,26 @@ class FlagWithValueHelp {
   bool? option;
 }
 
+@ShouldThrow(
+  'Could not handle field `option`. '
+  'The `allowedHelp` keys – {c} are not in `allowedValues`.',
+)
+@CliOptions()
+class AllowedHelpKeyNotInAllowed {
+  @CliOption(allowed: ['a', 'b'], allowedHelp: {'a': 'a help', 'c': 'c help'})
+  String? option;
+}
+
+@ShouldThrow(
+  'Could not handle field `option`. '
+  'The `allowedHelp` keys – {a} are not in `allowedValues`.',
+)
+@CliOptions()
+class AllowedHelpKeyNoAllowed {
+  @CliOption(allowedHelp: {'a': 'a help'})
+  String? option;
+}
+
 @ShouldGenerate(
   r'''
 Empty _$parseEmptyResult(ArgResults result) => Empty();

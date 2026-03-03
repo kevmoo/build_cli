@@ -44,6 +44,8 @@ Future<void> main() async {
         'UnsupportedFieldType',
         'WithCommand',
         'NonNullableTypes',
+        'AllowedHelpKeyNotInAllowed',
+        'AllowedHelpKeyNoAllowed',
       ],
     );
   });
