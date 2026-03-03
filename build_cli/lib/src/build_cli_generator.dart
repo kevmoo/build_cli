@@ -107,7 +107,7 @@ ${element.name} $resultParserName(ArgResults result) =>''');
       final fieldsString = unusedFields.map((f) => '`$f`').join(', ');
       log.warning('Skipping unassignable fields on `$element`: $fieldsString');
 
-      unusedFields.forEach(fields.remove);
+      fields.removeWhere((k, v) => unusedFields.contains(k));
     }
     yield buffer.toString();
 
