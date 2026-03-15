@@ -101,13 +101,12 @@ ${element.name} $resultParserName(ArgResults result) =>''');
       deserializeForField,
     );
 
-    final unusedFields = fields.keys.toSet()..removeAll(usedFields);
-
-    if (unusedFields.isNotEmpty) {
+    if (fields.length > usedFields.length) {
+      final unusedFields = fields.keys.where((k) => !usedFields.contains(k));
       final fieldsString = unusedFields.map((f) => '`$f`').join(', ');
       log.warning('Skipping unassignable fields on `$element`: $fieldsString');
 
-      unusedFields.forEach(fields.remove);
+      fields.removeWhere((k, v) => !usedFields.contains(k));
     }
     yield buffer.toString();
 
