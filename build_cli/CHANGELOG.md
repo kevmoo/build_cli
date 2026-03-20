@@ -1,6 +1,7 @@
-## 2.2.11-wip
+## 2.2.11
 
 - Validate that `allowedHelp` keys match `allowed` values.
+- Required `analyzer: ">=9.0.0 <13.0.0"`
 
 ## 2.2.10
 
