@@ -463,3 +463,106 @@ class NonNullableTypes {
     required this.number,
   });
 }
+
+class SuperClass {
+  String? superField;
+}
+
+@ShouldGenerate(r'''
+SubClass _$parseSubClassResult(ArgResults result) => SubClass()
+  ..superField = result['super-field'] as String?
+  ..yLocal = result['y-local'] as String?
+  ..xLocal = result['x-local'] as String?
+  ..wExplicitSetter = result['w-explicit-setter'] as String?
+  ..subclassField = result['subclass-field'] as String?;
+
+ArgParser _$populateSubClassParser(ArgParser parser) => parser
+  ..addOption(
+    'super-field',
+  )
+  ..addOption(
+    'y-local',
+  )
+  ..addOption(
+    'x-local',
+  )
+  ..addOption(
+    'w-explicit-setter',
+  )
+  ..addOption(
+    'subclass-field',
+  );
+
+final _$parserForSubClass = _$populateSubClassParser(ArgParser());
+
+SubClass parseSubClass(List<String> args) {
+  final result = _$parserForSubClass.parse(args);
+  return _$parseSubClassResult(result);
+}
+''')
+@CliOptions()
+class SubClass extends SuperClass {
+  String? yLocal;
+  String? xLocal;
+  String? get wExplicitSetter => null;
+  set wExplicitSetter(String? value) {}
+  String? subclassField;
+}
+
+abstract class GenericSuperClass<T> {
+  T? bField;
+  T? aField;
+}
+
+@ShouldGenerate(r'''
+T _$badNumberFormat<T extends num>(
+  String source,
+  String type,
+  String argName,
+) =>
+    throw FormatException(
+      'Cannot parse "$source" into `$type` for option "$argName".',
+    );
+
+GenericSubClass _$parseGenericSubClassResult(ArgResults result) =>
+    GenericSubClass()
+      ..bField = result['b-field'] != null
+          ? int.tryParse(result['b-field'] as String) ??
+              _$badNumberFormat(
+                result['b-field'] as String,
+                'int',
+                'b-field',
+              )
+          : null
+      ..aField = result['a-field'] != null
+          ? int.tryParse(result['a-field'] as String) ??
+              _$badNumberFormat(
+                result['a-field'] as String,
+                'int',
+                'a-field',
+              )
+          : null
+      ..subclassField = result['subclass-field'] as String?;
+
+ArgParser _$populateGenericSubClassParser(ArgParser parser) => parser
+  ..addOption(
+    'b-field',
+  )
+  ..addOption(
+    'a-field',
+  )
+  ..addOption(
+    'subclass-field',
+  );
+
+final _$parserForGenericSubClass = _$populateGenericSubClassParser(ArgParser());
+
+GenericSubClass parseGenericSubClass(List<String> args) {
+  final result = _$parserForGenericSubClass.parse(args);
+  return _$parseGenericSubClassResult(result);
+}
+''')
+@CliOptions()
+class GenericSubClass extends GenericSuperClass<int> {
+  String? subclassField;
+}

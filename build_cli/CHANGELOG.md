@@ -1,6 +1,10 @@
-## 2.2.11-wip
+## 2.2.11
 
 - Validate that `allowedHelp` keys match `allowed` values.
+- Required `analyzer: ">=10.0.0 <13.0.0"`
+- Required `build: ^4.0.4`
+- Required `source_gen: ^4.1.2`
+- Required `source_helper: ^1.3.10`
 
 ## 2.2.10
 

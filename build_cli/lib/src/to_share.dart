@@ -31,7 +31,10 @@ Never throwUnsupported(FieldElement element, String message, {String? todo}) =>
 Set<FieldElement> createSortedFieldSet(InstanceElement element) {
   // Get all of the fields that need to be assigned
   // TODO: support overriding the field set with an annotation option
-  final fieldsList = element.fields.where((e) => !e.isStatic).toList();
+  final fieldsList = element.fields
+      .where((e) => !e.isStatic)
+      .cast<FieldElement>()
+      .toList();
 
   final manager = InheritanceManager3();
 
@@ -41,8 +44,8 @@ Set<FieldElement> createSortedFieldSet(InstanceElement element) {
       continue;
     }
 
-    if (v is PropertyAccessorElement && v.baseElement is FieldElement) {
-      fieldsList.add(v.baseElement as FieldElement);
+    if (v case PropertyAccessorElement(:final FieldElement variable)) {
+      fieldsList.add(variable);
     }
   }
 
@@ -74,7 +77,7 @@ int _sortByLocation(FieldElement a, FieldElement b) {
   /// Returns the offset of given field/property in its source file – with a
   /// preference for the getter if it's defined.
   int offsetFor(FieldElement e) {
-    if (e.isSynthetic) {
+    if (!e.isOriginDeclaration) {
       return (e.getter ?? e.setter)!.firstFragment.nameOffset ?? 0;
     }
     return e.firstFragment.nameOffset ?? 0;
