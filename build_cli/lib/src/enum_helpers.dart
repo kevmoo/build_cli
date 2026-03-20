@@ -29,7 +29,7 @@ Map<FieldElement, String>? _enumFieldsMap(DartType targetType) {
   if (targetType is InterfaceType && targetType.element is EnumElement) {
     return Map<FieldElement, String>.fromEntries(
       targetType.element.fields
-          .where((p) => !p.isSynthetic)
+          .where((p) => p.isOriginDeclaration)
           .map((p) => MapEntry(p, p.name!)),
     );
   }
