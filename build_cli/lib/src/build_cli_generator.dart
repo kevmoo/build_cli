@@ -155,7 +155,7 @@ ${element.name} $resultParserName(ArgResults result) =>''');
       );
     for (var f in fields.values) {
       if (f.type.isEnum) {
-        yield enumValueMapFromType(f.type)!;
+        yield enumValueMapFromType(f.type);
       }
 
       _parserOptionFor(buffer, f);
