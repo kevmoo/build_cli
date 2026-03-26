@@ -153,9 +153,12 @@ ${element.name} $resultParserName(ArgResults result) =>''');
         'ArgParser $populateParserName(ArgParser parser$overrideArgs) => '
         'parser',
       );
+    final enumTypes = <DartType>{};
     for (var f in fields.values) {
       if (f.type.isEnum) {
-        yield enumValueMapFromType(f.type)!;
+        if (enumTypes.add(f.type)) {
+          yield enumValueMapFromType(f.type);
+        }
       }
 
       _parserOptionFor(buffer, f);
