@@ -4,12 +4,8 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:source_helper/source_helper.dart';
 
-String? enumValueMapFromType(DartType targetType) {
+String enumValueMapFromType(DartType targetType) {
   final enumMap = _enumFieldsMap(targetType);
-
-  if (enumMap == null) {
-    return null;
-  }
 
   final items = enumMap.entries.map(
     (e) =>
@@ -24,16 +20,9 @@ String? enumValueMapFromType(DartType targetType) {
 String enumConstMapName(DartType targetType) =>
     '_\$${targetType.element!.name}EnumMapBuildCli';
 
-/// If [targetType] is not an enum, `null` is returned.
-Map<FieldElement, String>? _enumFieldsMap(DartType targetType) {
-  if (targetType is InterfaceType && targetType.element is EnumElement) {
-    return Map<FieldElement, String>.fromEntries(
-      targetType.element.fields
-          .where((p) => p.isOriginDeclaration)
-          .map((p) => MapEntry(p, p.name!)),
-    );
-  }
-  return null;
+Map<FieldElement, String> _enumFieldsMap(DartType targetType) {
+  final element = targetType.element as EnumElement;
+  return {for (final p in element.constants) p: p.name!};
 }
 
 const enumValueHelperFunctionName = r'_$enumValueHelper';
