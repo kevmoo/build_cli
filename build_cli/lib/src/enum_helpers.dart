@@ -23,9 +23,7 @@ String enumConstMapName(DartType targetType) =>
 Map<FieldElement, String> _enumFieldsMap(DartType targetType) {
   final element = targetType.element as EnumElement;
   return Map<FieldElement, String>.fromEntries(
-    element.fields
-        .where((p) => p.isOriginDeclaration)
-        .map((p) => MapEntry(p, p.name!)),
+    element.constants.map((p) => MapEntry(p, p.name!)),
   );
 }
 
