@@ -22,9 +22,7 @@ String enumConstMapName(DartType targetType) =>
 
 Map<FieldElement, String> _enumFieldsMap(DartType targetType) {
   final element = targetType.element as EnumElement;
-  return Map<FieldElement, String>.fromEntries(
-    element.constants.map((p) => MapEntry(p, p.name!)),
-  );
+  return {for (final p in element.constants) p: p.name!};
 }
 
 const enumValueHelperFunctionName = r'_$enumValueHelper';
