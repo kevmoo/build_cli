@@ -1,3 +1,7 @@
+## 2.2.12
+
+- Required `analyzer: ">=10.0.0 <14.0.0"`
+
 ## 2.2.11
 
 - Validate that `allowedHelp` keys match `allowed` values.
