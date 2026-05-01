@@ -43,6 +43,7 @@ linter:
     - require_trailing_commas
     - unnecessary_await_in_return
     - unnecessary_breaks
+    - unnecessary_ignore
     - use_setters_to_change_properties
     - use_string_buffers
     - use_to_and_as_if_applicable
