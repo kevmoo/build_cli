@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:test/test.dart';
+import 'package:checks/checks.dart';
+import 'package:test/scaffolding.dart';
 
 void main() {
   test('readme contents', () {
@@ -18,6 +19,6 @@ void main() {
 
     printOnFailure(exampleContent);
 
-    expect(readmeContent, contains(exampleContent));
+    check(readmeContent).contains(exampleContent);
   });
 }

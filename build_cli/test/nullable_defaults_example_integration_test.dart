@@ -1,13 +1,14 @@
-import 'package:test/test.dart';
+import 'package:checks/checks.dart';
+import 'package:test/scaffolding.dart';
 import 'src/nullable_defaults_example.dart';
 
 void main() {
   test('should be null', () {
     final options = parseNullableOptions([]);
-    expect(options.nullableBoolean, equals(null));
-    expect(options.nullableInteger, equals(null));
-    expect(options.nullableDouble, equals(null));
-    expect(options.nullableNum, equals(null));
+    check(options.nullableBoolean).isNull();
+    check(options.nullableInteger).isNull();
+    check(options.nullableDouble).isNull();
+    check(options.nullableNum).isNull();
   });
 
   test('should be value from arguments', () {
@@ -21,9 +22,9 @@ void main() {
       '--nullable-num',
       '3.4',
     ]);
-    expect(options.nullableBoolean, equals(true));
-    expect(options.nullableInteger, equals(10));
-    expect(options.nullableDouble, equals(1.1));
-    expect(options.nullableNum, equals(3.4));
+    check(options.nullableBoolean).equals(true);
+    check(options.nullableInteger).equals(10);
+    check(options.nullableDouble).equals(1.1);
+    check(options.nullableNum).equals(3.4);
   });
 }
