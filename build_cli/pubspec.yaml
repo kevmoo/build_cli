@@ -28,6 +28,7 @@ dev_dependencies:
   args: ^2.6.0
   build_runner: ^2.10.5
   build_verify: ^3.0.0
+  checks: ^0.3.1
   dart_flutter_team_lints: ^3.2.0
   io: ^1.0.0
   path: ^1.9.0

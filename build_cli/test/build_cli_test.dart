@@ -6,7 +6,7 @@ import 'dart:async';
 
 import 'package:build_cli/build_cli.dart';
 import 'package:source_gen_test/source_gen_test.dart';
-import 'package:test/test.dart';
+import 'package:test/scaffolding.dart';
 
 Future<void> main() async {
   const generator = CliGenerator();

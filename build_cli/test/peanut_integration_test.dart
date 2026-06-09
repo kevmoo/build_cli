@@ -1,4 +1,5 @@
-import 'package:test/test.dart';
+import 'package:checks/checks.dart';
+import 'package:test/scaffolding.dart';
 
 import 'src/peanut_example.dart';
 
@@ -6,19 +7,19 @@ void main() {
   test('no args', () {
     final options = parsePeanutOptions([]);
 
-    expect(options.directory, 'web');
-    expect(options.branch, 'gh-pages');
-    expect(options.mode, PubBuildMode.release);
-    expect(options.modeWasParsed, isFalse);
-    expect(options.buildConfig, isNull);
-    expect(options.buildConfigWasParsed, isFalse);
-    expect(options.message, 'Built <directory>');
-    expect(options.buildTool, isNull);
-    expect(options.debugBuildTool, BuildTool.$loco);
-    expect(options.help, isFalse);
-    expect(options.release, isTrue);
-    expect(options.maxRuntime, isNull);
-    expect(options.rest, isEmpty);
+    check(options.directory).equals('web');
+    check(options.branch).equals('gh-pages');
+    check(options.mode).equals(PubBuildMode.release);
+    check(options.modeWasParsed).isFalse();
+    check(options.buildConfig).isNull();
+    check(options.buildConfigWasParsed).isFalse();
+    check(options.message).equals('Built <directory>');
+    check(options.buildTool).isNull();
+    check(options.debugBuildTool).equals(BuildTool.$loco);
+    check(options.help).isFalse();
+    check(options.release).isTrue();
+    check(options.maxRuntime).isNull();
+    check(options.rest).isEmpty();
   });
 
   test('some args', () {
@@ -39,20 +40,20 @@ void main() {
       'things',
     ]);
 
-    expect(options.directory, 'dir');
-    expect(options.branch, 'gh-pages');
-    expect(options.mode, PubBuildMode.debug);
-    expect(options.modeWasParsed, isTrue);
-    expect(options.buildConfig, isNull);
-    expect(options.buildConfigWasParsed, isFalse);
-    expect(options.bazelOptions, BazelOptions.toSource);
-    expect(options.message, 'Built <directory>');
-    expect(options.buildTool, isNull);
-    expect(options.debugBuildTool, BuildTool.pub);
-    expect(options.help, isTrue);
-    expect(options.release, isFalse);
-    expect(options.maxRuntime, const Duration(seconds: 42));
-    expect(options.rest, ['extra', 'things']);
+    check(options.directory).equals('dir');
+    check(options.branch).equals('gh-pages');
+    check(options.mode).equals(PubBuildMode.debug);
+    check(options.modeWasParsed).isTrue();
+    check(options.buildConfig).isNull();
+    check(options.buildConfigWasParsed).isFalse();
+    check(options.bazelOptions).equals(BazelOptions.toSource);
+    check(options.message).equals('Built <directory>');
+    check(options.buildTool).isNull();
+    check(options.debugBuildTool).equals(BuildTool.pub);
+    check(options.help).isTrue();
+    check(options.release).isFalse();
+    check(options.maxRuntime).equals(const Duration(seconds: 42));
+    check(options.rest).deepEquals(['extra', 'things']);
   });
 
   group('with invalid args', () {
@@ -67,12 +68,10 @@ void main() {
 
     for (var item in items.entries) {
       test('`${item.value.join(' ')}`', () {
-        expect(
-          () => parsePeanutOptions(item.value),
-          throwsA(
-            isFormatException.having((e) => e.message, 'message', item.key),
-          ),
-        );
+        check(() => parsePeanutOptions(item.value))
+            .throws<FormatException>()
+            .has((e) => e.message, 'message')
+            .equals(item.key);
       });
     }
   });
@@ -80,7 +79,7 @@ void main() {
   test('usage', () {
     final prettyUsage = prettyParser.usage;
     printOnFailure(prettyUsage);
-    expect(prettyUsage, r'''
+    check(prettyUsage).equals(r'''
 -d, --directory           (defaults to "web")
 -b, --branch              (defaults to "gh-pages")
     --mode                The mode to run `pub build` in.

@@ -1,5 +1,6 @@
 import 'package:args/command_runner.dart';
-import 'package:test/test.dart';
+import 'package:checks/checks.dart';
+import 'package:test/scaffolding.dart';
 
 import 'src/command_runner_example.dart';
 
@@ -8,6 +9,8 @@ void main() {
     final runner = CommandRunner<void>('my_app', '')
       ..addCommand(CommitCommand());
     await runner.run(['commit', '--all']);
-    expect(CommitCommand.debugOptionsWhenRun?.all, isTrue);
+    check(
+      CommitCommand.debugOptionsWhenRun,
+    ).isNotNull().has((o) => o.all, 'all').isTrue();
   });
 }

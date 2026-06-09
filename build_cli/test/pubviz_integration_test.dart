@@ -1,4 +1,5 @@
-import 'package:test/test.dart';
+import 'package:checks/checks.dart';
+import 'package:test/scaffolding.dart';
 
 import 'src/pubviz_example.dart';
 
@@ -6,12 +7,12 @@ void main() {
   test('no args', () {
     final options = parsePubvizOptions([]);
 
-    expect(options.secret, isNull);
-    expect(options.ignorePackages, <void>[]);
-    expect(options.productionPort, 8080);
-    expect(options.numValue, 3.14);
-    expect(options.doubleValue, 3000.0);
-    expect(options.devPort, 8080);
+    check(options.secret).isNull();
+    check(options.ignorePackages).isNotNull().isEmpty();
+    check(options.productionPort).equals(8080);
+    check(options.numValue).equals(3.14);
+    check(options.doubleValue).equals(3000);
+    check(options.devPort).equals(8080);
   });
 
   group('with invalid args', () {
@@ -41,12 +42,10 @@ void main() {
 
     for (var item in items.entries) {
       test('`${item.value.join(' ')}`', () {
-        expect(
-          () => parsePubvizOptions(item.value),
-          throwsA(
-            isFormatException.having((e) => e.message, 'message', item.key),
-          ),
-        );
+        check(() => parsePubvizOptions(item.value))
+            .throws<FormatException>()
+            .has((e) => e.message, 'message')
+            .equals(item.key);
       });
     }
   });
@@ -54,7 +53,7 @@ void main() {
   test('usage', () {
     final prettyUsage = prettyParser.usage;
     printOnFailure(prettyUsage);
-    expect(prettyUsage, r'''
+    check(prettyUsage).equals(r'''
 -f, --format                    
           [dot]                 Generate a GraphViz 'dot' file.
           [html] (default)      Wrap the GraphViz dot format in an HTML template
