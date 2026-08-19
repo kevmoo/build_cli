@@ -213,11 +213,3 @@ extension DartTypeExtension on DartType {
     return val;
   }
 }
-
-extension ElementExtension on Element {
-  String toStringNonNullable() {
-    final val = displayString();
-    if (val.endsWith('?')) return val.substring(0, val.length - 1);
-    return val;
-  }
-}
