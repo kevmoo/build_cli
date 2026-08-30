@@ -43,7 +43,7 @@ class PubvizOptions {
   )
   int devPort;
 
-  List? listOfNothing;
+  List<dynamic>? listOfNothing;
   List<dynamic>? listOfDynamic;
   List<Object>? listOfObject;
 
