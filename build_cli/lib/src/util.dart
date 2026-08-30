@@ -7,7 +7,7 @@ import 'package:yaml/yaml.dart';
 
 final _lowestSdkSupported = Version.parse('2.0.0');
 
-Future validateSdkConstraint(BuildStep buildStep) async {
+Future<void> validateSdkConstraint(BuildStep buildStep) async {
   if (buildStep.toString().contains('_MockBuildStep')) {
     // This is a throw-away class from `source_gen_test` – ignore!
     return;
