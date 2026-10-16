@@ -1,3 +1,8 @@
+## 2.2.14-wip
+
+- Required `sdk: ^3.12.0`
+- Required `analyzer: ">=13.0.0 <15.0.0"`
+
 ## 2.2.13
 
 - Required `analyzer: ">=10.0.0 <15.0.0"`
