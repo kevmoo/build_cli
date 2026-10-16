@@ -1,5 +1,5 @@
 environment:
-  sdk: ^3.9.0
+  sdk: ^3.12.0
 package:build_cli/build_cli.dart:
   CliGenerator (class extends GeneratorForAnnotation<CliOptions>):
     new (const constructor: CliGenerator Function())

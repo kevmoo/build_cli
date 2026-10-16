@@ -1,5 +1,5 @@
 environment:
-  sdk: ^3.9.0
+  sdk: ^3.12.0
 package:build_cli_annotations/build_cli_annotations.dart:
   ArgParser (class extends Object):
     new (constructor: ArgParser Function({bool allowTrailingOptions, int? usageLineLength}))
