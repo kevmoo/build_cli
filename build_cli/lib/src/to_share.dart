@@ -84,7 +84,11 @@ int _sortByLocation(FieldElement a, FieldElement b) {
   return offsetFor(a).compareTo(offsetFor(b));
 }
 
-const dartCoreObjectChecker = TypeChecker.fromUrl('dart:core#Object');
+const dartCoreObjectChecker = TypeChecker.typeNamed(
+  Object,
+  inPackage: 'core',
+  inSdk: true,
+);
 
 /// Writes the invocation of the default constructor – `new Class(...)` for the
 /// type defined in [classElement] to the provided [buffer].
@@ -113,51 +117,13 @@ Set<String> writeConstructorInvocation(
   deserializeForField,
 ) {
   final className = classElement.displayName;
-
-  var ctor = classElement.unnamedConstructor;
-  if (ctor == null) {
-    if (classElement.constructors.length == 1) {
-      ctor = classElement.constructors.single;
-    } else {
-      // TODO: allow specifying the target constructor
-      throw InvalidGenerationSourceError(
-        'Could not pick a constructor to use.',
-        element: classElement,
-      );
-    }
-  }
-
-  final usedCtorParamsAndFields = <String>{};
-  final constructorArguments = <FormalParameterElement>[];
-  final namedConstructorArguments = <FormalParameterElement>[];
-
-  for (var arg in ctor.formalParameters) {
-    if (!availableConstructorParameters.contains(arg.name)) {
-      if (arg.isPositional) {
-        var msg =
-            'Cannot populate the required constructor '
-            'argument: ${arg.displayName}.';
-
-        final additionalInfo = unavailableReasons[arg.name];
-
-        if (additionalInfo != null) {
-          msg = '$msg $additionalInfo';
-        }
-
-        throw InvalidGenerationSourceError(msg, element: ctor);
-      }
-
-      continue;
-    }
-
-    // TODO: validate that the types match!
-    if (arg.isNamed) {
-      namedConstructorArguments.add(arg);
-    } else {
-      constructorArguments.add(arg);
-    }
-    usedCtorParamsAndFields.add(arg.name!);
-  }
+  final ctor = _selectConstructor(classElement);
+  final resolvedParams = _resolveConstructorParams(
+    ctor,
+    availableConstructorParameters,
+    unavailableReasons,
+  );
+  final usedCtorParamsAndFields = resolvedParams.used;
 
   // fields that aren't already set by the constructor and that aren't final
   final remainingFieldsForInvocationBody = writeableFields.toSet().difference(
@@ -175,12 +141,12 @@ Set<String> writeConstructorInvocation(
   buffer
     ..write('$className$ctorName(')
     ..writeAll(
-      constructorArguments.map(
+      resolvedParams.positional.map(
         (e) => '${deserializeForField(e.name!, ctorParam: e)},',
       ),
     )
     ..writeAll(
-      namedConstructorArguments.map((paramElement) {
+      resolvedParams.named.map((paramElement) {
         final value = deserializeForField(
           paramElement.name!,
           ctorParam: paramElement,
@@ -204,6 +170,60 @@ Set<String> writeConstructorInvocation(
   buffer.writeln();
 
   return usedCtorParamsAndFields;
+}
+
+ConstructorElement _selectConstructor(ClassElement classElement) {
+  final unnamed = classElement.unnamedConstructor;
+  if (unnamed != null) {
+    return unnamed;
+  }
+  if (classElement.constructors.length == 1) {
+    return classElement.constructors.single;
+  }
+  throw InvalidGenerationSourceError(
+    'Could not pick a constructor to use.',
+    element: classElement,
+  );
+}
+
+({
+  List<FormalParameterElement> positional,
+  List<FormalParameterElement> named,
+  Set<String> used,
+})
+_resolveConstructorParams(
+  ConstructorElement ctor,
+  Iterable<String> availableConstructorParameters,
+  Map<String, String> unavailableReasons,
+) {
+  final used = <String>{};
+  final positional = <FormalParameterElement>[];
+  final named = <FormalParameterElement>[];
+
+  for (var arg in ctor.formalParameters) {
+    if (!availableConstructorParameters.contains(arg.name)) {
+      if (arg.isPositional) {
+        var msg =
+            'Cannot populate the required constructor '
+            'argument: ${arg.displayName}.';
+        final additionalInfo = unavailableReasons[arg.name];
+        if (additionalInfo != null) {
+          msg = '$msg $additionalInfo';
+        }
+        throw InvalidGenerationSourceError(msg, element: ctor);
+      }
+      continue;
+    }
+
+    if (arg.isNamed) {
+      named.add(arg);
+    } else {
+      positional.add(arg);
+    }
+    used.add(arg.name!);
+  }
+
+  return (positional: positional, named: named, used: used);
 }
 
 extension DartTypeExtension on DartType {

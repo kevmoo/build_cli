@@ -1,0 +1,346 @@
+// Copyright (c) 2026, the Dart project authors.  Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
+@TestOn('vm')
+library;
+
+import 'dart:convert';
+import 'dart:io';
+import 'dart:isolate';
+
+import 'package:build_cli/src/standalone.dart';
+import 'package:checks/checks.dart';
+import 'package:path/path.dart' as p;
+import 'package:test/test.dart';
+
+void main() {
+  late String basePackageConfigJson;
+
+  setUpAll(() async {
+    final configUri = await Isolate.packageConfig;
+    check(configUri).isNotNull();
+    final configFile = File.fromUri(configUri!);
+    final raw =
+        jsonDecode(configFile.readAsStringSync()) as Map<String, Object?>;
+    final packages =
+        (raw['packages'] as List<Object?>)
+            .cast<Map<String, Object?>>()
+            .where((pkg) => pkg['name'] != 'sample_pkg')
+            .map((pkg) {
+              final rootUriStr = pkg['rootUri'] as String;
+              final resolvedRoot = configUri.resolve(rootUriStr);
+              return {...pkg, 'rootUri': resolvedRoot.toString()};
+            })
+            .toList()
+          ..add({
+            'name': 'sample_pkg',
+            'rootUri': '../',
+            'packageUri': 'lib/',
+            'languageVersion': '3.12',
+          });
+    basePackageConfigJson = const JsonEncoder.withIndent(
+      '  ',
+    ).convert({...raw, 'packages': packages});
+  });
+
+  Directory createSamplePackage({String sdkConstraint = '^3.12.0'}) {
+    final tempDir = Directory.systemTemp.createTempSync(
+      'build_cli_standalone_',
+    );
+    addTearDown(() => tempDir.deleteSync(recursive: true));
+
+    File(p.join(tempDir.path, 'pubspec.yaml')).writeAsStringSync('''
+name: sample_pkg
+environment:
+  sdk: $sdkConstraint
+''');
+
+    final dartToolDir = Directory(p.join(tempDir.path, '.dart_tool'))
+      ..createSync();
+    File(
+      p.join(dartToolDir.path, 'package_config.json'),
+    ).writeAsStringSync(basePackageConfigJson);
+
+    return tempDir;
+  }
+
+  test('--help prints usage and exits 0', () async {
+    final out = StringBuffer();
+    final err = StringBuffer();
+
+    final code = await runBuildCli(['--help'], out: out, err: err);
+
+    check(code).equals(0);
+    check(out.toString()).contains('Usage: build_cli [options] [<paths...>]');
+    check(out.toString()).contains('--check');
+    check(out.toString()).not((it) => it.contains('--verify'));
+    check(out.toString()).not((it) => it.contains('--write'));
+    check(err.toString()).isEmpty();
+  });
+
+  test('rejects unknown flags and aliases (--verify, --write)', () async {
+    for (final flag in ['--verify', '--write', '--unknown']) {
+      final out = StringBuffer();
+      final err = StringBuffer();
+
+      final code = await runBuildCli([flag], out: out, err: err);
+
+      check(code).equals(64);
+      check(err.toString()).contains('Could not find an option named');
+    }
+  });
+
+  test('write mode generates .g.dart and --check passes', () async {
+    final pkgDir = createSamplePackage();
+    final libDir = Directory(p.join(pkgDir.path, 'lib'))..createSync();
+    File(p.join(libDir.path, 'options.dart')).writeAsStringSync('''
+import 'package:build_cli_annotations/build_cli_annotations.dart';
+
+part 'options.g.dart';
+
+enum Mode { fast, accurate }
+
+@CliOptions()
+class AppOptions {
+  @CliOption(abbr: 'n', help: 'User name.')
+  final String name;
+
+  @CliOption(defaultsTo: Mode.fast)
+  final Mode mode;
+
+  final bool verbose;
+
+  AppOptions({required this.name, required this.mode, this.verbose = false});
+}
+''');
+
+    final out = StringBuffer();
+    final err = StringBuffer();
+    final writeCode = await runBuildCli(
+      [],
+      workingDirectory: pkgDir.path,
+      out: out,
+      err: err,
+    );
+
+    check(writeCode).equals(0);
+    check(err.toString()).isEmpty();
+    check(out.toString()).contains('Generated lib/options.g.dart.');
+
+    final generatedFile = File(p.join(libDir.path, 'options.g.dart'));
+    check(generatedFile.existsSync()).isTrue();
+    final generatedText = generatedFile.readAsStringSync();
+    check(
+      generatedText,
+    ).startsWith('// GENERATED CODE - DO NOT MODIFY BY HAND');
+    check(generatedText).contains("part of 'options.dart';");
+    check(generatedText).contains('// CliGenerator');
+    check(generatedText).contains('AppOptions parseAppOptions(');
+
+    final checkOut = StringBuffer();
+    final checkErr = StringBuffer();
+    final checkCode = await runBuildCli(
+      ['--check'],
+      workingDirectory: pkgDir.path,
+      out: checkOut,
+      err: checkErr,
+    );
+
+    check(checkCode).equals(0);
+    check(checkOut.toString()).isEmpty();
+    check(checkErr.toString()).isEmpty();
+  });
+
+  test('--check fails when .g.dart is missing or stale', () async {
+    final pkgDir = createSamplePackage();
+    final libDir = Directory(p.join(pkgDir.path, 'lib'))..createSync();
+    File(p.join(libDir.path, 'options.dart')).writeAsStringSync('''
+import 'package:build_cli_annotations/build_cli_annotations.dart';
+
+part 'options.g.dart';
+
+@CliOptions()
+class Options {
+  final bool flag;
+  Options({this.flag = false});
+}
+''');
+
+    final missingErr = StringBuffer();
+    final missingCode = await runBuildCli(
+      ['--check'],
+      workingDirectory: pkgDir.path,
+      out: StringBuffer(),
+      err: missingErr,
+    );
+
+    check(missingCode).equals(1);
+    check(missingErr.toString()).contains('Missing generated file');
+    check(missingErr.toString()).contains('dart run build_cli');
+
+    await runBuildCli(
+      [],
+      workingDirectory: pkgDir.path,
+      out: StringBuffer(),
+      err: StringBuffer(),
+    );
+    final genFile = File(p.join(libDir.path, 'options.g.dart'));
+    genFile.writeAsStringSync('${genFile.readAsStringSync()}\n// stale edit\n');
+
+    final staleErr = StringBuffer();
+    final staleCode = await runBuildCli(
+      ['-c'],
+      workingDirectory: pkgDir.path,
+      out: StringBuffer(),
+      err: staleErr,
+    );
+
+    check(staleCode).equals(1);
+    check(staleErr.toString()).contains('is out of date');
+    check(staleErr.toString()).contains('dart run build_cli');
+  });
+
+  test('fails with clear error when part directive is missing', () async {
+    final pkgDir = createSamplePackage();
+    final libDir = Directory(p.join(pkgDir.path, 'lib'))..createSync();
+    File(p.join(libDir.path, 'missing_part.dart')).writeAsStringSync('''
+import 'package:build_cli_annotations/build_cli_annotations.dart';
+
+@CliOptions()
+class Options {
+  final bool flag;
+  Options({this.flag = false});
+}
+''');
+
+    final err = StringBuffer();
+    final code = await runBuildCli(
+      [],
+      workingDirectory: pkgDir.path,
+      out: StringBuffer(),
+      err: err,
+    );
+
+    check(code).equals(1);
+    check(err.toString()).contains("part 'missing_part.g.dart';");
+    check(
+      File(p.join(libDir.path, 'missing_part.g.dart')).existsSync(),
+    ).isFalse();
+  });
+
+  test(
+    'refuses to overwrite .g.dart containing another generator banner',
+    () async {
+      final pkgDir = createSamplePackage();
+      final libDir = Directory(p.join(pkgDir.path, 'lib'))..createSync();
+      File(p.join(libDir.path, 'combined.dart')).writeAsStringSync('''
+import 'package:build_cli_annotations/build_cli_annotations.dart';
+
+part 'combined.g.dart';
+
+@CliOptions()
+class CombinedOptions {
+  final String name;
+  CombinedOptions({this.name = 'a'});
+}
+''');
+
+      const existingCombinedContent = '''
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'combined.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Map<String, dynamic> _\$CombinedOptionsToJson() => {};
+''';
+      final genFile = File(p.join(libDir.path, 'combined.g.dart'))
+        ..writeAsStringSync(existingCombinedContent);
+
+      final err = StringBuffer();
+      final code = await runBuildCli(
+        [],
+        workingDirectory: pkgDir.path,
+        out: StringBuffer(),
+        err: err,
+      );
+
+      check(code).equals(1);
+      check(err.toString()).contains('JsonSerializableGenerator');
+      check(err.toString()).contains('build_runner');
+      check(genFile.readAsStringSync()).equals(existingCombinedContent);
+    },
+  );
+
+  test(
+    'generates for non-lib directories (bin/ and example/) and CWD without pubspec.yaml',
+    () async {
+      final pkgDir = createSamplePackage();
+      final binDir = Directory(p.join(pkgDir.path, 'bin'))..createSync();
+      final exampleDir = Directory(p.join(pkgDir.path, 'example'))
+        ..createSync();
+
+      File(p.join(binDir.path, 'server.dart')).writeAsStringSync('''
+import 'package:build_cli_annotations/build_cli_annotations.dart';
+
+part 'server.g.dart';
+
+enum LogLevel { info, debug }
+
+@CliOptions()
+class ServerOptions {
+  @CliOption(defaultsTo: LogLevel.info)
+  final LogLevel level;
+  ServerOptions({this.level = LogLevel.info});
+}
+''');
+
+      File(p.join(exampleDir.path, 'demo.dart')).writeAsStringSync('''
+import 'package:build_cli_annotations/build_cli_annotations.dart';
+
+part 'demo.g.dart';
+
+@CliOptions()
+class DemoOptions {
+  final int count;
+  DemoOptions({this.count = 1});
+}
+''');
+
+      // Run from inside bin/ (which has no pubspec.yaml) passing explicit paths.
+      final out = StringBuffer();
+      final err = StringBuffer();
+      final previousCurrent = Directory.current;
+      Directory.current = binDir;
+      late final int code;
+      try {
+        code = await runBuildCli(
+          ['server.dart', '../example/demo.dart'],
+          workingDirectory: binDir.path,
+          out: out,
+          err: err,
+        );
+      } finally {
+        Directory.current = previousCurrent;
+      }
+
+      check(code).equals(0);
+      check(err.toString()).isEmpty();
+      check(File(p.join(binDir.path, 'server.g.dart')).existsSync()).isTrue();
+      check(File(p.join(exampleDir.path, 'demo.g.dart')).existsSync()).isTrue();
+    },
+  );
+
+  test('bin/build_cli.dart executable runs end-to-end', () async {
+    final result = await Process.run(Platform.resolvedExecutable, [
+      'bin/build_cli.dart',
+      '--help',
+    ]);
+
+    check(result.exitCode).equals(0);
+    check(result.stdout as String).contains('Usage: build_cli');
+  });
+}
