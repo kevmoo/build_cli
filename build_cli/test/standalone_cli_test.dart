@@ -10,6 +10,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:build_cli/src/standalone.dart';
+import 'package:build_cli/src/util.dart';
 import 'package:build_cli/src/version.dart';
 import 'package:checks/checks.dart';
 import 'package:path/path.dart' as p;
@@ -71,6 +72,13 @@ environment:
     final pubspec =
         loadYaml(File('pubspec.yaml').readAsStringSync()) as YamlMap;
     check(pubspec['version']).equals(packageVersion);
+  });
+
+  test('baseReleaseVersion strips pre-release and build metadata', () {
+    check(baseReleaseVersion('2.3.0')).equals('2.3.0');
+    check(baseReleaseVersion('2.3.0-wip')).equals('2.3.0');
+    check(baseReleaseVersion('2.3.0+1')).equals('2.3.0');
+    check(baseReleaseVersion('2.3.0-dev.1+build.2')).equals('2.3.0');
   });
 
   test('--help prints usage and exits 0', () async {
