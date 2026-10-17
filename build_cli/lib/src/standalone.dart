@@ -65,16 +65,16 @@ Future<int> runBuildCli(
     sdkPath: cli_util.sdkPath,
   );
 
-  final packageStates = <String, _PackageState>{};
+  final packageValidity = <String, bool>{};
   var allSucceeded = true;
 
   for (final filePath in candidateFiles) {
     final pkgRoot = _findPackageRoot(filePath);
-    final state = packageStates.putIfAbsent(
+    final isValid = packageValidity.putIfAbsent(
       pkgRoot,
-      () => _loadPackageState(pkgRoot, stderrSink),
+      () => _validatePackageRoot(pkgRoot, stderrSink),
     );
-    if (!state.isValid) {
+    if (!isValid) {
       allSucceeded = false;
       continue;
     }
@@ -82,7 +82,7 @@ Future<int> runBuildCli(
     final ok = await _processCandidateFile(
       collection,
       filePath,
-      state: state,
+      pkgRoot: pkgRoot,
       checkOnly: parsed.checkOnly,
       workingDir: rootDir,
       out: stdoutSink,
@@ -230,83 +230,33 @@ String _findPackageRoot(String filePath) {
   }
 }
 
-class _PackageState {
-  final String rootDir;
-  final bool isValid;
-  final List<String> ignoreForFile;
-
-  const _PackageState({
-    required this.rootDir,
-    required this.isValid,
-    required this.ignoreForFile,
-  });
-}
-
-_PackageState _loadPackageState(String pkgRoot, StringSink err) {
+bool _validatePackageRoot(String pkgRoot, StringSink err) {
   final pubspecFile = File(p.join(pkgRoot, 'pubspec.yaml'));
-  if (pubspecFile.existsSync()) {
-    final content = pubspecFile.readAsStringSync();
-    final yaml = loadYaml(content, sourceUrl: pubspecFile.uri);
-    final pkgName = (yaml is YamlMap && yaml['name'] is String)
-        ? yaml['name'] as String
-        : p.basename(pkgRoot);
-    try {
-      validatePubspecSdkConstraint(
-        content,
-        packageName: pkgName,
-        sourceUrl: pubspecFile.uri,
-      );
-    } on InvalidGenerationSourceError catch (e) {
-      err.writeln(e.message);
-      return _PackageState(
-        rootDir: pkgRoot,
-        isValid: false,
-        ignoreForFile: const [],
-      );
-    }
+  if (!pubspecFile.existsSync()) {
+    return true;
   }
-
-  return _PackageState(
-    rootDir: pkgRoot,
-    isValid: true,
-    ignoreForFile: _readIgnoreForFileFromBuildYaml(pkgRoot),
-  );
-}
-
-List<String> _readIgnoreForFileFromBuildYaml(String pkgRoot) {
-  final buildFile = File(p.join(pkgRoot, 'build.yaml'));
-  if (!buildFile.existsSync()) {
-    return const [];
-  }
+  final content = pubspecFile.readAsStringSync();
+  final yaml = loadYaml(content, sourceUrl: pubspecFile.uri);
+  final pkgName = (yaml is YamlMap && yaml['name'] is String)
+      ? yaml['name'] as String
+      : p.basename(pkgRoot);
   try {
-    final yaml = loadYaml(buildFile.readAsStringSync());
-    if (yaml is! YamlMap) return const [];
-    final targets = yaml['targets'];
-    if (targets is! YamlMap) return const [];
-    final defaultTarget = targets[r'$default'];
-    if (defaultTarget is! YamlMap) return const [];
-    final builders = defaultTarget['builders'];
-    if (builders is! YamlMap) return const [];
-    final combining =
-        builders['source_gen|combining_builder'] ??
-        builders['source_gen:combining_builder'];
-    if (combining is! YamlMap) return const [];
-    final options = combining['options'];
-    if (options is! YamlMap) return const [];
-    final ignores = options['ignore_for_file'];
-    if (ignores is YamlList) {
-      return ignores.whereType<String>().toList();
-    }
-  } on Object {
-    // Ignore malformed build.yaml files in standalone mode.
+    validatePubspecSdkConstraint(
+      content,
+      packageName: pkgName,
+      sourceUrl: pubspecFile.uri,
+    );
+    return true;
+  } on InvalidGenerationSourceError catch (e) {
+    err.writeln(e.message);
+    return false;
   }
-  return const [];
 }
 
 Future<bool> _processCandidateFile(
   AnalysisContextCollection collection,
   String filePath, {
-  required _PackageState state,
+  required String pkgRoot,
   required bool checkOnly,
   required String workingDir,
   required StringSink out,
@@ -373,8 +323,7 @@ Future<bool> _processCandidateFile(
     resolved.libraryElement,
     p.basename(filePath),
     generatedBody,
-    state.ignoreForFile,
-    _commandTargetSuffix(filePath, state.rootDir),
+    _commandTargetSuffix(filePath, pkgRoot),
   );
 
   return _writeOrCheckOutput(
@@ -447,7 +396,6 @@ String _formatGeneratedPart(
   LibraryElement library,
   String sourceFileName,
   String generatedBody,
-  List<String> ignoreForFile,
   String targetSuffix,
 ) {
   final partChunk =
@@ -477,13 +425,10 @@ $generatedBody
   if (library.languageVersion.override case final override?) {
     buffer.writeln('// @dart=${override.major}.${override.minor}');
   }
-  buffer.writeln();
-  if (ignoreForFile.isNotEmpty) {
-    buffer
-      ..writeln('// ignore_for_file: ${ignoreForFile.join(', ')}')
-      ..writeln();
-  }
   buffer
+    ..writeln()
+    ..writeln('// ignore_for_file: type=lint')
+    ..writeln()
     ..writeln("part of '$sourceFileName';")
     ..writeln()
     ..writeln(formattedChunk);
