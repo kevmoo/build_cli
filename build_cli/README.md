@@ -50,6 +50,17 @@ void main(List<String> args) {
 
 ## Setup
 
+`build_cli` runs either as a standalone CLI or as a `build_runner` builder.
+
+| Feature                | Standalone CLI (`dart run build_cli@`)                                                          | With `build_runner`                                                                                             |
+| :--------------------- | :---------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------- |
+| **Best when**          | `build_cli` is your only code generator (or other generators run standalone in separate files). | You combine multiple generators in one `.g.dart` file (like `json_serializable`) or already use `build_runner`. |
+| **`dev_dependencies`** | None required.                                                                                  | `build_cli` and `build_runner` (plus `build_verify` for tests).                                                 |
+| **Configuration**      | CLI arguments (`dart run build_cli@ [paths...]`); ignores `build.yaml`.                         | `build.yaml` (`generate_for`, `source_gen\|combining_builder` options).                                         |
+| **Lint ignores**       | Emits `// ignore_for_file: type=lint` automatically.                                            | Configured via `source_gen\|combining_builder` `ignore_for_file` in `build.yaml`.                               |
+| **Generated header**   | Includes `dart run build_cli@<version>` rerun comment.                                          | Standard `// GENERATED CODE - DO NOT MODIFY BY HAND` header.                                                    |
+| **CI verification**    | `dart run build_cli@<version> --check`                                                          | `package:build_verify` (`expectBuildClean()`)                                                                   |
+
 ### Standalone CLI (Dart 3.12+)
 
 Add only `build_cli_annotations` to `pubspec.yaml`:
@@ -70,6 +81,28 @@ Pass `--check` (`-c`) in CI to verify that all generated `.g.dart` files match
 expected output without modifying disk. Pass optional file or directory paths
 (`dart run build_cli@ bin/main.dart`) to limit which files are scanned (defaults
 to `lib`, `bin`, `example`, `test`, and `tool`).
+
+You can also enforce `--check` inside `dart test` without
+`package:build_verify`:
+
+```dart
+@Tags(['presubmit-only'])
+@Timeout.factor(2)
+library;
+
+import 'dart:io';
+import 'package:test/test.dart';
+
+void main() {
+  test('ensure build_cli output is up to date', () async {
+    final result = await Process.run(
+      Platform.resolvedExecutable,
+      ['run', 'build_cli@2.3.1', '--check'],
+    );
+    expect(result.exitCode, 0, reason: '${result.stdout}\n${result.stderr}');
+  });
+}
+```
 
 ### With `build_runner`
 

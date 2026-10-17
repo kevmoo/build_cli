@@ -1,3 +1,8 @@
+## 2.3.1
+
+- Emit `// ignore_for_file: type=lint` in standalone `build_cli` output and stop
+  reading `build.yaml`.
+
 ## 2.3.0
 
 - Add standalone `build_cli` CLI (`dart run build_cli@` and `--check`) to
