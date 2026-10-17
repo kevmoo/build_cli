@@ -7,13 +7,21 @@ import 'package:source_helper/source_helper.dart';
 
 import 'to_share.dart';
 
-const boolChecker = TypeChecker.fromUrl('dart:core#bool');
-const listChecker = TypeChecker.fromUrl('dart:core#List');
-const numChecker = TypeChecker.fromUrl('dart:core#num');
-const stringChecker = TypeChecker.fromUrl('dart:core#String');
+const boolChecker = TypeChecker.typeNamed(bool, inPackage: 'core', inSdk: true);
+const listChecker = TypeChecker.typeNamed(List, inPackage: 'core', inSdk: true);
+const numChecker = TypeChecker.typeNamed(num, inPackage: 'core', inSdk: true);
+const stringChecker = TypeChecker.typeNamed(
+  String,
+  inPackage: 'core',
+  inSdk: true,
+);
 const _argResultsChecker = TypeChecker.typeNamed(ArgResults);
 const _cliOptionChecker = TypeChecker.typeNamed(CliOption);
-const _iterableChecker = TypeChecker.fromUrl('dart:core#Iterable');
+const _iterableChecker = TypeChecker.typeNamed(
+  Iterable,
+  inPackage: 'core',
+  inSdk: true,
+);
 
 class ConverterData {
   final String name;
@@ -84,36 +92,39 @@ class ArgInfo {
     if (option == null) {
       assert(specialTypes.keys.contains(type));
     } else {
-      if (type == ArgType.flag) {
-        if (option.defaultsTo != null && option.defaultsTo is! bool) {
-          throwUnsupported(
-            element,
-            'The value for `defaultsTo` must be assignable to `bool`.',
-          );
-        }
-        if (option.allowed != null) {
-          throwUnsupported(element, '`allowed` is not supported for flags.');
-        }
-        if (option.allowedHelp != null) {
-          throwUnsupported(
-            element,
-            '`allowedHelp` is not supported for flags.',
-          );
-        }
-        if (option.valueHelp != null) {
-          throwUnsupported(element, '`valueHelp` is not supported for flags.');
-        }
-      } else {
-        if (option.negatable != null) {
-          throwUnsupported(
-            element,
-            '`negatable` is only valid for flags – type `bool`.',
-          );
-        }
-      }
+      _validateFlagOptionConstraints(element, type, option);
     }
 
     return _argInfoCache[element] = ArgInfo(type, option, element);
+  }
+}
+
+void _validateFlagOptionConstraints(
+  FieldElement element,
+  ArgType type,
+  CliOption option,
+) {
+  if (type == ArgType.flag) {
+    if (option.defaultsTo != null && option.defaultsTo is! bool) {
+      throwUnsupported(
+        element,
+        'The value for `defaultsTo` must be assignable to `bool`.',
+      );
+    }
+    if (option.allowed != null) {
+      throwUnsupported(element, '`allowed` is not supported for flags.');
+    }
+    if (option.allowedHelp != null) {
+      throwUnsupported(element, '`allowedHelp` is not supported for flags.');
+    }
+    if (option.valueHelp != null) {
+      throwUnsupported(element, '`valueHelp` is not supported for flags.');
+    }
+  } else if (option.negatable != null) {
+    throwUnsupported(
+      element,
+      '`negatable` is only valid for flags – type `bool`.',
+    );
   }
 }
 
@@ -164,78 +175,20 @@ CliOption? _getOptions(FieldElement element) {
       : annotation.read('defaultsTo');
 
   if (element.type.isEnum) {
-    final interfaceType = element.type as InterfaceType;
-
-    final targetType = element.type.toStringNonNullable();
-    final enumNames = interfaceType.getters
-        .where(
-          (p) =>
-              // An enum's values are non-nullable. For example, If the enum
-              // field's type is `BuildTool?` it's accessors will be the
-              // non-nullable type, `BuildTool`.
-              // TODO: find a better way to compare the underlying type
-              p.returnType.toStringNonNullable() == targetType,
-        )
-        .map((p) => p.name!)
-        .toList();
-
-    if (defaultsToReader != null && !defaultsToReader.isNull) {
-      final objectValue = defaultsToReader.objectValue;
-      if (objectValue.type != element.type) {
-        throwUnsupported(
-          element,
-          'The type provided to defaultsTo is '
-          'different than the field type. Check that the num types are the '
-          'same, or try making the field type non-nullable.',
-        );
-      }
-
-      defaultsTo = _enumValueForDartObject<String>(
-        objectValue,
-        enumNames,
-        (v) => v,
-      );
-      defaultsTo = (defaultsTo as String).kebab;
-    }
-
-    allowedValues = enumNames.map((e) => e.kebab).toList();
+    final enumValues = _extractEnumValues(element, defaultsToReader);
+    allowedValues = enumValues.allowedValues;
+    defaultsTo = enumValues.defaultsTo;
   }
 
   if (annotation.isNull) {
     return CliOption(allowed: allowedValues);
   }
 
-  Map<Object, String>? allowedHelp;
-  final allowedHelpReader = annotation.read('allowedHelp');
-  if (!allowedHelpReader.isNull) {
-    if (!allowedHelpReader.isMap) {
-      throwUnsupported(element, 'What are you doing?');
-    }
-
-    allowedHelp = <Object, String>{};
-    for (var entry in allowedHelpReader.mapValue.entries) {
-      final mapKeyReader = ConstantReader(entry.key);
-      if (mapKeyReader.isString ||
-          mapKeyReader.isInt ||
-          mapKeyReader.isDouble) {
-        allowedHelp[mapKeyReader.literalValue!] = entry.value!.toStringValue()!;
-        continue;
-      }
-
-      if (entry.key!.type!.isEnum) {
-        assert(allowedValues != null);
-        final stringValue = _enumValueForDartObject<String>(
-          entry.key!,
-          allowedValues!.cast<String>(),
-          (v) => v,
-        );
-        allowedHelp[stringValue] = entry.value!.toStringValue()!;
-        continue;
-      }
-
-      throwUnsupported(element, 'I do not get it! - ${entry.key!.type}');
-    }
-  }
+  final allowedHelp = _parseAllowedHelp(
+    element,
+    annotation.read('allowedHelp'),
+    allowedValues,
+  );
 
   final allowedReader = annotation.read('allowed');
   if (!allowedReader.isNull) {
@@ -244,24 +197,136 @@ CliOption? _getOptions(FieldElement element) {
         .toList();
   }
 
-  if (!defaultsToReader!.isNull) {
-    if (element.type.isEnum) {
-      // Already taken care of above, right?
-      assert(defaultsTo != null);
-    } else if (defaultsToReader.isString ||
-        defaultsToReader.isBool ||
-        defaultsToReader.isInt ||
-        defaultsToReader.isDouble) {
-      defaultsTo = defaultsToReader.literalValue;
-    } else {
-      throwUnsupported(
-        element,
-        'Could not process the default value '
-        '`${defaultsToReader.literalValue}`.',
-      );
-    }
+  defaultsTo = _resolveDefaultsTo(element, defaultsToReader!, defaultsTo);
+
+  _validateAllowedValues(element, allowedValues, defaultsTo, allowedHelp);
+
+  final option = CliOption(
+    abbr: annotation.read('abbr').literalValue as String?,
+    allowed: allowedValues,
+    allowedHelp: allowedHelp,
+    defaultsTo: defaultsTo,
+    help: annotation.read('help').literalValue as String?,
+    hide: annotation.read('hide').literalValue as bool?,
+    name: annotation.read('name').literalValue as String?,
+    negatable: annotation.read('negatable').literalValue as bool?,
+    provideDefaultToOverride:
+        annotation.read('provideDefaultToOverride').literalValue as bool? ??
+        false,
+    valueHelp: annotation.read('valueHelp').literalValue as String?,
+  );
+
+  final convertData = _parseConvertData(element, annotation.read('convert'));
+  if (convertData != null) {
+    _convertName[option] = convertData;
   }
 
+  return option;
+}
+
+({List<Object> allowedValues, Object? defaultsTo}) _extractEnumValues(
+  FieldElement element,
+  ConstantReader? defaultsToReader,
+) {
+  final interfaceType = element.type as InterfaceType;
+  final targetType = element.type.toStringNonNullable();
+  final enumNames = interfaceType.getters
+      .where((p) => p.returnType.toStringNonNullable() == targetType)
+      .map((p) => p.name!)
+      .toList();
+
+  Object? defaultsTo;
+  if (defaultsToReader != null && !defaultsToReader.isNull) {
+    final objectValue = defaultsToReader.objectValue;
+    if (objectValue.type != element.type) {
+      throwUnsupported(
+        element,
+        'The type provided to defaultsTo is '
+        'different than the field type. Check that the num types are the '
+        'same, or try making the field type non-nullable.',
+      );
+    }
+
+    final enumVal = _enumValueForDartObject<String>(
+      objectValue,
+      enumNames,
+      (v) => v,
+    );
+    defaultsTo = enumVal.kebab;
+  }
+
+  return (
+    allowedValues: enumNames.map((e) => e.kebab).toList(),
+    defaultsTo: defaultsTo,
+  );
+}
+
+Map<Object, String>? _parseAllowedHelp(
+  FieldElement element,
+  ConstantReader allowedHelpReader,
+  List<Object>? allowedValues,
+) {
+  if (allowedHelpReader.isNull) {
+    return null;
+  }
+  if (!allowedHelpReader.isMap) {
+    throwUnsupported(element, 'What are you doing?');
+  }
+
+  final allowedHelp = <Object, String>{};
+  for (var entry in allowedHelpReader.mapValue.entries) {
+    final mapKeyReader = ConstantReader(entry.key);
+    if (mapKeyReader.isString || mapKeyReader.isInt || mapKeyReader.isDouble) {
+      allowedHelp[mapKeyReader.literalValue!] = entry.value!.toStringValue()!;
+      continue;
+    }
+
+    if (entry.key!.type!.isEnum) {
+      assert(allowedValues != null);
+      final stringValue = _enumValueForDartObject<String>(
+        entry.key!,
+        allowedValues!.cast<String>(),
+        (v) => v,
+      );
+      allowedHelp[stringValue] = entry.value!.toStringValue()!;
+      continue;
+    }
+
+    throwUnsupported(element, 'I do not get it! - ${entry.key!.type}');
+  }
+  return allowedHelp;
+}
+
+Object? _resolveDefaultsTo(
+  FieldElement element,
+  ConstantReader defaultsToReader,
+  Object? currentDefault,
+) {
+  if (defaultsToReader.isNull) {
+    return currentDefault;
+  }
+  if (element.type.isEnum) {
+    assert(currentDefault != null);
+    return currentDefault;
+  }
+  if (defaultsToReader.isString ||
+      defaultsToReader.isBool ||
+      defaultsToReader.isInt ||
+      defaultsToReader.isDouble) {
+    return defaultsToReader.literalValue;
+  }
+  throwUnsupported(
+    element,
+    'Could not process the default value `${defaultsToReader.literalValue}`.',
+  );
+}
+
+void _validateAllowedValues(
+  FieldElement element,
+  List<Object>? allowedValues,
+  Object? defaultsTo,
+  Map<Object, String>? allowedHelp,
+) {
   if (allowedValues != null &&
       defaultsTo != null &&
       !allowedValues.contains(defaultsTo)) {
@@ -283,66 +348,54 @@ CliOption? _getOptions(FieldElement element) {
       );
     }
   }
+}
 
-  final option = CliOption(
-    abbr: annotation.read('abbr').literalValue as String?,
-    allowed: allowedValues,
-    allowedHelp: allowedHelp,
-    defaultsTo: defaultsTo,
-    help: annotation.read('help').literalValue as String?,
-    hide: annotation.read('hide').literalValue as bool?,
-    name: annotation.read('name').literalValue as String?,
-    negatable: annotation.read('negatable').literalValue as bool?,
-    provideDefaultToOverride:
-        annotation.read('provideDefaultToOverride').literalValue as bool? ??
-        false,
-    valueHelp: annotation.read('valueHelp').literalValue as String?,
-  );
+ConverterData? _parseConvertData(
+  FieldElement element,
+  ConstantReader convertReader,
+) {
+  if (convertReader.isNull) {
+    return null;
+  }
+  final functionElement = convertReader.objectValue.toFunctionValue()!;
 
-  final convertReader = annotation.read('convert');
-  if (!convertReader.isNull) {
-    final functionElement = convertReader.objectValue.toFunctionValue()!;
-
-    if (functionElement is MethodElement) {
-      throwUnsupported(
-        element,
-        'The function provided for `convert` must be top-level.'
-        ' Static class methods (like `${functionElement.name}`) are not '
-        'supported.',
-      );
-    }
-
-    final formalParams = functionElement.formalParameters;
-
-    if (formalParams.isEmpty ||
-        formalParams.first.isNamed ||
-        formalParams.where((pe) => !pe.isOptional).length > 1 ||
-        !element.library.typeProvider.stringType.isAssignableTo(
-          formalParams.first.type,
-        )) {
-      throwUnsupported(
-        element,
-        'The convert function `${functionElement.name}` must have one '
-        'positional parameter of type `String`.',
-      );
-    }
-
-    if (!functionElement.returnType.isAssignableTo(element.type)) {
-      final typeString = functionElement.returnType.toStringNonNullable();
-      throwUnsupported(
-        element,
-        'The convert function `${functionElement.name}` return type '
-        '`$typeString` is not compatible with the field '
-        'type `${element.type.toStringNonNullable()}`.',
-      );
-    }
-    _convertName[option] = ConverterData(
-      functionElement.name!,
-      formalParams.first.type.isNullableType,
+  if (functionElement is MethodElement) {
+    throwUnsupported(
+      element,
+      'The function provided for `convert` must be top-level.'
+      ' Static class methods (like `${functionElement.name}`) are not '
+      'supported.',
     );
   }
 
-  return option;
+  final formalParams = functionElement.formalParameters;
+
+  if (formalParams.isEmpty ||
+      formalParams.first.isNamed ||
+      formalParams.where((pe) => !pe.isOptional).length > 1 ||
+      !element.library.typeProvider.stringType.isAssignableTo(
+        formalParams.first.type,
+      )) {
+    throwUnsupported(
+      element,
+      'The convert function `${functionElement.name}` must have one '
+      'positional parameter of type `String`.',
+    );
+  }
+
+  if (!functionElement.returnType.isAssignableTo(element.type)) {
+    final typeString = functionElement.returnType.toStringNonNullable();
+    throwUnsupported(
+      element,
+      'The convert function `${functionElement.name}` return type '
+      '`$typeString` is not compatible with the field '
+      'type `${element.type.toStringNonNullable()}`.',
+    );
+  }
+  return ConverterData(
+    functionElement.name!,
+    formalParams.first.type.isNullableType,
+  );
 }
 
 T _enumValueForDartObject<T>(

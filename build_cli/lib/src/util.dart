@@ -7,6 +7,9 @@ import 'package:yaml/yaml.dart';
 
 final _lowestSdkSupported = Version.parse('2.0.0');
 
+String baseReleaseVersion(String version) =>
+    version.split(RegExp(r'[-+]')).first;
+
 Future<void> validateSdkConstraint(BuildStep buildStep) async {
   if (buildStep.toString().contains('_MockBuildStep')) {
     // This is a throw-away class from `source_gen_test` – ignore!
@@ -15,7 +18,20 @@ Future<void> validateSdkConstraint(BuildStep buildStep) async {
   final uri = Uri.parse('asset:${buildStep.inputId.package}/pubspec.yaml');
   final thing = await buildStep.readAsString(AssetId.resolve(uri));
 
-  final pubSpecYaml = loadYaml(thing, sourceUrl: uri) as YamlMap;
+  validatePubspecSdkConstraint(
+    thing,
+    packageName: buildStep.inputId.package,
+    sourceUrl: uri,
+  );
+}
+
+void validatePubspecSdkConstraint(
+  String pubspecContent, {
+  required String packageName,
+  Uri? sourceUrl,
+}) {
+  final pubSpecYaml = loadYaml(pubspecContent, sourceUrl: sourceUrl);
+  if (pubSpecYaml is! YamlMap) return;
 
   final environment = pubSpecYaml['environment'];
 
@@ -26,7 +42,7 @@ Future<void> validateSdkConstraint(BuildStep buildStep) async {
 
       if (constraint.allowsAny(VersionRange(max: _lowestSdkSupported))) {
         throw InvalidGenerationSourceError(
-          'The SDK constraint on `package:${buildStep.inputId.package}` is '
+          'The SDK constraint on `package:$packageName` is '
           'not valid: `$constraint`. '
           'The minimum supported Dart SDK must be `>=$_lowestSdkSupported`.',
         );

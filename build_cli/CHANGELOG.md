@@ -1,5 +1,7 @@
-## 2.2.14-wip
+## 2.3.0
 
+- Add standalone `build_cli` CLI (`dart run build_cli@` and `--check`) to
+  generate `.g.dart` files without `build_runner`.
 - Required `sdk: ^3.12.0`
 - Required `analyzer: ">=13.0.0 <15.0.0"`
 
