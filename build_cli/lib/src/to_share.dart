@@ -4,8 +4,6 @@
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:analyzer/src/dart/element/inheritance_manager3.dart' // ignore: implementation_imports
-    show InheritanceManager3;
 import 'package:source_gen/source_gen.dart';
 
 Never throwBugFound(FieldElement element) => throwUnsupported(
@@ -34,9 +32,7 @@ Set<FieldElement> createSortedFieldSet(InstanceElement element) {
       .cast<FieldElement>()
       .toList();
 
-  final manager = InheritanceManager3();
-
-  for (var v in manager.getInheritedMap(element as InterfaceElement).values) {
+  for (var v in (element as InterfaceElement).inheritedMembers.values) {
     assert(v is! FieldElement);
     if (dartCoreObjectChecker.isExactly(v.enclosingElement!)) {
       continue;
