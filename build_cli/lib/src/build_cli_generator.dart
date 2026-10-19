@@ -77,7 +77,10 @@ Iterable<String> _generateForAnnotatedElement(
 
   // Get all of the fields that need to be assigned
   // TODO: We only care about constructor things + writable fields, right?
-  final fieldsList = createSortedFieldSet(element);
+  final fieldsList = createSortedFieldSet(
+    element,
+    keepObjectMemberOverride: (_) => true,
+  ).toSet();
 
   // Explicitly using `LinkedHashMap` – we want these ordered.
   final fields = LinkedHashMap<String, FieldElement>.fromIterable(
@@ -323,7 +326,7 @@ String _deserializeMultiOption(
   final args = targetType.typeArgumentsOf(listChecker)!;
   assert(args.length == 1);
 
-  if (dartCoreObjectChecker.isExactlyType(args.single)) {
+  if (args.single.isDartCoreObject) {
     return '$argAccess as List<Object>';
   }
   if (args.single is DynamicType) {

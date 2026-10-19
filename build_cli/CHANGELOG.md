@@ -5,6 +5,12 @@
   compile.
 - Only enum constants are used for an enum option's `allowed` values; static
   getters on the enum returning the enum type are no longer included.
+- Inherit `@CliOption` annotations from overridden superclass fields and
+  getters.
+- Ignore inherited setter-only properties and abstract interface getters when
+  collecting option fields.
+- Sort primary constructor declaring parameters in declaration order.
+- Require `source_helper: ^1.4.0`.
 
 ## 2.3.1
 

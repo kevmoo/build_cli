@@ -63,16 +63,14 @@ Future<void> main() async {
   });
 
   group('inherited setter-only property', () {
-    // Pins current behavior: the inherited setter-only property is collected
-    // as a field and then `ArgInfo.fromField` dereferences its missing getter,
-    // so the generator crashes with a `TypeError` instead of reporting an
-    // `InvalidGenerationSourceError`.
-    test('InheritsSetterOnly crashes with TypeError', () {
-      expect(
-        () =>
-            generateForElement(generator, libraryReader, 'InheritsSetterOnly'),
-        throwsA(isA<TypeError>()),
+    test('InheritsSetterOnly ignores inherited setter-only property', () async {
+      final output = await generateForElement(
+        generator,
+        libraryReader,
+        'InheritsSetterOnly',
       );
+      expect(output, contains("..own = result['own'] as String?;"));
+      expect(output, isNot(contains('setter-only')));
     });
   });
 
@@ -204,7 +202,7 @@ PrimaryConstructorLargeOptions _$parsePrimaryConstructorLargeOptionsResult(
 
 ArgParser _$populatePrimaryConstructorLargeOptionsParser(ArgParser parser) =>
     parser
-      ..addFlag('param14')
+      ..addFlag('param01')
       ..addFlag('param02')
       ..addFlag('param03')
       ..addFlag('param04')
@@ -217,7 +215,7 @@ ArgParser _$populatePrimaryConstructorLargeOptionsParser(ArgParser parser) =>
       ..addFlag('param11')
       ..addFlag('param12')
       ..addFlag('param13')
-      ..addFlag('param01')
+      ..addFlag('param14')
       ..addFlag('param15')
       ..addFlag('param16')
       ..addFlag('param17')
@@ -231,7 +229,7 @@ ArgParser _$populatePrimaryConstructorLargeOptionsParser(ArgParser parser) =>
       ..addFlag('param25')
       ..addFlag('param26')
       ..addFlag('param27')
-      ..addFlag('param40')
+      ..addFlag('param28')
       ..addFlag('param29')
       ..addFlag('param30')
       ..addFlag('param31')
@@ -243,7 +241,7 @@ ArgParser _$populatePrimaryConstructorLargeOptionsParser(ArgParser parser) =>
       ..addFlag('param37')
       ..addFlag('param38')
       ..addFlag('param39')
-      ..addFlag('param28')
+      ..addFlag('param40')
       ..addOption('body-a')
       ..addOption('body-b');
 
