@@ -198,7 +198,7 @@ _resolveConstructorParams(
 
   for (var arg in ctor.formalParameters) {
     if (!availableConstructorParameters.contains(arg.name)) {
-      if (arg.isPositional) {
+      if (arg.isRequired || arg.isPositional) {
         var msg =
             'Cannot populate the required constructor '
             'argument: ${arg.displayName}.';

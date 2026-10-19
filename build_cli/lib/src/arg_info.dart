@@ -5,6 +5,7 @@ import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:source_helper/source_helper.dart';
 
+import 'enum_helpers.dart';
 import 'to_share.dart';
 
 const boolChecker = TypeChecker.typeNamed(bool, inPackage: 'core', inSdk: true);
@@ -228,12 +229,7 @@ CliOption? _getOptions(FieldElement element) {
   FieldElement element,
   ConstantReader? defaultsToReader,
 ) {
-  final interfaceType = element.type as InterfaceType;
-  final targetType = element.type.toStringNonNullable();
-  final enumNames = interfaceType.getters
-      .where((p) => p.returnType.toStringNonNullable() == targetType)
-      .map((p) => p.name!)
-      .toList();
+  final enumNames = enumConstants(element.type).map((e) => e.name!).toList();
 
   Object? defaultsTo;
   if (defaultsToReader != null && !defaultsToReader.isNull) {
@@ -398,6 +394,10 @@ ConverterData? _parseConvertData(
   );
 }
 
+/// Returns the entry of [items] for the enum value [source].
+///
+/// [items] must be in enum constant declaration order, so that an enum
+/// value's `index` selects its entry.
 T _enumValueForDartObject<T>(
   DartObject source,
   List<T> items,

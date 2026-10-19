@@ -3,12 +3,10 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:source_helper/source_helper.dart';
 
 String enumValueMapFromType(DartType targetType) {
-  final enumMap = _enumFieldsMap(targetType);
-
-  final items = enumMap.entries.map(
+  final items = enumConstants(targetType).map(
     (e) =>
-        '  ${targetType.element!.name}.${e.key.name}: '
-        '${escapeDartString(e.value.kebab)}',
+        '  ${targetType.element!.name}.${e.name}: '
+        '${escapeDartString(e.name!.kebab)}',
   );
 
   return 'const ${enumConstMapName(targetType)} = '
@@ -18,10 +16,10 @@ String enumValueMapFromType(DartType targetType) {
 String enumConstMapName(DartType targetType) =>
     '_\$${targetType.element!.name}EnumMapBuildCli';
 
-Map<FieldElement, String> _enumFieldsMap(DartType targetType) {
-  final element = targetType.element as EnumElement;
-  return {for (final p in element.constants) p: p.name!};
-}
+/// The declared constants of the enum [targetType], in declaration (index)
+/// order.
+List<FieldElement> enumConstants(DartType targetType) =>
+    (targetType.element as EnumElement).constants;
 
 const enumValueHelperFunctionName = r'_$enumValueHelper';
 

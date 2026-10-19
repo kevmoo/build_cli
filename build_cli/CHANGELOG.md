@@ -1,5 +1,11 @@
 ## 2.3.2-wip
 
+- Throw a generation error when a constructor has a required named parameter
+  that no field can populate, instead of generating a call that does not
+  compile.
+- Only enum constants are used for an enum option's `allowed` values; static
+  getters on the enum returning the enum type are no longer included.
+
 ## 2.3.1
 
 - Emit `// ignore_for_file: type=lint` in standalone `build_cli` output and stop
