@@ -741,7 +741,7 @@ const _$EnumWithStaticGetterEnumMapBuildCli = <EnumWithStaticGetter, String>{
 ArgParser _$populateEnumStaticGetterParser(ArgParser parser) => parser
   ..addOption(
     'value',
-    allowed: ['one', 'two', 'fallback'],
+    allowed: ['one', 'two'],
   );
 
 final _$parserForEnumStaticGetter =
