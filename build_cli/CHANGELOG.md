@@ -1,5 +1,9 @@
 ## 2.3.2-wip
 
+- Throw a generation error when a constructor has a required named parameter
+  that no field can populate, instead of generating a call that does not
+  compile.
+
 ## 2.3.1
 
 - Emit `// ignore_for_file: type=lint` in standalone `build_cli` output and stop

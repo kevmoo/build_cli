@@ -683,24 +683,7 @@ class GenericOptions<T> {
   String? value;
 }
 
-@ShouldGenerate(r'''
-RequiredNamedWithoutField _$parseRequiredNamedWithoutFieldResult(
-        ArgResults result) =>
-    RequiredNamedWithoutField()..option = result['option'] as String?;
-
-ArgParser _$populateRequiredNamedWithoutFieldParser(ArgParser parser) => parser
-  ..addOption(
-    'option',
-  );
-
-final _$parserForRequiredNamedWithoutField =
-    _$populateRequiredNamedWithoutFieldParser(ArgParser());
-
-RequiredNamedWithoutField parseRequiredNamedWithoutField(List<String> args) {
-  final result = _$parserForRequiredNamedWithoutField.parse(args);
-  return _$parseRequiredNamedWithoutFieldResult(result);
-}
-''')
+@ShouldThrow('Cannot populate the required constructor argument: missing.')
 @CliOptions()
 class RequiredNamedWithoutField {
   String? option;
