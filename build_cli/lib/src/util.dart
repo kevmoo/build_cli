@@ -1,9 +1,25 @@
 import 'dart:async';
 
+import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart' show AssetId, BuildStep;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:yaml/yaml.dart';
+
+Never throwBugFound(FieldElement element) => throwUnsupported(
+  element,
+  "You've hit a bug in build_cli!",
+  todo:
+      'Please rerun your build with --verbose and file as issue '
+      'with the stace trace.',
+);
+
+Never throwUnsupported(FieldElement element, String message, {String? todo}) =>
+    throw InvalidGenerationSourceError(
+      'Could not handle field `${element.displayName}`. $message',
+      element: element,
+      todo: todo ?? '',
+    );
 
 final _lowestSdkSupported = Version.parse('2.0.0');
 

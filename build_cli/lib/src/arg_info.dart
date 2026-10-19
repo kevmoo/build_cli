@@ -5,7 +5,7 @@ import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:source_helper/source_helper.dart';
 
-import 'to_share.dart';
+import 'util.dart';
 
 const boolChecker = TypeChecker.typeNamed(bool, inPackage: 'core', inSdk: true);
 const listChecker = TypeChecker.typeNamed(List, inPackage: 'core', inSdk: true);

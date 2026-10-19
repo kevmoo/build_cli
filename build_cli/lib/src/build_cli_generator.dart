@@ -11,7 +11,6 @@ import 'package:source_helper/source_helper.dart';
 
 import 'arg_info.dart';
 import 'enum_helpers.dart';
-import 'to_share.dart';
 import 'util.dart';
 
 /// A `package:source_gen` `Generator` which generates CLI parsing code
@@ -104,7 +103,7 @@ ${element.name} $resultParserName(ArgResults result) =>''');
     FormalParameterElement? ctorParam,
   }) => _deserializeForField(fields[fieldName]!, ctorParam, fields);
 
-  final usedFields = writeConstructorInvocation(
+  final usedFields = _writeConstructorInvocation(
     buffer,
     element,
     fields.keys,
@@ -463,4 +462,104 @@ List<String> _defaultsToValuesFor(FieldElement element, ArgInfo info) {
   }
 
   return defaultsToValues;
+}
+
+/// Writes the invocation of the default constructor – `new Class(...)` for the
+/// type defined in [classElement] to the provided [buffer].
+///
+/// If a parameter is required to invoke the constructor,
+/// [availableConstructorParameters] is checked to see if it is available. If
+/// [availableConstructorParameters] does not contain the parameter name,
+/// an [InvalidGenerationSourceError] is thrown.
+///
+/// To improve the error details, [unavailableReasons] is checked for the
+/// unavailable constructor parameter. If the value is not `null`, it is
+/// included in the [InvalidGenerationSourceError] message.
+///
+/// [writeableFields] are also populated, but only if they have not already
+/// been defined by a constructor parameter with the same name.
+///
+/// The set of all constructor parameters and fields that are populated is
+/// returned.
+Set<String> _writeConstructorInvocation(
+  StringBuffer buffer,
+  ClassElement classElement,
+  Iterable<String> availableConstructorParameters,
+  Iterable<String> writeableFields,
+  Map<String, String> unavailableReasons,
+  String Function(String paramOrFieldName, {FormalParameterElement ctorParam})
+  deserializeForField,
+) {
+  final ctor = _selectConstructor(classElement);
+  final plan = planConstruction(ctor, availableConstructorParameters.toSet());
+  final unpopulated = plan.unmatched
+      .where((arg) => arg.isRequired || arg.isPositional)
+      .firstOrNull;
+  if (unpopulated != null) {
+    var msg =
+        'Cannot populate the required constructor '
+        'argument: ${unpopulated.displayName}.';
+    final additionalInfo = unavailableReasons[unpopulated.name];
+    if (additionalInfo != null) {
+      msg = '$msg $additionalInfo';
+    }
+    throw InvalidGenerationSourceError(msg, element: ctor);
+  }
+
+  final usedCtorParamsAndFields = {...plan.consumedNames};
+
+  // fields that aren't already set by the constructor and that aren't final
+  final remainingFieldsForInvocationBody = writeableFields.toSet().difference(
+    usedCtorParamsAndFields,
+  );
+
+  //
+  // Generate the static factory method
+  //
+  buffer
+    ..write('${ctor.qualifiedName}(')
+    ..writeAll(
+      plan.positional.map(
+        (e) => '${deserializeForField(e.name!, ctorParam: e)},',
+      ),
+    )
+    ..writeAll(
+      plan.named.map((paramElement) {
+        final value = deserializeForField(
+          paramElement.name!,
+          ctorParam: paramElement,
+        );
+        return '${paramElement.name}: $value,';
+      }),
+    )
+    ..write(')');
+  if (remainingFieldsForInvocationBody.isEmpty) {
+    buffer.writeln(';');
+  } else {
+    for (var field in remainingFieldsForInvocationBody) {
+      buffer
+        ..writeln()
+        ..write('      ..$field = ')
+        ..write(deserializeForField(field));
+      usedCtorParamsAndFields.add(field);
+    }
+    buffer.writeln(';');
+  }
+  buffer.writeln();
+
+  return usedCtorParamsAndFields;
+}
+
+ConstructorElement _selectConstructor(ClassElement classElement) {
+  try {
+    return constructorByName(classElement, '');
+  } on InvalidGenerationSourceError {
+    if (classElement.constructors.length == 1) {
+      return classElement.constructors.single;
+    }
+    throw InvalidGenerationSourceError(
+      'Could not pick a constructor to use.',
+      element: classElement,
+    );
+  }
 }
