@@ -571,22 +571,19 @@ abstract class InterfaceWithGetter {
   String? get fromInterface;
 }
 
-// Pins current behavior: the abstract interface getter is treated as an
-// inherited field, so `fromInterface` takes the (earlier) super slot even
-// though `ownFirst` is declared first in the class.
 @ShouldGenerate(r'''
 ImplementsInterfaceGetter _$parseImplementsInterfaceGetterResult(
         ArgResults result) =>
     ImplementsInterfaceGetter()
-      ..fromInterface = result['from-interface'] as String?
-      ..ownFirst = result['own-first'] as String?;
+      ..ownFirst = result['own-first'] as String?
+      ..fromInterface = result['from-interface'] as String?;
 
 ArgParser _$populateImplementsInterfaceGetterParser(ArgParser parser) => parser
   ..addOption(
-    'from-interface',
+    'own-first',
   )
   ..addOption(
-    'own-first',
+    'from-interface',
   );
 
 final _$parserForImplementsInterfaceGetter =
@@ -610,9 +607,6 @@ class SetterOnlySuper {
   set setterOnly(String? value) {}
 }
 
-// Current behavior is pinned in `build_cli_test.dart`: the inherited
-// setter-only property is collected as a field, then crashes the generator
-// with a `TypeError` (`element.getter!`) instead of a generation error.
 @CliOptions()
 class InheritsSetterOnly extends SetterOnlySuper {
   String? own;
@@ -623,23 +617,21 @@ class AnnotatedSuper {
   String? overridden;
 }
 
-// Pins current behavior: when a subclass overrides a super field, the
-// super-only `@CliOption` is lost (last-wins by name) while the option keeps
-// the super field's (earlier) position.
 @ShouldGenerate(r'''
 OverridesAnnotatedSuperField _$parseOverridesAnnotatedSuperFieldResult(
         ArgResults result) =>
     OverridesAnnotatedSuperField()
-      ..overridden = result['overridden'] as String?
-      ..own = result['own'] as String?;
+      ..own = result['own'] as String?
+      ..overridden = result['custom-name'] as String?;
 
 ArgParser _$populateOverridesAnnotatedSuperFieldParser(ArgParser parser) =>
     parser
       ..addOption(
-        'overridden',
+        'own',
       )
       ..addOption(
-        'own',
+        'custom-name',
+        help: 'Help from the super class.',
       );
 
 final _$parserForOverridesAnnotatedSuperField =

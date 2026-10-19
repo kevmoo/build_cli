@@ -5,8 +5,7 @@ import 'package:build_cli_annotations/build_cli_annotations.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:source_helper/source_helper.dart';
 
-import 'enum_helpers.dart';
-import 'to_share.dart';
+import 'util.dart';
 
 const boolChecker = TypeChecker.typeNamed(bool, inPackage: 'core', inSdk: true);
 const listChecker = TypeChecker.typeNamed(List, inPackage: 'core', inSdk: true);
@@ -158,9 +157,13 @@ ArgType _getArgType(FieldElement element, CliOption option) {
 }
 
 CliOption? _getOptions(FieldElement element) {
-  final obj =
+  final obj = switch (element.enclosingElement) {
+    final InterfaceElement enclosing when element.name != null =>
+      firstAnnotationOnProperty(enclosing, element.name!, _cliOptionChecker),
+    _ =>
       _cliOptionChecker.firstAnnotationOfExact(element) ??
-      _cliOptionChecker.firstAnnotationOfExact(element.getter!);
+          _cliOptionChecker.firstAnnotationOfExact(element.getter!),
+  };
 
   List<Object>? allowedValues;
   Object? defaultsTo;
@@ -229,7 +232,7 @@ CliOption? _getOptions(FieldElement element) {
   FieldElement element,
   ConstantReader? defaultsToReader,
 ) {
-  final enumNames = enumConstants(element.type).map((e) => e.name!).toList();
+  final enumNames = element.type.enumConstants.map((e) => e.name!).toList();
 
   Object? defaultsTo;
   if (defaultsToReader != null && !defaultsToReader.isNull) {
