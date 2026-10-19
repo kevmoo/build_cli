@@ -566,3 +566,210 @@ GenericSubClass parseGenericSubClass(List<String> args) {
 class GenericSubClass extends GenericSuperClass<int> {
   String? subclassField;
 }
+
+abstract class InterfaceWithGetter {
+  String? get fromInterface;
+}
+
+// Pins current behavior: the abstract interface getter is treated as an
+// inherited field, so `fromInterface` takes the (earlier) super slot even
+// though `ownFirst` is declared first in the class.
+@ShouldGenerate(r'''
+ImplementsInterfaceGetter _$parseImplementsInterfaceGetterResult(
+        ArgResults result) =>
+    ImplementsInterfaceGetter()
+      ..fromInterface = result['from-interface'] as String?
+      ..ownFirst = result['own-first'] as String?;
+
+ArgParser _$populateImplementsInterfaceGetterParser(ArgParser parser) => parser
+  ..addOption(
+    'from-interface',
+  )
+  ..addOption(
+    'own-first',
+  );
+
+final _$parserForImplementsInterfaceGetter =
+    _$populateImplementsInterfaceGetterParser(ArgParser());
+
+ImplementsInterfaceGetter parseImplementsInterfaceGetter(List<String> args) {
+  final result = _$parserForImplementsInterfaceGetter.parse(args);
+  return _$parseImplementsInterfaceGetterResult(result);
+}
+''')
+@CliOptions()
+class ImplementsInterfaceGetter implements InterfaceWithGetter {
+  String? ownFirst;
+
+  @override
+  String? fromInterface;
+}
+
+class SetterOnlySuper {
+  // ignore: avoid_setters_without_getters
+  set setterOnly(String? value) {}
+}
+
+// Current behavior is pinned in `build_cli_test.dart`: the inherited
+// setter-only property is collected as a field, then crashes the generator
+// with a `TypeError` (`element.getter!`) instead of a generation error.
+@CliOptions()
+class InheritsSetterOnly extends SetterOnlySuper {
+  String? own;
+}
+
+class AnnotatedSuper {
+  @CliOption(name: 'custom-name', help: 'Help from the super class.')
+  String? overridden;
+}
+
+// Pins current behavior: when a subclass overrides a super field, the
+// super-only `@CliOption` is lost (last-wins by name) while the option keeps
+// the super field's (earlier) position.
+@ShouldGenerate(r'''
+OverridesAnnotatedSuperField _$parseOverridesAnnotatedSuperFieldResult(
+        ArgResults result) =>
+    OverridesAnnotatedSuperField()
+      ..overridden = result['overridden'] as String?
+      ..own = result['own'] as String?;
+
+ArgParser _$populateOverridesAnnotatedSuperFieldParser(ArgParser parser) =>
+    parser
+      ..addOption(
+        'overridden',
+      )
+      ..addOption(
+        'own',
+      );
+
+final _$parserForOverridesAnnotatedSuperField =
+    _$populateOverridesAnnotatedSuperFieldParser(ArgParser());
+
+OverridesAnnotatedSuperField parseOverridesAnnotatedSuperField(
+    List<String> args) {
+  final result = _$parserForOverridesAnnotatedSuperField.parse(args);
+  return _$parseOverridesAnnotatedSuperFieldResult(result);
+}
+''')
+@CliOptions()
+class OverridesAnnotatedSuperField extends AnnotatedSuper {
+  String? own;
+
+  @override
+  // ignore: overridden_fields
+  String? overridden;
+}
+
+// Pins current behavior: no type arguments are emitted for an annotated
+// generic class.
+@ShouldGenerate(r'''
+GenericOptions _$parseGenericOptionsResult(ArgResults result) =>
+    GenericOptions()..value = result['value'] as String?;
+
+ArgParser _$populateGenericOptionsParser(ArgParser parser) => parser
+  ..addOption(
+    'value',
+  );
+
+final _$parserForGenericOptions = _$populateGenericOptionsParser(ArgParser());
+
+GenericOptions parseGenericOptions(List<String> args) {
+  final result = _$parserForGenericOptions.parse(args);
+  return _$parseGenericOptionsResult(result);
+}
+''')
+@CliOptions()
+class GenericOptions<T> {
+  String? value;
+}
+
+@ShouldGenerate(r'''
+RequiredNamedWithoutField _$parseRequiredNamedWithoutFieldResult(
+        ArgResults result) =>
+    RequiredNamedWithoutField()..option = result['option'] as String?;
+
+ArgParser _$populateRequiredNamedWithoutFieldParser(ArgParser parser) => parser
+  ..addOption(
+    'option',
+  );
+
+final _$parserForRequiredNamedWithoutField =
+    _$populateRequiredNamedWithoutFieldParser(ArgParser());
+
+RequiredNamedWithoutField parseRequiredNamedWithoutField(List<String> args) {
+  final result = _$parserForRequiredNamedWithoutField.parse(args);
+  return _$parseRequiredNamedWithoutFieldResult(result);
+}
+''')
+@CliOptions()
+class RequiredNamedWithoutField {
+  String? option;
+
+  // ignore: avoid_unused_constructor_parameters
+  RequiredNamedWithoutField({required String missing});
+}
+
+@ShouldThrow('Cannot populate the required constructor argument: missing.')
+@CliOptions()
+class OptionalPositionalWithoutField {
+  String? option;
+
+  // ignore: avoid_unused_constructor_parameters
+  OptionalPositionalWithoutField([String? missing]);
+}
+
+enum EnumWithStaticGetter {
+  one,
+  two;
+
+  static EnumWithStaticGetter get fallback => one;
+}
+
+@ShouldGenerate(r'''
+T _$enumValueHelper<T>(Map<T, String> enumValues, String source) =>
+    enumValues.entries
+        .singleWhere(
+          (e) => e.value == source,
+          orElse: () => throw ArgumentError(
+            '`$source` is not one of the supported values: '
+            '${enumValues.values.join(', ')}',
+          ),
+        )
+        .key;
+
+T? _$nullableEnumValueHelperNullable<T>(
+  Map<T, String> enumValues,
+  String? source,
+) =>
+    source == null ? null : _$enumValueHelper(enumValues, source);
+
+EnumStaticGetter _$parseEnumStaticGetterResult(ArgResults result) =>
+    EnumStaticGetter()
+      ..value = _$nullableEnumValueHelperNullable(
+        _$EnumWithStaticGetterEnumMapBuildCli,
+        result['value'] as String?,
+      );
+
+const _$EnumWithStaticGetterEnumMapBuildCli = <EnumWithStaticGetter, String>{
+  EnumWithStaticGetter.one: 'one',
+  EnumWithStaticGetter.two: 'two'
+};
+
+ArgParser _$populateEnumStaticGetterParser(ArgParser parser) => parser
+  ..addOption(
+    'value',
+    allowed: ['one', 'two', 'fallback'],
+  );
+
+final _$parserForEnumStaticGetter =
+    _$populateEnumStaticGetterParser(ArgParser());
+
+EnumStaticGetter parseEnumStaticGetter(List<String> args) {
+  final result = _$parserForEnumStaticGetter.parse(args);
+  return _$parseEnumStaticGetterResult(result);
+}
+''')
+@CliOptions()
+class EnumStaticGetter {
+  EnumWithStaticGetter? value;
+}
