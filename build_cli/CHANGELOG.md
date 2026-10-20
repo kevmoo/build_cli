@@ -1,4 +1,4 @@
-## 2.3.2-wip
+## 2.3.2
 
 - Throw a generation error when a constructor has a required named parameter
   that no field can populate, instead of generating a call that does not
