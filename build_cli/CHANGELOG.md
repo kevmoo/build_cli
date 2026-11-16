@@ -1,3 +1,9 @@
+## 2.3.3-wip
+
+- Fixed the README `parseOptions` example, which threw `ArgumentError` instead
+  of the `FormatException` the real example uses. README snippets are now
+  sourced from `example/example.dart` and checked in CI.
+
 ## 2.3.2
 
 - Throw a generation error when a constructor has a required named parameter
