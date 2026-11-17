@@ -1,5 +1,6 @@
 import 'dart:io';
 
+// #region options
 import 'package:build_cli_annotations/build_cli_annotations.dart';
 
 part 'example.g.dart';
@@ -38,14 +39,17 @@ class Options {
 /// Enums are a great way to specify options with a fixed set of allowed
 /// values.
 enum Language { en, es }
+// #endregion options
 
 void main(List<String> args) {
   Options options;
   try {
+    // #region parse
     options = parseOptions(args);
     if (!options.nameWasParsed) {
       throw const FormatException('You must provide a name.');
     }
+    // #endregion parse
   } on FormatException catch (e) {
     print(e.message);
     print('');
