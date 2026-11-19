@@ -10,16 +10,16 @@ void main() {
     check(options.directory).equals('web');
     check(options.branch).equals('gh-pages');
     check(options.mode).equals(PubBuildMode.release);
-    check(options.modeWasParsed).isFalse();
-    check(options.buildConfig).isNull();
-    check(options.buildConfigWasParsed).isFalse();
+    check(options.modeWasParsed).isFalse;
+    check(options.buildConfig).isNull;
+    check(options.buildConfigWasParsed).isFalse;
     check(options.message).equals('Built <directory>');
-    check(options.buildTool).isNull();
+    check(options.buildTool).isNull;
     check(options.debugBuildTool).equals(BuildTool.$loco);
-    check(options.help).isFalse();
-    check(options.release).isTrue();
-    check(options.maxRuntime).isNull();
-    check(options.rest).isEmpty();
+    check(options.help).isFalse;
+    check(options.release).isTrue;
+    check(options.maxRuntime).isNull;
+    check(options.rest).isEmpty;
   });
 
   test('some args', () {
@@ -43,15 +43,15 @@ void main() {
     check(options.directory).equals('dir');
     check(options.branch).equals('gh-pages');
     check(options.mode).equals(PubBuildMode.debug);
-    check(options.modeWasParsed).isTrue();
-    check(options.buildConfig).isNull();
-    check(options.buildConfigWasParsed).isFalse();
+    check(options.modeWasParsed).isTrue;
+    check(options.buildConfig).isNull;
+    check(options.buildConfigWasParsed).isFalse;
     check(options.bazelOptions).equals(BazelOptions.toSource);
     check(options.message).equals('Built <directory>');
-    check(options.buildTool).isNull();
+    check(options.buildTool).isNull;
     check(options.debugBuildTool).equals(BuildTool.pub);
-    check(options.help).isTrue();
-    check(options.release).isFalse();
+    check(options.help).isTrue;
+    check(options.release).isFalse;
     check(options.maxRuntime).equals(const Duration(seconds: 42));
     check(options.rest).deepEquals(['extra', 'things']);
   });
@@ -70,7 +70,7 @@ void main() {
       test('`${item.value.join(' ')}`', () {
         check(() => parsePeanutOptions(item.value))
             .throws<FormatException>()
-            .has((e) => e.message, 'message')
+            .has('message', (e) => e.message)
             .equals(item.key);
       });
     }
