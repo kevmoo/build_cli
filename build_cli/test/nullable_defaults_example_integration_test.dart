@@ -5,10 +5,10 @@ import 'src/nullable_defaults_example.dart';
 void main() {
   test('should be null', () {
     final options = parseNullableOptions([]);
-    check(options.nullableBoolean).isNull();
-    check(options.nullableInteger).isNull();
-    check(options.nullableDouble).isNull();
-    check(options.nullableNum).isNull();
+    check(options.nullableBoolean).isNull;
+    check(options.nullableInteger).isNull;
+    check(options.nullableDouble).isNull;
+    check(options.nullableNum).isNull;
   });
 
   test('should be value from arguments', () {

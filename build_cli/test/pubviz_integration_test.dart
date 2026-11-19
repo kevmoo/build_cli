@@ -7,8 +7,8 @@ void main() {
   test('no args', () {
     final options = parsePubvizOptions([]);
 
-    check(options.secret).isNull();
-    check(options.ignorePackages).isNotNull().isEmpty();
+    check(options.secret).isNull;
+    check(options.ignorePackages).isNotNull().isEmpty;
     check(options.productionPort).equals(8080);
     check(options.numValue).equals(3.14);
     check(options.doubleValue).equals(3000);
@@ -44,7 +44,7 @@ void main() {
       test('`${item.value.join(' ')}`', () {
         check(() => parsePubvizOptions(item.value))
             .throws<FormatException>()
-            .has((e) => e.message, 'message')
+            .has('message', (e) => e.message)
             .equals(item.key);
       });
     }

@@ -90,9 +90,9 @@ environment:
     check(code).equals(0);
     check(out.toString()).contains('Usage: build_cli [options] [<paths...>]');
     check(out.toString()).contains('--check');
-    check(out.toString()).not((it) => it.contains('--verify'));
-    check(out.toString()).not((it) => it.contains('--write'));
-    check(err.toString()).isEmpty();
+    check(out.toString()).not(.it()..contains('--verify'));
+    check(out.toString()).not(.it()..contains('--write'));
+    check(err.toString()).isEmpty;
   });
 
   test('rejects unknown flags and aliases (--verify, --write)', () async {
@@ -141,11 +141,11 @@ class AppOptions {
     );
 
     check(writeCode).equals(0);
-    check(err.toString()).isEmpty();
+    check(err.toString()).isEmpty;
     check(out.toString()).contains('Generated lib/options.g.dart.');
 
     final generatedFile = File(p.join(libDir.path, 'options.g.dart'));
-    check(generatedFile.existsSync()).isTrue();
+    check(generatedFile.existsSync()).isTrue;
     final generatedText = generatedFile.readAsStringSync();
     check(generatedText).startsWith(
       '// GENERATED CODE - DO NOT MODIFY BY HAND\n'
@@ -169,8 +169,8 @@ class AppOptions {
     );
 
     check(checkCode).equals(0);
-    check(checkOut.toString()).isEmpty();
-    check(checkErr.toString()).isEmpty();
+    check(checkOut.toString()).isEmpty;
+    check(checkErr.toString()).isEmpty;
 
     final singleFileCheckCode = await runBuildCli(
       ['--check', 'lib/options.dart'],
@@ -290,7 +290,7 @@ class Options {
     check(err.toString()).contains("part 'missing_part.g.dart';");
     check(
       File(p.join(libDir.path, 'missing_part.g.dart')).existsSync(),
-    ).isFalse();
+    ).isFalse;
   });
 
   test(
@@ -384,14 +384,14 @@ class DemoOptions {
       ], workingDirectory: binDir.path);
 
       check(result.exitCode).equals(0);
-      check(result.stderr as String).isEmpty();
+      check(result.stderr as String).isEmpty;
       final serverGen = File(p.join(binDir.path, 'server.g.dart'));
-      check(serverGen.existsSync()).isTrue();
+      check(serverGen.existsSync()).isTrue;
       check(serverGen.readAsStringSync()).contains(
         '// To reproduce this exact version: dart run build_cli@${baseReleaseVersion(packageVersion)}\n'
         '// To update with the latest release: dart run build_cli@\n',
       );
-      check(File(p.join(exampleDir.path, 'demo.g.dart')).existsSync()).isTrue();
+      check(File(p.join(exampleDir.path, 'demo.g.dart')).existsSync()).isTrue;
     },
   );
 
@@ -433,9 +433,7 @@ class Options {
         p.join(libDir.path, 'options.g.dart'),
       ).readAsStringSync();
       check(generatedText).contains('// ignore_for_file: type=lint\n');
-      check(
-        generatedText,
-      ).not((it) => it.contains('custom_lint_from_build_yaml'));
+      check(generatedText).not(.it()..contains('custom_lint_from_build_yaml'));
     },
   );
 

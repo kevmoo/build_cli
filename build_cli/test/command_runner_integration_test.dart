@@ -11,6 +11,6 @@ void main() {
     await runner.run(['commit', '--all']);
     check(
       CommitCommand.debugOptionsWhenRun,
-    ).isNotNull().has((o) => o.all, 'all').isTrue();
+    ).isNotNull().has('all', (o) => o.all).isTrue;
   });
 }
